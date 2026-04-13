@@ -3,19 +3,26 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
 <title>Egypt Bazar</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 2'><rect width='4' height='2' fill='%23CE1126'/><rect width='4' height='1.333' fill='%23FFFFFF'/><rect width='4' height='.667' fill='%23000000'/><g transform='translate(1.5,.5)'><path d='M0.5 0.5 C0.5 0.5 0.1 0.7 0.1 1 C0.1 1 0.5 1.1 0.5 1.1 C0.5 1.1 0.9 1 0.9 1 C0.9 0.7 0.5 0.5 0.5 0.5Z' fill='%23C09300'/></g></svg>">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 67'%3E%3Crect width='100' height='22.3' fill='%23CE1126'/%3E%3Crect y='22.3' width='100' height='22.3' fill='%23fff'/%3E%3Crect y='44.6' width='100' height='22.4' fill='%23000'/%3E%3Cpath d='M50 28 L46 38 L54 38 Z M44 38 L56 38 L56 40 L44 40Z' fill='%23C09300'/%3E%3C/svg%3E">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+button,div[onclick]{-webkit-tap-highlight-color:transparent;}
 :root{--bg:#0d0d0d;--card:#181818;--card2:#222;--border:#2e2e2e;--accent:#f0a500;--accent2:#ffc93c;--text:#fff;--muted:#aaa;--green:#2ecc71;--red:#e74c3c;--nav-h:54px;}
-html,body{background:#000;min-height:100vh;}
-.wrap{max-width:480px;margin:0 auto;background:var(--bg);color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;overflow-x:hidden;position:relative;padding-bottom:calc(var(--nav-h)+16px);}
+html,body{background:#000;min-height:100vh;overflow-x:hidden;}
+.wrap{max-width:480px;margin:0 auto;background:var(--bg);color:#fff;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;overflow-x:hidden;position:relative;padding-bottom:160px;}
 
 /* HEADER */
 .header{position:sticky;top:0;z-index:100;background:rgba(13,13,13,.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:12px 16px;}
 .header-inner{display:flex;align-items:center;justify-content:space-between;}
 .logo{font-size:20px;font-weight:900;letter-spacing:-.5px;}
 .logo-em{color:var(--accent);}
+.chat-btn{width:34px;height:34px;border-radius:50%;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--accent);transition:transform .15s;}
+.chat-btn:active{transform:scale(.9);}
 /* lang switcher — always LTR regardless of page direction */
 .lang-sw{display:flex;background:var(--card2);border-radius:20px;border:1px solid var(--border);padding:3px;gap:2px;direction:ltr;}
 .lang-opt{padding:4px 9px;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;border-radius:16px;transition:all .2s;display:flex;align-items:center;gap:3px;}
@@ -24,17 +31,28 @@ html,body{background:#000;min-height:100vh;}
 
 /* BANNER */
 .banner-wrap{padding:12px 16px 0;}
-.banner-area{border-radius:16px;overflow:hidden;position:relative;height:100px;}
-.banner-slide{position:absolute;inset:0;opacity:0;transition:opacity .7s;cursor:pointer;}
+.banner-area{border-radius:18px;overflow:hidden;position:relative;height:96px;border:2px solid var(--accent);box-shadow:0 0 20px rgba(240,165,0,.35);}
+.banner-area::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.07) 50%,transparent 60%);animation:shine 3s ease-in-out infinite;pointer-events:none;z-index:10;}
+@keyframes shine{0%{transform:translateX(-100%);}100%{transform:translateX(200%);}}
+.banner-slide{position:absolute;inset:0;opacity:0;transition:opacity .5s;cursor:pointer;display:flex;}
 .banner-slide.active{opacity:1;}
-.banner-bg{position:absolute;inset:0;background:linear-gradient(135deg,#1a0800,#3d2000);}
-.banner-pattern{position:absolute;inset:0;opacity:.12;background-image:radial-gradient(circle,var(--accent) 1px,transparent 1px);background-size:18px 18px;}
-.banner-slide img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
-.banner-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.78),rgba(0,0,0,.15));}
-.banner-content{position:absolute;inset:0;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;direction:ltr;}
-.banner-tag{font-size:9px;font-weight:800;background:var(--accent);color:#000;border-radius:4px;padding:2px 7px;display:inline-block;margin-bottom:5px;width:fit-content;letter-spacing:.5px;}
-.banner-title{font-size:15px;font-weight:800;color:#fff;line-height:1.2;}
-.banner-price{font-size:11px;color:var(--accent2);font-weight:700;margin-top:3px;}
+.banner-info{flex:1;display:flex;flex-direction:column;justify-content:center;padding:12px 0 12px 14px;min-width:0;z-index:1;}
+.banner-label{font-size:9px;font-weight:900;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.banner-name{font-size:15px;font-weight:900;color:#fff;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:6px;}
+.banner-row{display:flex;align-items:center;gap:8px;}
+.banner-price-big{font-size:19px;font-weight:900;color:var(--accent);}
+.banner-city-tag{font-size:10px;color:rgba(255,255,255,.6);display:flex;align-items:center;gap:2px;}
+.banner-photo{width:110px;flex-shrink:0;position:relative;overflow:hidden;}
+.banner-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 4s ease;}
+.banner-slide.active .banner-photo img{transform:scale(1.08);}
+.banner-photo::before{content:'';position:absolute;left:0;top:0;bottom:0;width:40px;background:linear-gradient(to right,var(--bbg,#111),transparent);z-index:1;}
+.banner-photo-empty{width:110px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:40px;}
+.banner-default-slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:linear-gradient(135deg,#1a0800,#3d1800);cursor:pointer;}
+.banner-default-left{flex:1;}
+.banner-default-icon{font-size:22px;margin-bottom:4px;}
+.banner-default-title{font-size:15px;font-weight:900;color:#fff;margin-bottom:2px;}
+.banner-default-sub{font-size:11px;color:var(--accent2);font-weight:700;}
+.banner-default-btn{background:var(--accent);color:#000;font-size:11px;font-weight:900;padding:8px 16px;border-radius:20px;white-space:nowrap;flex-shrink:0;}
 .banner-dots{display:flex;justify-content:center;gap:5px;padding:6px 0 0;}
 .bdot{width:5px;height:5px;border-radius:50%;background:var(--border);transition:all .3s;}
 .bdot.active{background:var(--accent);width:14px;border-radius:3px;}
@@ -76,8 +94,14 @@ html,body{background:#000;min-height:100vh;}
 
 /* GRID */
 .listings{padding:4px 12px 16px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.card{background:var(--card);border-radius:14px;border:1px solid var(--border);overflow:hidden;cursor:pointer;position:relative;}
+.card{background:var(--card);border-radius:14px;border:1px solid var(--border);overflow:hidden;cursor:pointer;position:relative;transition:transform .15s;}
+.card:active{transform:scale(.97);}
 .card.mine{border:2px solid #fff;}
+.card.promoted-card{border:2px solid var(--accent);box-shadow:0 0 12px rgba(240,165,0,.4),0 0 24px rgba(240,165,0,.15);animation:gold-glow 2s ease-in-out infinite alternate;}
+@keyframes gold-glow{0%{box-shadow:0 0 8px rgba(240,165,0,.4);}100%{box-shadow:0 0 18px rgba(240,165,0,.7),0 0 32px rgba(240,165,0,.2);}}
+.card.legendary{border:2px solid #ff00ff;box-shadow:0 0 12px rgba(255,0,255,.5),0 0 24px rgba(0,255,255,.3),inset 0 0 12px rgba(255,0,255,.05);animation:neon-glow 2s ease-in-out infinite alternate;}
+@keyframes neon-glow{0%{box-shadow:0 0 8px rgba(255,0,255,.6),0 0 20px rgba(0,255,255,.3);}100%{box-shadow:0 0 16px rgba(255,0,255,.9),0 0 32px rgba(0,255,255,.5),0 0 48px rgba(255,0,255,.2);}}
+.card.legendary .card-badge{background:linear-gradient(135deg,#9b00ff,#ff00aa);color:#fff;font-weight:900;box-shadow:0 0 8px rgba(155,0,255,.7);border:none;}
 .card-imgs{position:relative;width:100%;aspect-ratio:1;background:var(--card2);overflow:hidden;}
 /* swipeable photos */
 .card-imgs img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .3s;}
@@ -96,16 +120,19 @@ html,body{background:#000;min-height:100vh;}
 .empty-icon{font-size:52px;margin-bottom:14px;}
 
 /* FAB */
-.fab{position:fixed;bottom:calc(var(--nav-h)+18px);right:16px;width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#000;display:flex;align-items:center;justify-content:center;box-shadow:0 5px 20px rgba(240,165,0,.5);cursor:pointer;z-index:150;border:none;transition:transform .15s;}
+.fab{position:fixed;bottom:72px;right:16px;width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#000;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(240,165,0,.7);cursor:pointer;z-index:9999;border:none;transition:transform .15s,opacity .2s;}
 .fab:active{transform:scale(.9);}
+.fab.hidden{opacity:0;pointer-events:none;}
 
 /* NAV */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;height:var(--nav-h);background:rgba(20,20,20,.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);border-radius:20px 20px 0 0;display:flex;z-index:140;padding:0 10px;direction:ltr;}
 .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;color:var(--muted);font-size:10px;font-weight:600;border-radius:16px;transition:color .2s;padding-bottom:4px;}
 .nav-item.active{color:var(--accent);}
-.nav-icon{width:22px;height:22px;display:flex;align-items:center;justify-content:center;}
+.nav-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;}
 .nav-icon svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s;}
 .nav-item.active .nav-icon svg{transform:scale(1.1);}
+.nav-png{width:24px;height:24px;object-fit:contain;opacity:.5;transition:opacity .2s,transform .2s;}
+.nav-item.active .nav-png{opacity:1;transform:scale(1.1);}
 
 .page{display:none;}
 .page.active{display:block;}
@@ -152,7 +179,9 @@ html,body{background:#000;min-height:100vh;}
 /* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:300;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;}
 .modal-overlay.open{opacity:1;pointer-events:all;}
-.modal{background:var(--card);border-radius:22px 22px 0 0;width:100%;max-width:480px;max-height:93vh;overflow-y:auto;padding:0 0 36px;transform:translateY(50px);transition:transform .28s cubic-bezier(.4,0,.2,1);direction:ltr;}
+.modal-close-btn{position:absolute;top:14px;right:16px;width:32px;height:32px;border-radius:50%;background:rgba(40,40,40,.95);border:1px solid var(--border);color:var(--muted);font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:10;transition:background .15s;}
+.modal-close-btn:active{background:#333;}
+.modal{background:var(--card);border-radius:22px 22px 0 0;width:100%;max-width:480px;max-height:93vh;overflow-y:auto;padding:0 0 36px;transform:translateY(50px);transition:transform .28s cubic-bezier(.4,0,.2,1);direction:ltr;position:relative;}
 .modal-overlay.open .modal{transform:translateY(0);}
 .modal-handle{width:36px;height:4px;background:var(--border);border-radius:2px;margin:14px auto 18px;}
 .modal-title{font-size:18px;font-weight:800;color:#fff;padding:0 20px 16px;border-bottom:1px solid var(--border);}
@@ -193,21 +222,28 @@ html,body{background:#000;min-height:100vh;}
 .detail-imgs img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s;}
 .detail-imgs img.active{opacity:1;}
 .detail-imgs .no-img{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:64px;}
-.detail-img-nav{position:absolute;inset:0;display:flex;}
-.detail-img-nav .half{flex:1;cursor:pointer;}
+.detail-img-nav{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 8px;pointer-events:none;}
+.detail-img-nav .half{flex:1;cursor:pointer;height:100%;pointer-events:all;}
+.detail-arrow{width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;pointer-events:all;cursor:pointer;flex-shrink:0;}
+.detail-arrow svg{width:16px;height:16px;stroke:#fff;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
 .detail-img-dots{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:5px;}
 .didot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.35);transition:all .3s;}
 .didot.active{background:#fff;width:16px;border-radius:3px;}
+.main-label{position:absolute;bottom:14px;left:10px;background:rgba(0,0,0,.72);border:1px solid var(--accent);color:var(--accent);font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;z-index:5;display:flex;align-items:center;gap:4px;pointer-events:none;}
 .detail-body{padding:16px 18px;}
 .detail-price{font-size:26px;font-weight:800;color:var(--accent);}
 .detail-title{font-size:18px;font-weight:700;margin:6px 0 8px;line-height:1.3;color:#fff;}
 .detail-desc{color:#fff;font-size:14px;line-height:1.6;margin-bottom:16px;opacity:.8;}
 .detail-meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px;}
 .detail-chip{background:var(--card2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:12px;color:#fff;font-weight:500;}
-.action-btns{display:flex;gap:8px;}
+.action-btns{display:flex;gap:8px;flex-wrap:wrap;}
 .contact-btn{flex:1;background:var(--green);color:#fff;font-size:14px;font-weight:700;padding:14px;border-radius:14px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:transform .15s;}
 .contact-btn:active{transform:scale(.97);}
-.edit-btn{flex:1;background:var(--card2);color:#fff;font-size:14px;font-weight:700;padding:14px;border-radius:14px;border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:transform .15s;}
+.sold-btn{flex:1;background:var(--green);color:#fff;font-size:14px;font-weight:700;padding:14px;border-radius:14px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:transform .15s;}
+.sold-btn:active{transform:scale(.97);}
+.delete-btn-red{flex:1;background:var(--red);color:#fff;font-size:14px;font-weight:700;padding:14px;border-radius:14px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:transform .15s;}
+.delete-btn-red:active{transform:scale(.97);}
+.edit-btn{width:100%;background:rgba(240,165,0,.15);color:var(--accent);font-size:14px;font-weight:700;padding:14px;border-radius:14px;border:1.5px solid var(--accent);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:transform .15s;box-sizing:border-box;margin-bottom:8px;}
 .edit-btn:active{transform:scale(.97);}
 .action-btns svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 .recs-lbl{font-size:11px;font-weight:700;color:#fff;opacity:.4;text-transform:uppercase;letter-spacing:.7px;margin:20px 0 10px;}
@@ -231,10 +267,15 @@ html,body{background:#000;min-height:100vh;}
 <div class="header">
   <div class="header-inner">
     <div class="logo"><span class="logo-em">Egypt</span> Bazar</div>
-    <div class="lang-sw">
-      <div class="lang-opt active" onclick="setLang('ru')" id="lo-ru"><span class="flag">🇷🇺</span>RU</div>
-      <div class="lang-opt" onclick="setLang('ar')" id="lo-ar"><span class="flag">🇪🇬</span>EG</div>
-      <div class="lang-opt" onclick="setLang('en')" id="lo-en"><span class="flag">🇬🇧</span>EN</div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="chat-btn" onclick="vib();openTgChat()" title="Чат сообщества">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="lang-sw">
+        <div class="lang-opt active" onclick="setLang('ru')" id="lo-ru"><span class="flag">🇷🇺</span></div>
+        <div class="lang-opt" onclick="setLang('ar')" id="lo-ar"><span class="flag">🇪🇬</span></div>
+        <div class="lang-opt" onclick="setLang('en')" id="lo-en"><span class="flag">🇬🇧</span></div>
+      </div>
     </div>
   </div>
 </div>
@@ -265,9 +306,8 @@ html,body{background:#000;min-height:100vh;}
   </div>
   <div class="filters-row">
     <!-- PRICE: 2 states only -->
-    <div class="filter-btn" id="filter-price" onclick="cyclePrice()">
-      <span id="filter-price-lbl" style="font-size:13px;font-weight:700;">$</span>
-      <svg id="price-arr" viewBox="0 0 24 24" style="transition:transform .3s"><polyline points="6 9 12 15 18 9"/></svg>
+    <div class="filter-btn active" id="filter-price" onclick="cyclePrice()">
+      <span id="filter-price-lbl" style="font-size:13px;font-weight:700;display:flex;align-items:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
     </div>
     <!-- CITY: multi-select -->
     <div class="filter-btn" id="filter-city-btn" onclick="toggleDD(event,'city-dd')">
@@ -292,7 +332,7 @@ html,body{background:#000;min-height:100vh;}
 <!-- AUCTION -->
 <div class="page" id="page-auction">
   <div class="auction-page">
-    <div class="coming-icon">🔨</div>
+    <div class="coming-icon"><img src="/static/icons/hammer.png" style="width:68px;height:68px;object-fit:contain;opacity:.9;"></div>
     <div class="coming-title" id="auction-title">Аукцион</div>
     <div class="coming-sub" id="auction-sub">Здесь скоро появятся аукционы.</div>
     <div class="coming-badge" id="auction-badge">Скоро</div>
@@ -333,39 +373,22 @@ html,body{background:#000;min-height:100vh;}
 <!-- NAV -->
 <nav class="bottom-nav">
   <div class="nav-item active" id="nav-market" onclick="vib();goPage('market')">
-    <div class="nav-icon">
-      <svg viewBox="0 0 24 24">
-        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-        <line x1="3" y1="6" x2="21" y2="6"/>
-        <path d="M16 10a4 4 0 0 1-8 0"/>
-      </svg>
-    </div>
+    <div class="nav-icon"><img src="/static/icons/cage.png" class="nav-png" id="ico-market" alt=""></div>
     <div id="nav-lbl-market">Рынок</div>
   </div>
   <div class="nav-item" id="nav-auction" onclick="vib();goPage('auction')">
-    <div class="nav-icon">
-      <svg viewBox="0 0 24 24">
-        <rect x="2" y="18" width="20" height="2" rx="1"/>
-        <path d="M6.5 17V9.5"/>
-        <path d="M6.5 9.5l5-5"/>
-        <path d="M11.5 4.5l4 4"/>
-        <path d="M15.5 8.5l2-2a1.4 1.4 0 0 1 2 2l-2 2"/>
-        <path d="M4.5 11.5l-2 2a1.4 1.4 0 0 0 2 2l2-2"/>
-      </svg>
-    </div>
+    <div class="nav-icon"><img src="/static/icons/hammer.png" class="nav-png" id="ico-auction" alt=""></div>
     <div id="nav-lbl-auction">Аукцион</div>
   </div>
   <div class="nav-item" id="nav-profile" onclick="vib();goPage('profile')">
-    <div class="nav-icon">
-      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    </div>
+    <div class="nav-icon"><img src="/static/icons/profile.png" class="nav-png" id="ico-profile" alt=""></div>
     <div id="nav-lbl-profile">Профиль</div>
   </div>
 </nav>
 
 <!-- FAB -->
-<button class="fab" onclick="vib();openAddModal()" id="fab-btn">
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+<button class="fab hidden" onclick="vib();openAddModal()" id="fab-btn">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="4" x2="12" y2="20"/><line x1="4" y1="12" x2="20" y2="12"/></svg>
 </button>
 
 <!-- DROPDOWNS -->
@@ -384,21 +407,32 @@ html,body{background:#000;min-height:100vh;}
 <div class="modal-overlay" id="add-modal">
   <div class="modal">
     <div class="modal-handle"></div>
+    <div class="modal-close-btn" onclick="vib();closeModal('add-modal')">✕</div>
     <div class="modal-title" id="add-modal-title">Новое объявление</div>
     <div class="modal-body">
-      <label class="form-label" id="lbl-photos">Фото (до 4)</label>
-      <div class="photo-grid">
-        <div class="photo-slot" id="slot-0"><input type="file" accept="image/*" onchange="addPhoto(this,0)"><span>+</span></div>
-        <div class="photo-slot" id="slot-1" style="display:none"><input type="file" accept="image/*" onchange="addPhoto(this,1)"><span>+</span></div>
-        <div class="photo-slot" id="slot-2" style="display:none"><input type="file" accept="image/*" onchange="addPhoto(this,2)"><span>+</span></div>
-        <div class="photo-slot" id="slot-3" style="display:none"><input type="file" accept="image/*" onchange="addPhoto(this,3)"><span>+</span></div>
+      <label class="form-label" id="lbl-photos">Фото (до 8)</label>
+      <div class="photo-grid" id="photo-preview-grid">
+        <div class="photo-slot" id="slot-multi" style="border-color:var(--accent);border-style:solid;grid-column:1/-1;aspect-ratio:auto;height:56px;border-radius:12px;font-size:14px;gap:8px;flex-direction:row;">
+          <input type="file" accept="image/*" multiple onchange="addPhotosMulti(this)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span id="photo-slot-lbl">Выбрать фото (до 8)</span>
+        </div>
       </div>
+      <div class="photo-grid" id="photo-thumbs" style="margin-top:-6px;"></div>
       <label class="form-label" id="lbl-title">Заголовок *</label>
       <input class="form-input" id="inp-title" type="text" maxlength="100">
-      <label class="form-label" id="lbl-desc">Описание</label>
+      <label class="form-label">Состояние *</label>
+      <div style="display:flex;gap:8px;margin-bottom:14px;">
+        <div id="cond-new" onclick="vib();selectCondition('new')" style="flex:1;padding:10px;border-radius:12px;border:1.5px solid var(--accent);background:rgba(240,165,0,.15);color:var(--accent);font-weight:700;font-size:13px;text-align:center;cursor:pointer;">Новое</div>
+        <div id="cond-used" onclick="vib();selectCondition('used')" style="flex:1;padding:10px;border-radius:12px;border:1.5px solid var(--border);background:var(--card2);color:var(--muted);font-weight:700;font-size:13px;text-align:center;cursor:pointer;">Б/У</div>
+      </div>
+      <input type="hidden" id="inp-condition" value="new">
+      <label class="form-label" id="lbl-desc">Описание *</label>
       <textarea class="form-textarea" id="inp-desc" maxlength="600"></textarea>
       <label class="form-label" id="lbl-price">Цена (USD)</label>
-      <input class="form-input" id="inp-price" type="number" min="0" placeholder="0">
+      <input class="form-input" id="inp-price" type="number" min="0" placeholder="Оставьте пустым если договорная">
+      <label class="form-label">Телефон (необязательно)</label>
+      <input class="form-input" id="inp-phone" type="tel" placeholder="+7 / +20 / +972..." maxlength="20">
       <label class="form-label" id="lbl-cat">Категория *</label>
       <select class="form-select" id="inp-cat"></select>
       <label class="form-label" id="lbl-city-f">Город *</label>
@@ -407,28 +441,76 @@ html,body{background:#000;min-height:100vh;}
         <option value="hurghada">Хургада</option>
         <option value="cairo">Каир</option>
         <option value="alexandria">Александрия</option>
-        <option value="giza">Гиза</option>
+        <option value="dahab">Дахаб</option>
+        <option value="marsa">Марса-Алам</option>
+        <option value="el-gouna">Эль-Гуна</option>
+        <option value="soma-bay">Сома-Бей</option>
+        <option value="taba">Таба</option>
+        <option value="nuweiba">Нувейба</option>
+        <option value="safaga">Сафага</option>
+        <option value="el-quseir">Эль-Кусейр</option>
         <option value="luxor">Луксор</option>
+        <option value="aswan">Асуан</option>
+        <option value="other">Другой город...</option>
       </select>
-      <div class="promote-box">
+      <input class="form-input" id="inp-city-other" type="text" placeholder="Введите название города" style="display:none;margin-top:-8px;" maxlength="60">
+      <div class="promote-box" style="border-color:var(--accent);box-shadow:0 0 10px rgba(240,165,0,.3);animation:gold-glow 2s ease-in-out infinite alternate;margin-bottom:10px;">
         <div class="promote-header">
-          <div class="promote-ttl">📢 Продвинуть в ТОП</div>
-          <div class="promote-badge">$5 · 24ч</div>
+          <div class="promote-ttl" style="background:linear-gradient(135deg,#ffd700,#f0a500,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">⭐ ЗОЛОТОЕ</div>
+          <div class="promote-badge">30 дней</div>
         </div>
-        <div class="promote-desc">Баннер вверху виден всем пользователям</div>
-        <div class="toggle-wrap">
-          <div class="toggle" id="promo-toggle" onclick="togglePromo()"><div class="toggle-knob"></div></div>
-          <div class="toggle-lbl" id="promo-lbl">Не продвигать</div>
-        </div>
-        <div id="promo-opts" style="display:none">
-          <div class="promo-opts">
-            <div class="popt selected" id="popt-stars" onclick="selPay('stars')"><div class="popt-icon">⭐</div><div class="popt-name">Stars</div><div class="popt-price">250⭐</div></div>
-            <div class="popt" id="popt-crypto" onclick="selPay('crypto')"><div class="popt-icon">💎</div><div class="popt-name">Crypto</div><div class="popt-price">$5</div></div>
-            <div class="popt" id="popt-card" onclick="selPay('card')"><div class="popt-icon">💳</div><div class="popt-name">Карта</div><div class="popt-price">$5</div></div>
-          </div>
+        <div class="promote-desc">Баннер вверху — видят все пользователи</div>
+        <div class="promo-opts" style="margin-top:10px;">
+          <div class="popt" onclick="vib();setPromoAndPublish('gold','stars')"><div class="popt-icon">⭐</div><div class="popt-name">Stars</div><div class="popt-price">1000⭐</div></div>
+          <div class="popt" onclick="vib();setPromoAndPublish('gold','card')"><div class="popt-icon">💳</div><div class="popt-name">Карта/Крипто</div><div class="popt-price">$15</div></div>
         </div>
       </div>
-      <button class="submit-btn" id="submit-btn" onclick="vib();submitListing()">Опубликовать</button>
+      <div class="promote-box" style="border-color:#ff00ff;box-shadow:0 0 10px rgba(255,0,255,.3);margin-bottom:10px;">
+        <div class="promote-header">
+          <div class="promote-ttl" style="background:linear-gradient(135deg,#ff00ff,#00ffff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">⚡ ЛЕГЕНДАРНОЕ</div>
+          <div class="promote-badge" style="background:linear-gradient(135deg,#9b00ff,#ff00aa);color:#fff;">30 дней</div>
+        </div>
+        <div class="promote-desc">Неоновая рамка + надпись «ЛЕГЕНДАРНОЕ»</div>
+        <div class="promo-opts" style="margin-top:10px;">
+          <div class="popt" onclick="vib();setPromoAndPublish('legendary','stars')"><div class="popt-icon">⭐</div><div class="popt-name">Stars</div><div class="popt-price">750⭐</div></div>
+          <div class="popt" onclick="vib();setPromoAndPublish('legendary','card')"><div class="popt-icon">💳</div><div class="popt-name">Карта/Крипто</div><div class="popt-price">$7.5</div></div>
+        </div>
+      </div>
+      <button class="submit-btn" id="submit-btn" onclick="vib();submitListing()">Опубликовать бесплатно</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-overlay" id="pay-modal" style="z-index:600;">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-close-btn" onclick="vib();closeModal('pay-modal')">✕</div>
+    <div class="modal-title">Продвижение объявления</div>
+    <div class="modal-body">
+      <div class="promote-box" style="border-color:var(--accent);box-shadow:0 0 10px rgba(240,165,0,.3);animation:gold-glow 2s ease-in-out infinite alternate;margin-bottom:12px;">
+        <div class="promote-header">
+          <div class="promote-ttl" style="background:linear-gradient(135deg,#ffd700,#f0a500,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">⭐ ЗОЛОТОЕ</div>
+          <div class="promote-badge">30 дней</div>
+        </div>
+        <div class="promote-desc">Баннер вверху — видят все пользователи</div>
+        <div class="promo-opts" style="margin-top:10px;">
+          <div class="popt" onclick="vib();payPromoStars()"><div class="popt-icon">⭐</div><div class="popt-name">Stars</div><div class="popt-price">1000⭐</div></div>
+          <div class="popt" onclick="vib();payPromoCard()"><div class="popt-icon">💳</div><div class="popt-name">Карта/Крипто</div><div class="popt-price">$15</div></div>
+        </div>
+      </div>
+      <div class="promote-box" style="border-color:#ff00ff;box-shadow:0 0 10px rgba(255,0,255,.3);">
+        <div class="promote-header">
+          <div class="promote-ttl" style="background:linear-gradient(135deg,#ff00ff,#00ffff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">⚡ ЛЕГЕНДАРНОЕ</div>
+          <div class="promote-badge" style="background:linear-gradient(135deg,#9b00ff,#ff00aa);color:#fff;">30 дней</div>
+        </div>
+        <div class="promote-desc">Неоновая рамка + надпись «ЛЕГЕНДАРНОЕ»</div>
+        <div class="promo-opts" style="margin-top:10px;">
+          <div class="popt" onclick="vib();payLegStars()"><div class="popt-icon">⭐</div><div class="popt-name">Stars</div><div class="popt-price">750⭐</div></div>
+          <div class="popt" onclick="vib();payLegCard()"><div class="popt-icon">💳</div><div class="popt-name">Карта/Крипто</div><div class="popt-price">$7.5</div></div>
+        </div>
+      </div>
+      <button class="submit-btn" style="background:var(--card2);color:var(--muted);margin-top:8px;" onclick="vib();closeModal('pay-modal')">Пропустить</button>
     </div>
   </div>
 </div>
@@ -437,9 +519,14 @@ html,body{background:#000;min-height:100vh;}
 <div class="modal-overlay" id="detail-modal">
   <div class="modal">
     <div class="modal-handle"></div>
+    <div class="modal-close-btn" onclick="vib();closeModal('detail-modal')">✕</div>
     <div class="detail-imgs" id="detail-imgs">
       <div class="no-img" id="detail-no-img">📦</div>
-      <div class="detail-img-nav"><div class="half" onclick="detailNav(-1)"></div><div class="half" onclick="detailNav(1)"></div></div>
+      <div class="detail-img-nav" id="detail-img-nav">
+        <div class="detail-arrow" id="detail-arr-l" onclick="detailNav(-1)" style="display:none"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg></div>
+        <div style="flex:1;height:100%;cursor:pointer;" onclick=""></div>
+        <div class="detail-arrow" id="detail-arr-r" onclick="detailNav(1)" style="display:none"><svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></div>
+      </div>
       <div class="detail-img-dots" id="detail-dots"></div>
     </div>
     <div class="detail-body">
@@ -463,10 +550,58 @@ html,body{background:#000;min-height:100vh;}
   </div>
 </div>
 
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="edit-modal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Редактировать объявление</div>
+    <div class="modal-body">
+      <label class="form-label">Фото</label>
+      <div class="photo-grid">
+        <div class="photo-slot" id="edit-slot-0" style="border-color:var(--accent);border-style:solid;"><input type="file" accept="image/*" onchange="editPhoto(this,0)"><span>+</span></div>
+        <div class="photo-slot" id="edit-slot-1" style="display:none"><input type="file" accept="image/*" onchange="editPhoto(this,1)"><span>+</span></div>
+        <div class="photo-slot" id="edit-slot-2" style="display:none"><input type="file" accept="image/*" onchange="editPhoto(this,2)"><span>+</span></div>
+        <div class="photo-slot" id="edit-slot-3" style="display:none"><input type="file" accept="image/*" onchange="editPhoto(this,3)"><span>+</span></div>
+      </div>
+      <label class="form-label">Заголовок *</label>
+      <input class="form-input" id="edit-title" type="text" maxlength="100">
+      <label class="form-label">Описание</label>
+      <textarea class="form-textarea" id="edit-desc" maxlength="600"></textarea>
+      <label class="form-label">Цена (USD)</label>
+      <input class="form-input" id="edit-price" type="number" min="0" placeholder="Оставьте пустым если договорная">
+      <label class="form-label">Телефон (необязательно)</label>
+      <input class="form-input" id="edit-phone" type="tel" placeholder="+7 / +20 / +972..." maxlength="20">
+      <label class="form-label">Категория *</label>
+      <select class="form-select" id="edit-cat"></select>
+      <label class="form-label">Город *</label>
+      <select class="form-select" id="edit-city">
+        <option value="sharm">Шарм-эль-Шейх</option>
+        <option value="hurghada">Хургада</option>
+        <option value="cairo">Каир</option>
+        <option value="alexandria">Александрия</option>
+        <option value="dahab">Дахаб</option>
+        <option value="marsa">Марса-Алам</option>
+        <option value="el-gouna">Эль-Гуна</option>
+        <option value="soma-bay">Сома-Бей</option>
+        <option value="taba">Таба</option>
+        <option value="nuweiba">Нувейба</option>
+        <option value="safaga">Сафага</option>
+        <option value="el-quseir">Эль-Кусейр</option>
+        <option value="luxor">Луксор</option>
+        <option value="aswan">Асуан</option>
+        <option value="other">Другой город...</option>
+      </select>
+      <input class="form-input" id="edit-city-other" type="text" placeholder="Введите название города" style="display:none;margin-top:-8px;" maxlength="60">
+      <button class="submit-btn" id="edit-submit-btn" onclick="vib();submitEdit()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 const API="";
+const V=Date.now(); // cache bust
 const tg=window.Telegram?.WebApp;
 if(tg){tg.ready();tg.expand();}
 
@@ -474,36 +609,43 @@ let lang="ru";
 // multi-select filters
 let selectedCities=new Set(); // empty = all
 let selectedCats=new Set();   // empty = all
-let priceSort=0; // 0=none, 1=asc, 2=desc
+let priceSort=3; // 0=none, 1=asc, 2=desc, 3=newest
 // pending selections (before apply)
 let pendingCities=new Set();
 let pendingCats=new Set();
 
 let allListings=[],currentPage="market";
 let tgUser=tg?.initDataUnsafe?.user||null;
-let promoEnabled=false,promoPayment="stars";
-let photoFiles=[null,null,null,null];
-let detailPhotos=[],detailPhotoIdx=0;
+let promoEnabled=false,promoPayment="card";
+let legendaryEnabled=false,legendaryPayment="card";
+let photoFiles=[null,null,null,null,null,null,null,null];
+let detailPhotos=[],detailPhotoIdx=0,currentDetailMine=false;
 
 // card photo swipe state
 let cardSwipeData={};
 
 function vib(){try{if(tg)tg.HapticFeedback.impactOccurred('light');else if(navigator.vibrate)navigator.vibrate(20);}catch(e){}}
+function selectCondition(v){
+  document.getElementById("inp-condition").value=v;
+  document.getElementById("cond-new").style.cssText=`flex:1;padding:10px;border-radius:12px;border:1.5px solid ${v==="new"?"var(--accent)":"var(--border)"};background:${v==="new"?"rgba(240,165,0,.15)":"var(--card2)"};color:${v==="new"?"var(--accent)":"var(--muted)"};font-weight:700;font-size:13px;text-align:center;cursor:pointer;`;
+  document.getElementById("cond-used").style.cssText=`flex:1;padding:10px;border-radius:12px;border:1.5px solid ${v==="used"?"var(--accent)":"var(--border)"};background:${v==="used"?"rgba(240,165,0,.15)":"var(--card2)"};color:${v==="used"?"var(--accent)":"var(--muted)"};font-weight:700;font-size:13px;text-align:center;cursor:pointer;`;
+}
+function openTgChat(){if(tg)tg.openTelegramLink("https://t.me/egypttorg");else window.open("https://t.me/egypttorg","_blank");}
 
-const CITY_KEYS=["sharm","hurghada","cairo","alexandria","giza","luxor"];
-const CAT_KEYS=["realestate","transport","services","clothes","kids","home","furniture","household","repair","jobs","animals","hobby","sport","electronics","food","business","money","alcohol"];
-const CAT_EMOJI={realestate:"🏠",transport:"🚗",services:"🔧",clothes:"👗",kids:"🧸",home:"🌿",jobs:"💼",animals:"🐱",hobby:"🎨",sport:"⚽",electronics:"📱",food:"🛒",business:"📈",money:"💰",alcohol:"🍾",furniture:"🛋",household:"🏺",repair:"🪚"};
+const CITY_KEYS=["sharm","hurghada","cairo","alexandria","dahab","marsa","el-gouna","taba","luxor","aswan","safaga","el-quseir","nuweiba","soma-bay","other"];
+const CAT_KEYS=["realestate","rent","transport","services","beauty","clothes","kids","home","furniture","household","repair","jobs","animals","hobby","sport","electronics","food","business","money","alcohol","smoking","tourism","medicine","education","other"];
+const CAT_EMOJI={realestate:"🏠",rent:"🏡",transport:"🚗",services:"🔧",beauty:"💄",clothes:"👗",kids:"🧸",home:"🌿",jobs:"💼",animals:"🐱",hobby:"🎨",sport:"⚽",electronics:"📱",food:"🛒",business:"📈",money:"💰",alcohol:"🍾",furniture:"🛋",household:"🏺",repair:"🪚",smoking:"🚬",tourism:"🏖️",medicine:"💊",education:"📚",other:"📦"};
 
 const T={
-  ru:{search:"Поиск...",fp:"$",fc:"Город",fs:"Раздел",apply:"Применить",new_listing:"Новое объявление",lbl_photos:"Фото (до 4)",lbl_title:"Заголовок *",lbl_desc:"Описание",lbl_price:"Цена (USD)",lbl_cat:"Категория *",lbl_city:"Город *",publish:"Опубликовать",contact:"Написать продавцу",edit:"Редактировать",empty:"Объявлений нет",free:"Бесплатно",nav_market:"Рынок",nav_auction:"Аукцион",nav_profile:"Профиль",auction_title:"Аукцион",auction_sub:"Здесь скоро появятся аукционы.",auction_badge:"Скоро",add_listing:"Добавить объявление",my_listings:"Мои объявления",no_listings:"Нет объявлений",recs:"Похожие",del_confirm:"Удалить объявление?",s_active:"Активных",s_total:"Всего",s_deals:"Сделки",promo_on:"Продвигается · $5 · 24ч",promo_off:"Не продвигать",all_cities:"Все города",all_cats:"Все разделы",deals_title:"История сделок",
-    cities:{sharm:"Шарм-эль-Шейх",hurghada:"Хургада",cairo:"Каир",alexandria:"Александрия",giza:"Гиза",luxor:"Луксор"},
-    cats:{realestate:"Недвижимость",transport:"Транспорт",services:"Услуги",clothes:"Одежда",kids:"Детские товары",home:"Дом и сад",jobs:"Работа",animals:"Животные",hobby:"Хобби",sport:"Спорт",electronics:"Электроника",food:"Продовольствие",business:"Бизнес",money:"Деньги и финансы",alcohol:"Алкоголь",furniture:"Мебель",household:"Бытовые товары",repair:"Ремонт"}},
-  en:{search:"Search...",fp:"$",fc:"City",fs:"Section",apply:"Apply",new_listing:"New Listing",lbl_photos:"Photos (up to 4)",lbl_title:"Title *",lbl_desc:"Description",lbl_price:"Price (USD)",lbl_cat:"Category *",lbl_city:"City *",publish:"Publish",contact:"Contact seller",edit:"Edit",empty:"No listings",free:"Free",nav_market:"Market",nav_auction:"Auction",nav_profile:"Profile",auction_title:"Auction",auction_sub:"Auctions coming soon.",auction_badge:"Soon",add_listing:"Add listing",my_listings:"My listings",no_listings:"No listings yet",recs:"Similar",del_confirm:"Delete listing?",s_active:"Active",s_total:"Total",s_deals:"Deals",promo_on:"Promoted · $5 · 24h",promo_off:"Don't promote",all_cities:"All cities",all_cats:"All sections",deals_title:"Deal history",
-    cities:{sharm:"Sharm",hurghada:"Hurghada",cairo:"Cairo",alexandria:"Alexandria",giza:"Giza",luxor:"Luxor"},
-    cats:{realestate:"Real Estate",transport:"Transport",services:"Services",clothes:"Clothes",kids:"Kids",home:"Home & Garden",jobs:"Jobs",animals:"Animals",hobby:"Hobby",sport:"Sport",electronics:"Electronics",food:"Grocery",business:"Business",money:"Finance",alcohol:"Alcohol",furniture:"Furniture",household:"Household",repair:"Repair"}},
-  ar:{search:"بحث...",fp:"$",fc:"المدينة",fs:"القسم",apply:"تطبيق",new_listing:"إعلان جديد",lbl_photos:"صور (حتى 4)",lbl_title:"العنوان *",lbl_desc:"الوصف",lbl_price:"السعر (USD)",lbl_cat:"الفئة *",lbl_city:"المدينة *",publish:"نشر",contact:"تواصل",edit:"تعديل",empty:"لا إعلانات",free:"مجاني",nav_market:"السوق",nav_auction:"مزاد",nav_profile:"الملف",auction_title:"مزاد",auction_sub:"قريباً.",auction_badge:"قريباً",add_listing:"إضافة إعلان",my_listings:"إعلاناتي",no_listings:"لا إعلانات",recs:"مشابهة",del_confirm:"حذف؟",s_active:"نشط",s_total:"المجموع",s_deals:"صفقات",promo_on:"مميز · $5",promo_off:"بدون ترويج",all_cities:"كل المدن",all_cats:"كل الأقسام",deals_title:"سجل الصفقات",
-    cities:{sharm:"شرم الشيخ",hurghada:"الغردقة",cairo:"القاهرة",alexandria:"الإسكندرية",giza:"الجيزة",luxor:"الأقصر"},
-    cats:{realestate:"عقارات",transport:"مواصلات",services:"خدمات",clothes:"ملابس",kids:"أطفال",home:"المنزل",jobs:"وظائف",animals:"حيوانات",hobby:"هوايات",sport:"رياضة",electronics:"إلكترونيات",food:"بقالة",business:"أعمال",money:"مال",alcohol:"كحول",furniture:"أثاث",household:"منزلية",repair:"تجديد"}}
+  ru:{search:"Поиск...",fp:"$",fc:"Город",fs:"Раздел",apply:"Применить",new_listing:"Новое объявление",lbl_photos:"Фото (до 8)",lbl_title:"Заголовок *",lbl_desc:"Описание *",lbl_price:"Цена (USD)",lbl_cat:"Категория *",lbl_city:"Город *",publish:"Опубликовать",contact:"Написать продавцу",edit:"Редактировать",empty:"Объявлений нет",free:"Бесплатно",nav_market:"Рынок",nav_auction:"Аукцион",nav_profile:"Профиль",auction_title:"Аукцион",auction_sub:"Здесь скоро появятся аукционы.",auction_badge:"Скоро",add_listing:"Добавить объявление",my_listings:"Мои объявления",no_listings:"Нет объявлений",recs:"Похожие",del_confirm:"Удалить объявление?",s_active:"Активных",s_total:"Всего",s_deals:"Сделки",promo_on:"Продвигается · $5 · 24ч",promo_off:"Не продвигать",all_cities:"Все города",all_cats:"Все разделы",deals_title:"История сделок",
+    cities:{sharm:"Шарм-эль-Шейх",hurghada:"Хургада",cairo:"Каир",alexandria:"Александрия",dahab:"Дахаб",marsa:"Марса-Алам","el-gouna":"Эль-Гуна",taba:"Таба",luxor:"Луксор",aswan:"Асуан",safaga:"Сафага","el-quseir":"Эль-Кусейр",nuweiba:"Нувейба","soma-bay":"Сома-Бей",other:"Другой город"},
+    cats:{realestate:"Продажа недвижимости",rent:"Аренда жилья",transport:"Транспорт",services:"Услуги",beauty:"Мода и красота",clothes:"Одежда",kids:"Детские товары",home:"Дом и сад",jobs:"Работа",animals:"Животные",hobby:"Хобби",sport:"Спорт",electronics:"Электроника",food:"Продовольствие",business:"Бизнес",money:"Деньги и финансы",alcohol:"Алкоголь",furniture:"Мебель",household:"Бытовые товары",repair:"Ремонт",smoking:"Курение",tourism:"Туризм и экскурсии",medicine:"Медицина",education:"Обучение",other:"Другое"}},
+  en:{search:"Search...",fp:"$",fc:"City",fs:"Section",apply:"Apply",new_listing:"New Listing",lbl_photos:"Photos (up to 8)",lbl_title:"Title *",lbl_desc:"Description *",lbl_price:"Price (USD)",lbl_cat:"Category *",lbl_city:"City *",publish:"Publish",contact:"Contact seller",edit:"Edit",empty:"No listings",free:"Free",nav_market:"Market",nav_auction:"Auction",nav_profile:"Profile",auction_title:"Auction",auction_sub:"Auctions coming soon.",auction_badge:"Soon",add_listing:"Add listing",my_listings:"My listings",no_listings:"No listings yet",recs:"Similar",del_confirm:"Delete listing?",s_active:"Active",s_total:"Total",s_deals:"Deals",promo_on:"Promoted · $5 · 24h",promo_off:"Don't promote",all_cities:"All cities",all_cats:"All sections",deals_title:"Deal history",
+    cities:{sharm:"Sharm",hurghada:"Hurghada",cairo:"Cairo",alexandria:"Alexandria",dahab:"Dahab",marsa:"Marsa Alam","el-gouna":"El Gouna",taba:"Taba",luxor:"Luxor",aswan:"Aswan",safaga:"Safaga","el-quseir":"El Quseir",nuweiba:"Nuweiba","soma-bay":"Soma Bay",other:"Other city"},
+    cats:{realestate:"Real Estate (Sale)",rent:"Rent",transport:"Transport",services:"Services",beauty:"Fashion & Beauty",clothes:"Clothes",kids:"Kids",home:"Home & Garden",jobs:"Jobs",animals:"Animals",hobby:"Hobby",sport:"Sport",electronics:"Electronics",food:"Grocery",business:"Business",money:"Finance",alcohol:"Alcohol",furniture:"Furniture",household:"Household",repair:"Repair",smoking:"Smoking",tourism:"Tourism",medicine:"Medicine",education:"Education",other:"Other"}},
+  ar:{search:"بحث...",fp:"$",fc:"المدينة",fs:"القسم",apply:"تطبيق",new_listing:"إعلان جديد",lbl_photos:"صور (حتى 8)",lbl_title:"العنوان *",lbl_desc:"الوصف *",lbl_price:"السعر (USD)",lbl_cat:"الفئة *",lbl_city:"المدينة *",publish:"نشر",contact:"تواصل",edit:"تعديل",empty:"لا إعلانات",free:"مجاني",nav_market:"السوق",nav_auction:"مزاد",nav_profile:"الملف",auction_title:"مزاد",auction_sub:"قريباً.",auction_badge:"قريباً",add_listing:"إضافة إعلان",my_listings:"إعلاناتي",no_listings:"لا إعلانات",recs:"مشابهة",del_confirm:"حذف؟",s_active:"نشط",s_total:"المجموع",s_deals:"صفقات",promo_on:"مميز · $5",promo_off:"بدون ترويج",all_cities:"كل المدن",all_cats:"كل الأقسام",deals_title:"سجل الصفقات",
+    cities:{sharm:"شرم الشيخ",hurghada:"الغردقة",cairo:"القاهرة",alexandria:"الإسكندرية",dahab:"دهب",marsa:"مرسى علم","el-gouna":"الجونة",taba:"طابا",luxor:"الأقصر",aswan:"أسوان",safaga:"سفاجا","el-quseir":"القصير",nuweiba:"نويبع","soma-bay":"سوما باي",other:"مدينة أخرى"},
+    cats:{realestate:"عقارات",rent:"إيجار",transport:"مواصلات",services:"خدمات",beauty:"موضة وجمال",clothes:"ملابس",kids:"أطفال",home:"المنزل",jobs:"وظائف",animals:"حيوانات",hobby:"هوايات",sport:"رياضة",electronics:"إلكترونيات",food:"بقالة",business:"أعمال",money:"مال",alcohol:"كحول",furniture:"أثاث",household:"منزلية",repair:"تجديد",smoking:"تدخين",tourism:"سياحة",medicine:"طب",education:"تعليم",other:"أخرى"}}
 };
 const t=k=>{const keys=k.split(".");let v=T[lang];for(const x of keys)v=v?.[x];return v||k;};
 
@@ -570,21 +712,22 @@ function goPage(page){
     document.getElementById(`page-${p}`).classList.toggle("active",p===page);
     document.getElementById(`nav-${p}`).classList.toggle("active",p===page);
   });
-  document.getElementById("fab-btn").style.display=page==="market"?"":"none";
+  // FAB only on market
+  document.getElementById("fab-btn").classList.toggle("hidden", page!=="market");
   if(page==="profile")loadProfile();
-  if(page==="market")setTimeout(()=>document.getElementById("search-input").focus(),100);
 }
 
 /* PRICE — 2 states: asc / desc, toggle */
 function cyclePrice(){
   vib();
-  priceSort=priceSort===0?1:priceSort===1?2:0;
-  const arr=document.getElementById("price-arr");
+  priceSort=priceSort===3?1:priceSort===1?2:3;
   const btn=document.getElementById("filter-price");
-  if(priceSort===0){btn.classList.remove("active");arr.style.transform="";}
-  else if(priceSort===1){btn.classList.add("active");arr.style.transform="rotate(180deg)";}
-  else{btn.classList.add("active");arr.style.transform="";}
-  updatePriceLabel();updateResetBtn();
+  const lbl=document.getElementById("filter-price-lbl");
+  btn.classList.add("active");
+  if(priceSort===3){lbl.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';}
+  else if(priceSort===1){lbl.textContent="$ ↑";}
+  else{lbl.textContent="$ ↓";}
+  updateResetBtn();
   renderListings(filterData());
 }
 
@@ -615,7 +758,7 @@ function closeAllDD(){
 function buildCityDD(){
   const list=document.getElementById("city-dd-list");
   const allSel=pendingCities.size===0;
-  list.innerHTML=`<div class="dd-item${allSel?" selected":""}" onclick="clearPendingCities()"><span>🌍 ${t("all_cities")}</span><svg class="dd-chk" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>`
+  list.innerHTML=`<div class="dd-item${allSel?" selected":""}" onclick="clearPendingCities()"><span>${t("all_cities")}</span><svg class="dd-chk" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>`
   +CITY_KEYS.map(k=>`
     <div class="dd-item${pendingCities.has(k)?" selected":""}" onclick="togglePendingCity('${k}')">
       <span>${t(`cities.${k}`)}</span>
@@ -656,11 +799,12 @@ function applyCat(){
 }
 function resetFilters(){
   vib();
-  selectedCities.clear();selectedCats.clear();priceSort=0;
+  selectedCities.clear();selectedCats.clear();priceSort=3;
   pendingCities.clear();pendingCats.clear();
-  document.getElementById("filter-price").classList.remove("active");
-  document.getElementById("price-arr").style.transform="";
-  updatePriceLabel();updateCityLabel();updateCatLabel();
+  document.getElementById("filter-price").classList.add("active");
+  const lbl=document.getElementById("filter-price-lbl");
+  lbl.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+  updateCityLabel();updateCatLabel();
   updateResetBtn();
   renderListings(filterData());
 }
@@ -679,6 +823,7 @@ function filterData(){
   });
   if(priceSort===1)data=[...data].sort((a,b)=>(a.price||0)-(b.price||0));
   else if(priceSort===2)data=[...data].sort((a,b)=>(b.price||0)-(a.price||0));
+  else if(priceSort===3)data=[...data].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
   return data;
 }
 function clearSearch(){document.getElementById("search-input").value="";toggleClearBtn();filterListings();}
@@ -686,10 +831,11 @@ function toggleClearBtn(){const val=document.getElementById("search-input").valu
 function filterListings(){renderListings(filterData());}
 
 function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
-function priceStr(l){return l.price&&l.price>0?`$${l.price}`:t("free");}
+function priceStr(l){return l.price&&l.price>0?`$${l.price}`:"Договорная";}
 function cityName(c){return t(`cities.${c}`)||c;}
 function isMine(l){return tgUser&&l.user_id===tgUser.id;}
-function getPhotos(l){return[l.photo_path,l.photo_path2,l.photo_path3,l.photo_path4].filter(Boolean);}
+function getPhotos(l){return[l.photo_path,l.photo_path2,l.photo_path3,l.photo_path4,l.photo_path5,l.photo_path6,l.photo_path7,l.photo_path8].filter(Boolean);}
+function dateStr(d){if(!d)return"";const dt=new Date(d);const day=dt.getDate();const mon=["янв","фев","мар","апр","май","июн","июл","авг","сен","окт","ноя","дек"][dt.getMonth()];return`${day} ${mon}`;}
 
 /* CARD with swipeable photos */
 function renderListings(data){
@@ -701,14 +847,14 @@ function renderListings(data){
       ?photos.map((p,i)=>`<img src="${p}" class="${i===0?"active":""}" loading="lazy" draggable="false">`).join("")
       :`<div class="no-img">${CAT_EMOJI[l.category]||"📦"}</div>`;
     const dots=photos.length>1?`<div class="card-idots">${photos.map((_,i)=>`<div class="card-idot${i===0?" active":""}"></div>`).join("")}</div>`:"";
-    return`<div class="card${isMine(l)?" mine":""}" data-id="${l.id}" data-photos="${photos.length}">
+    return`<div class="card${isMine(l)?" mine":""}${l.is_legendary?" legendary":""}${l.is_promoted&&!l.is_legendary?" promoted-card":""}" data-id="${l.id}" data-photos="${photos.length}">
       <div class="card-imgs" data-id="${l.id}" data-idx="0">${imgHtml}${dots}</div>
-      ${l.is_promoted?`<div class="promoted-badge">TOP</div>`:""}
-      <div class="card-badge">${t(`cats.${l.category}`)}</div>
+      ${l.is_promoted?`<div class="promoted-badge">⭐ TOP</div>`:""}
+      <div class="card-badge">${l.is_legendary?"⚡ ЛЕГЕНДАРНОЕ":l.is_promoted?"":t(`cats.${l.category}`)}</div>
       <div class="card-body" onclick="vib();openDetail(${l.id})">
         <div class="card-title">${esc(l.title)}</div>
         <div class="card-price">${priceStr(l)}</div>
-        <div class="card-city">📍 ${cityName(l.city)}</div>
+        <div class="card-city"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px;opacity:.7"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${cityName(l.city)}<span style="float:right;opacity:.4;font-size:10px;">${dateStr(l.created_at)}</span></div>
       </div>
     </div>`;
   }).join("");
@@ -742,19 +888,72 @@ function renderListings(data){
 
 /* BANNERS */
 let bannerIdx=0,bannerTimer=null;
+const CAT_BG={realestate:"#0d1b4b",rent:"#0d2b4b",transport:"#2e0a6b",services:"#003d2e",beauty:"#4b0a2e",clothes:"#4b2e00",kids:"#003d4b",home:"#1a3300",electronics:"#00004b",food:"#4b3a00",business:"#1a1a1a",default:"#2e1200"};
 function initBanners(){
   const promoted=allListings.filter(l=>l.is_promoted);
   const area=document.getElementById("banner-area");
   const dots=document.getElementById("banner-dots");
-  if(!promoted.length){area.innerHTML=`<div class="banner-slide active"><div class="banner-bg"></div><div class="banner-pattern"></div><div class="banner-overlay"></div><div class="banner-content"><div class="banner-tag">РЕКЛАМА</div><div class="banner-title">Продвиньте объявление в ТОП</div><div class="banner-price">$5 · 24 часа · Шарм, Хургада, Каир</div></div></div>`;dots.innerHTML="";return;}
-  area.innerHTML=promoted.map((l,i)=>{const p=getPhotos(l)[0];return`<div class="banner-slide${i===0?" active":""}" onclick="vib();openDetail(${l.id})">${p?`<img src="${p}" alt="">`:`<div class="banner-bg"></div><div class="banner-pattern"></div>`}<div class="banner-overlay"></div><div class="banner-content"><div class="banner-tag">TOP</div><div class="banner-title">${esc(l.title)}</div><div class="banner-price">${priceStr(l)}</div></div></div>`;}).join("");
-  dots.innerHTML=promoted.map((_,i)=>`<div class="bdot${i===0?" active":""}"></div>`).join("");
+  if(!promoted.length){
+    area.innerHTML=`<div class="banner-slide active">
+      <div class="banner-default-slide" onclick="vib();openAddModal()">
+        <div class="banner-default-left">
+          <div class="banner-default-icon">📢</div>
+          <div class="banner-default-title">Реклама в баннере</div>
+          <div class="banner-default-sub">400 ⭐ · 24 часа · все города</div>
+        </div>
+        <div class="banner-default-btn">Разместить</div>
+      </div>
+    </div>`;
+    dots.innerHTML="";return;
+  }
+  area.innerHTML=promoted.map((l,i)=>{
+    const p=getPhotos(l)[0];
+    const bg="#1a1200";
+    const photoHtml=p
+      ?`<div class="banner-photo" style="--bbg:${bg}"><img src="${p}" alt="" loading="lazy"></div>`
+      :`<div class="banner-photo-empty" style="background:linear-gradient(135deg,#2a1e00,#4a3500)">${CAT_EMOJI[l.category]||"📦"}</div>`;
+    return`<div class="banner-slide${i===0?" active":""}" style="background:linear-gradient(135deg,#1a1200,#3d2d00,#1a1200)" onclick="vib();openDetail(${l.id})">
+      <div class="banner-info">
+        <div class="banner-name">${esc(l.title)}</div>
+        <div class="banner-row">
+          <div class="banner-price-big">${priceStr(l)}</div>
+          <div class="banner-city-tag"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${cityName(l.city)}</div>
+        </div>
+      </div>
+      ${photoHtml}
+    </div>`;
+  }).join("");
+  dots.innerHTML=promoted.length>1?promoted.map((_,i)=>`<div class="bdot${i===0?" active":""}"></div>`).join(""):"";
   if(bannerTimer)clearInterval(bannerTimer);
-  if(promoted.length>1){bannerTimer=setInterval(()=>{const s=area.querySelectorAll(".banner-slide");const d=dots.querySelectorAll(".bdot");s[bannerIdx].classList.remove("active");d[bannerIdx].classList.remove("active");bannerIdx=(bannerIdx+1)%s.length;s[bannerIdx].classList.add("active");d[bannerIdx].classList.add("active");},5000);}
+  if(promoted.length>1){
+    // Auto rotate every 3s
+    bannerTimer=setInterval(()=>rotateBanner(1),3000);
+    // Touch swipe
+    let bsx=0,bmoved=false;
+    area.ontouchstart=e=>{bsx=e.touches[0].clientX;bmoved=false;};
+    area.ontouchmove=e=>{if(Math.abs(e.touches[0].clientX-bsx)>8)bmoved=true;};
+    area.ontouchend=e=>{
+      const dx=e.changedTouches[0].clientX-bsx;
+      if(bmoved&&Math.abs(dx)>40){rotateBanner(dx<0?1:-1);}
+    };
+  }
+}
+function rotateBanner(dir){
+  const area=document.getElementById("banner-area");
+  const dots=document.getElementById("banner-dots");
+  const s=area.querySelectorAll(".banner-slide");
+  const d=dots.querySelectorAll(".bdot");
+  if(!s.length)return;
+  s[bannerIdx].classList.remove("active");
+  d[bannerIdx]?.classList.remove("active");
+  bannerIdx=(bannerIdx+dir+s.length)%s.length;
+  s[bannerIdx].classList.add("active");
+  d[bannerIdx]?.classList.add("active");
+  if(bannerTimer){clearInterval(bannerTimer);bannerTimer=setInterval(()=>rotateBanner(1),3000);}
 }
 
 async function loadListings(){
-  try{const res=await fetch(`${API}/api/listings`);allListings=await res.json();initBanners();renderListings(filterData());}
+  try{const res=await fetch(`${API}/api/listings?_=${V}`);allListings=await res.json();initBanners();renderListings(filterData());}
   catch(e){document.getElementById("listings-grid").innerHTML=`<div class="empty"><div class="empty-icon">⚠️</div><div>Ошибка соединения</div></div>`;}
 }
 
@@ -762,31 +961,180 @@ async function loadListings(){
 async function openDetail(id){
   try{
     const res=await fetch(`${API}/api/listings/${id}`);const l=await res.json();
-    detailPhotos=getPhotos(l);detailPhotoIdx=0;renderDetailImgs();
+    detailPhotos=getPhotos(l);detailPhotoIdx=0;currentDetailMine=isMine(l);renderDetailImgs();
     document.getElementById("detail-price").textContent=priceStr(l);
     document.getElementById("detail-title").textContent=l.title;
     document.getElementById("detail-desc").textContent=l.description||"";
-    document.getElementById("detail-meta").innerHTML=`<span class="detail-chip">${CAT_EMOJI[l.category]||"📦"} ${t(`cats.${l.category}`)}</span><span class="detail-chip">📍 ${cityName(l.city)}</span>`;
+    const phoneMeta=l.phone?`<span class="detail-chip">📞 ${l.phone}</span>`:"";
+    const condMeta=l.condition?`<span class="detail-chip">${l.condition==="new"?"✨ Новое":"🔧 Б/У"}</span>`:"";
+    document.getElementById("detail-meta").innerHTML=`<span class="detail-chip">${CAT_EMOJI[l.category]||"📦"} ${t(`cats.${l.category}`)}</span><span class="detail-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:3px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${cityName(l.city)}</span>${condMeta}${phoneMeta}`;
     const mine=isMine(l);
-    document.getElementById("action-btns").innerHTML=mine
-      ?`<button class="edit-btn" onclick="vib();showToast('✏️ Скоро')"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>${t("edit")}</button>`
-      :`<button class="contact-btn" onclick="vib();contactSeller('${l.seller_username||''}')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 0 2 2z"/></svg>${t("contact")}</button>`;
+    if(mine){
+      const buyRow=((!l.is_promoted)||(!l.is_legendary))?
+        `<div style="display:flex;gap:8px;width:100%;margin-bottom:8px;">
+          ${!l.is_promoted?`<button class="edit-btn" style="flex:1;background:rgba(240,165,0,.15);border-color:var(--accent);color:var(--accent);padding:10px 6px;font-size:12px;" onclick="vib();buyPromo(${l.id})">⭐ ЗОЛОТОЕ</button>`:""}
+          ${!l.is_legendary?`<button class="edit-btn" style="flex:1;background:rgba(255,0,255,.1);border-color:#ff00ff;color:#ff00ff;padding:10px 6px;font-size:12px;" onclick="vib();buyLegendary(${l.id})">⚡ ЛЕГЕНДАРНОЕ</button>`:""}
+        </div>`:"";
+      document.getElementById("action-btns").innerHTML=
+        buyRow+
+        `<button class="edit-btn" onclick="vib();openEditModal(${l.id})"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Изменить</button>`+
+        `<button class="sold-btn" onclick="vib();markSold(${l.id})"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Продано!</button>`+
+        `<button class="delete-btn-red" onclick="vib();deleteListingFromDetail(${l.id})"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Удалить</button>`;
+    } else {
+      const contactHtml=`<button class="contact-btn" onclick="vib();contactSeller('${l.seller_username||''}','${l.phone||''}')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 0 2 2z"/></svg>Написать</button>`;
+      document.getElementById("action-btns").innerHTML=contactHtml;
+    }
     const recs=allListings.filter(x=>x.id!==id&&(x.category===l.category||x.city===l.city)).slice(0,8);
     document.getElementById("recs-lbl").textContent=recs.length?t("recs"):"";
     document.getElementById("recs-list").innerHTML=recs.map(r=>`<div class="rec-card" onclick="vib();closeModal('detail-modal');setTimeout(()=>openDetail(${r.id}),220)"><div class="rec-img">${getPhotos(r)[0]?`<img src="${getPhotos(r)[0]}" loading="lazy">`:`<span>${CAT_EMOJI[r.category]||"📦"}</span>`}</div><div class="rec-body"><div class="rec-ttl">${esc(r.title)}</div><div class="rec-prc">${priceStr(r)}</div></div></div>`).join("");
     document.getElementById("detail-modal").classList.add("open");
+    document.getElementById("fab-btn").classList.add("hidden");
   }catch(e){}
 }
-function contactSeller(u){if(u&&tg)tg.openTelegramLink(`https://t.me/${u}`);else showToast("У продавца нет username");}
+function contactSeller(u,phone){
+  if(u&&tg)tg.openTelegramLink(`https://t.me/${u}`);
+  else if(phone)window.open(`tel:${phone}`);
+  else showToast("У продавца нет контактов");
+}
+
+function buyPromo(id){
+  currentListingId=id;
+  document.getElementById("pay-modal").classList.add("open");
+}
+
+function buyLegendary(id){
+  currentListingId=id;
+  document.getElementById("pay-modal").classList.add("open");
+}
+
+async function markSold(id){
+  if(!confirm("Отметить как Продано?"))return;
+  try{
+    await fetch(`${API}/api/listings/${id}/sold?user_id=${tgUser?.id||0}`,{method:"POST"});
+    closeModal("detail-modal");await loadListings();loadProfile();showToast("✅ Отмечено как Продано!");
+  }catch(e){showToast("❌ Ошибка");}
+}
+
+async function deleteListingFromDetail(id){
+  if(!confirm("Удалить объявление?"))return;
+  try{
+    await fetch(`${API}/api/listings/${id}?user_id=${tgUser?.id||0}`,{method:"DELETE"});
+    closeModal("detail-modal");await loadListings();loadProfile();showToast("🗑 Удалено");
+  }catch(e){showToast("❌ Ошибка");}
+}
+
+let editListingId=null;
+let editPhotoFiles=[null,null,null,null];
+
+async function openEditModal(id){
+  try{
+    const res=await fetch(`${API}/api/listings/${id}`);const l=await res.json();
+    editListingId=id;
+    editPhotoFiles=[null,null,null,null];
+    // fill fields
+    document.getElementById("edit-title").value=l.title||"";
+    document.getElementById("edit-desc").value=l.description||"";
+    document.getElementById("edit-price").value=l.price||"";
+    document.getElementById("edit-phone").value=l.phone||"";
+    // build cat select
+    const catSel=document.getElementById("edit-cat");
+    catSel.innerHTML="";
+    CAT_KEYS.forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=`${CAT_EMOJI[k]} ${t(`cats.${k}`)}`;catSel.appendChild(o);});
+    catSel.value=l.category;
+    // city
+    const citySel=document.getElementById("edit-city");
+    const cityOther=document.getElementById("edit-city-other");
+    if(CITY_KEYS.includes(l.city)){citySel.value=l.city;cityOther.style.display="none";}
+    else{citySel.value="other";cityOther.style.display="";cityOther.value=l.city;}
+    citySel.onchange=()=>{cityOther.style.display=citySel.value==="other"?"":"none";};
+    // existing photos
+    const photos=getPhotos(l);
+    for(let i=0;i<4;i++){
+      const slot=document.getElementById(`edit-slot-${i}`);
+      slot.style.display=i<=photos.length&&i<4?"":"none";
+      if(photos[i]){slot.innerHTML=`<img src="${photos[i]}"><div class="del-p" onclick="clearEditPhoto(${i})">×</div><input type="file" accept="image/*" onchange="editPhoto(this,${i})" style="position:absolute;inset:0;opacity:0;cursor:pointer;">`;}
+      else{slot.innerHTML=`<input type="file" accept="image/*" onchange="editPhoto(this,${i})"><span>+</span>`;}
+    }
+    document.getElementById("edit-modal").classList.add("open");
+  }catch(e){showToast("❌ Ошибка загрузки");}
+}
+
+function editPhoto(input,idx){
+  const file=input.files[0];if(!file)return;
+  editPhotoFiles[idx]=file;
+  const slot=document.getElementById(`edit-slot-${idx}`);
+  const img=document.createElement("img");img.src=URL.createObjectURL(file);
+  slot.innerHTML="";slot.appendChild(img);
+  const del=document.createElement("div");del.className="del-p";del.textContent="×";
+  del.onclick=e=>{e.stopPropagation();editPhotoFiles[idx]=null;slot.innerHTML=`<input type="file" accept="image/*" onchange="editPhoto(this,${idx})"><span>+</span>`;};
+  slot.appendChild(del);
+  const inp=document.createElement("input");inp.type="file";inp.accept="image/*";inp.style="position:absolute;inset:0;opacity:0;cursor:pointer;";inp.onchange=e=>editPhoto(e.target,idx);
+  slot.appendChild(inp);
+}
+
+function clearEditPhoto(idx){
+  editPhotoFiles[idx]=null;
+  const slot=document.getElementById(`edit-slot-${idx}`);
+  slot.innerHTML=`<input type="file" accept="image/*" onchange="editPhoto(this,${idx})"><span>+</span>`;
+}
+
+async function submitEdit(){
+  const title=document.getElementById("edit-title").value.trim();
+  if(!title){showToast("⚠️ Введите заголовок");return;}
+  const btn=document.getElementById("edit-submit-btn");btn.disabled=true;
+  const fd=new FormData();
+  fd.append("user_id",tgUser?.id||0);
+  fd.append("title",title);
+  fd.append("description",document.getElementById("edit-desc").value);
+  fd.append("price",document.getElementById("edit-price").value||0);
+  fd.append("currency","USD");
+  fd.append("category",document.getElementById("edit-cat").value);
+  const cityVal=document.getElementById("edit-city").value;
+  const cityOther=document.getElementById("edit-city-other").value.trim();
+  fd.append("city",cityVal==="other"?(cityOther||"other"):cityVal);
+  fd.append("phone",document.getElementById("edit-phone").value);
+  if(editPhotoFiles[0])fd.append("photo",editPhotoFiles[0]);
+  if(editPhotoFiles[1])fd.append("photo_2",editPhotoFiles[1]);
+  if(editPhotoFiles[2])fd.append("photo_3",editPhotoFiles[2]);
+  if(editPhotoFiles[3])fd.append("photo_4",editPhotoFiles[3]);
+  try{
+    const res=await fetch(`${API}/api/listings/${editListingId}`,{method:"PUT",body:fd});
+    if(res.ok){showToast("✅ Сохранено!");closeModal("edit-modal");await loadListings();}
+    else showToast("❌ Ошибка");
+  }catch(e){showToast("❌ Ошибка соединения");}
+  btn.disabled=false;
+}
 function renderDetailImgs(){
   const wrap=document.getElementById("detail-imgs");
   wrap.querySelectorAll("img").forEach(i=>i.remove());
+  wrap.querySelectorAll(".make-main-btn,.main-label").forEach(i=>i.remove());
   const dots=document.getElementById("detail-dots");
   const noImg=document.getElementById("detail-no-img");
+  const hasMulti=detailPhotos.length>1;
+  document.getElementById("detail-arr-l").style.display=hasMulti?"flex":"none";
+  document.getElementById("detail-arr-r").style.display=hasMulti?"flex":"none";
   if(!detailPhotos.length){noImg.style.display="flex";dots.innerHTML="";return;}
   noImg.style.display="none";
   detailPhotos.forEach((p,i)=>{const img=document.createElement("img");img.src=p;img.className=i===0?"active":"";wrap.insertBefore(img,wrap.querySelector(".detail-img-nav"));});
   dots.innerHTML=detailPhotos.map((_,i)=>`<div class="didot${i===0?" active":""}"></div>`).join("");
+  // main label
+  if(currentDetailMine&&hasMulti){
+    const lbl=document.createElement("div");
+    lbl.className="main-label";
+    lbl.id="main-label";
+    lbl.textContent="⭐ Главное фото";
+    lbl.style.display=detailPhotoIdx===0?"flex":"none";
+    wrap.appendChild(lbl);
+  }
+  // touch swipe
+  let sx=0,moved=false;
+  wrap.ontouchstart=e=>{sx=e.touches[0].clientX;moved=false;};
+  wrap.ontouchmove=e=>{if(Math.abs(e.touches[0].clientX-sx)>8)moved=true;};
+  wrap.ontouchend=e=>{const dx=e.changedTouches[0].clientX-sx;if(moved&&Math.abs(dx)>40){detailNav(dx<0?1:-1);updateMakeMainBtn();}};
+}
+function updateMakeMainBtn(){
+  const lbl=document.getElementById("main-label");
+  if(lbl)lbl.style.display=detailPhotoIdx===0?"flex":"none";
 }
 function detailNav(dir){if(!detailPhotos.length)return;vib();const imgs=document.getElementById("detail-imgs").querySelectorAll("img");const dotEls=document.getElementById("detail-dots").querySelectorAll(".didot");imgs[detailPhotoIdx].classList.remove("active");dotEls[detailPhotoIdx]?.classList.remove("active");detailPhotoIdx=(detailPhotoIdx+dir+detailPhotos.length)%detailPhotos.length;imgs[detailPhotoIdx].classList.add("active");dotEls[detailPhotoIdx]?.classList.add("active");}
 
@@ -807,32 +1155,172 @@ function openDeals(){document.getElementById("deals-modal").classList.add("open"
 async function deleteListing(id){if(!confirm(t("del_confirm")))return;try{await fetch(`${API}/api/listings/${id}?user_id=${tgUser?.id||0}`,{method:"DELETE"});await loadListings();loadProfile();showToast("🗑 Удалено");}catch(e){showToast("❌ Ошибка");}}
 
 /* MODALS */
-function openAddModal(){buildCatSelect();document.getElementById("add-modal").classList.add("open");}
-function closeModal(id){document.getElementById(id).classList.remove("open");}
-["add-modal","detail-modal","deals-modal"].forEach(id=>{document.getElementById(id).addEventListener("click",e=>{if(e.target===e.currentTarget)closeModal(id);});});
+function openAddModal(){
+  buildCatSelect();
+  document.getElementById("add-modal").classList.add("open");
+  document.getElementById("fab-btn").classList.add("hidden");
+  const sel=document.getElementById("inp-city");
+  const other=document.getElementById("inp-city-other");
+  sel.onchange=()=>{other.style.display=sel.value==="other"?"":"none";};
+}
+function closeModal(id){
+  document.getElementById(id).classList.remove("open");
+  if(id==="add-modal"||id==="detail-modal")document.getElementById("fab-btn").classList.toggle("hidden",currentPage!=="market");
+}
+["add-modal","detail-modal","deals-modal","edit-modal","pay-modal"].forEach(id=>{document.getElementById(id).addEventListener("click",e=>{if(e.target===e.currentTarget)closeModal(id);});});
 
 /* PHOTOS */
-function addPhoto(input,idx){const file=input.files[0];if(!file)return;photoFiles[idx]=file;const slot=document.getElementById(`slot-${idx}`);const img=document.createElement("img");img.src=URL.createObjectURL(file);slot.innerHTML="";slot.appendChild(img);const del=document.createElement("div");del.className="del-p";del.textContent="×";del.onclick=e=>{e.stopPropagation();photoFiles[idx]=null;slot.innerHTML=`<input type="file" accept="image/*" onchange="addPhoto(this,${idx})"><span>+</span>`;updateSlots();};slot.appendChild(del);updateSlots();}
-function updateSlots(){const filled=photoFiles.filter(f=>f).length;for(let i=0;i<4;i++)document.getElementById(`slot-${i}`).style.display=i<=filled&&i<4?"":"none";}
+function addPhotosMulti(input){
+  const files=Array.from(input.files).slice(0,8);
+  if(!files.length)return;
+  photoFiles=[null,null,null,null,null,null,null,null];
+  files.forEach((f,i)=>photoFiles[i]=f);
+  const thumbs=document.getElementById("photo-thumbs");
+  thumbs.innerHTML="";
+  files.forEach((f,i)=>{
+    const slot=document.createElement("div");slot.className="photo-slot";slot.style.cssText="position:relative;";
+    const img=document.createElement("img");img.src=URL.createObjectURL(f);img.style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;";
+    const del=document.createElement("div");del.className="del-p";del.textContent="×";
+    del.onclick=e=>{e.stopPropagation();photoFiles[i]=null;slot.remove();
+      const cnt=photoFiles.filter(Boolean).length;
+      const lbl=document.getElementById("photo-slot-lbl");
+      if(lbl)lbl.textContent=cnt?`${cnt} фото выбрано`:"Выбрать фото (до 8)";
+    };
+    slot.appendChild(img);slot.appendChild(del);thumbs.appendChild(slot);
+  });
+  const lbl=document.getElementById("photo-slot-lbl");
+  if(lbl)lbl.textContent=`${files.length} фото выбрано`;
+}
+function addPhoto(input,idx){const file=input.files[0];if(!file)return;photoFiles[idx]=file;}
+function updateSlots(){}
 function buildCatSelect(){const sel=document.getElementById("inp-cat");sel.innerHTML="";CAT_KEYS.forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=`${CAT_EMOJI[k]} ${t(`cats.${k}`)}`;sel.appendChild(o);});}
 
 /* PROMOTE */
-function togglePromo(){vib();promoEnabled=!promoEnabled;document.getElementById("promo-toggle").classList.toggle("on",promoEnabled);document.getElementById("promo-lbl").textContent=promoEnabled?t("promo_on"):t("promo_off");document.getElementById("promo-opts").style.display=promoEnabled?"":"none";}
-function selPay(p){vib();promoPayment=p;["stars","crypto","card"].forEach(x=>document.getElementById(`popt-${x}`).classList.toggle("selected",x===p));}
+function togglePromo(){vib();promoEnabled=!promoEnabled;document.getElementById("promo-toggle").classList.toggle("on",promoEnabled);document.getElementById("promo-lbl").textContent=promoEnabled?"Баннер · 1000⭐ · 30 дней":"Не продвигать";document.getElementById("promo-opts").style.display=promoEnabled?"":"none";}
+function selPay(p){vib();promoPayment=p;["stars","card"].forEach(x=>document.getElementById(`popt-${x}`).classList.toggle("selected",x===p));}
+function toggleLegendary(){vib();legendaryEnabled=!legendaryEnabled;document.getElementById("legend-toggle").classList.toggle("on",legendaryEnabled);document.getElementById("legend-lbl").textContent=legendaryEnabled?"⚡ Легендарное · 750⭐":"Не активировать";document.getElementById("legend-opts").style.display=legendaryEnabled?"":"none";}
+function selLegPay(p){vib();legendaryPayment=p;["stars","card"].forEach(x=>document.getElementById(`popt-leg-${x}`)?.classList.toggle("selected",x===p));}
 
 /* SUBMIT */
+let pendingPromoType=null,pendingPromoPayment=null;
+async function setPromoAndPublish(type,payment){
+  pendingPromoType=type;
+  pendingPromoPayment=payment;
+  await submitListing();
+  // After publish, auto-trigger payment
+  if(currentListingId){
+    if(type==="gold"&&payment==="stars") await payPromoStars();
+    else if(type==="gold"&&payment==="card") await payPromoCard();
+    else if(type==="legendary"&&payment==="stars") await payLegStars();
+    else if(type==="legendary"&&payment==="card") await payLegCard();
+  }
+}
+let currentListingId=null;
+
 async function submitListing(){
   const title=document.getElementById("inp-title").value.trim();
+  const desc=document.getElementById("inp-desc").value.trim();
   if(!title){showToast("⚠️ Введите заголовок");return;}
+  if(!desc){showToast("⚠️ Введите описание");return;}
+  const uid=tgUser?.id||0;
   const btn=document.getElementById("submit-btn");btn.disabled=true;
   const fd=new FormData();
-  fd.append("user_id",tgUser?.id||0);fd.append("title",title);fd.append("description",document.getElementById("inp-desc").value);fd.append("price",document.getElementById("inp-price").value||0);fd.append("currency","USD");fd.append("category",document.getElementById("inp-cat").value);fd.append("city",document.getElementById("inp-city").value);fd.append("is_promoted",promoEnabled?1:0);
+  const cityVal=document.getElementById("inp-city").value;
+  const cityOther=document.getElementById("inp-city-other").value.trim();
+  const finalCity=cityVal==="other"?(cityOther||"other"):cityVal;
+  fd.append("user_id",uid);fd.append("title",title);
+  fd.append("description",desc);
+  fd.append("price",document.getElementById("inp-price").value||0);
+  fd.append("currency","USD");fd.append("category",document.getElementById("inp-cat").value);
+  fd.append("city",finalCity);fd.append("is_promoted",0);
+  fd.append("condition",document.getElementById("inp-condition").value||"new");
   if(tgUser?.username)fd.append("seller_username",tgUser.username);
-  if(photoFiles[0])fd.append("photo",photoFiles[0]);if(photoFiles[1])fd.append("photo_2",photoFiles[1]);if(photoFiles[2])fd.append("photo_3",photoFiles[2]);if(photoFiles[3])fd.append("photo_4",photoFiles[3]);
-  try{const res=await fetch(`${API}/api/listings`,{method:"POST",body:fd});if(res.ok){showToast(promoEnabled?"✅ Опубликовано! Оплата скоро":"✅ Опубликовано!");closeModal("add-modal");resetForm();loadListings();}else showToast("❌ Ошибка");}catch(e){showToast("❌ Ошибка соединения");}
+  fd.append("phone",document.getElementById("inp-phone").value||"");
+  photoFiles.filter(Boolean).forEach((f,i)=>{
+    const keys=["photo","photo_2","photo_3","photo_4","photo_5","photo_6","photo_7","photo_8"];
+    fd.append(keys[i],f);
+  });
+  try{
+    const res=await fetch(`${API}/api/listings`,{method:"POST",body:fd});
+    if(res.ok){
+      const data=await res.json();
+      currentListingId=data.id;
+      closeModal("add-modal");resetForm();loadListings();
+      // Show payment options
+      document.getElementById("pay-modal").classList.add("open");
+    } else {
+      const err=await res.json().catch(()=>({}));
+      showToast("❌ "+(err.detail||res.status));
+    }
+  }catch(e){showToast("❌ "+e.message);}
   btn.disabled=false;
 }
-function resetForm(){["inp-title","inp-desc","inp-price"].forEach(id=>document.getElementById(id).value="");photoFiles=[null,null,null,null];for(let i=0;i<4;i++){const s=document.getElementById(`slot-${i}`);s.innerHTML=`<input type="file" accept="image/*" onchange="addPhoto(this,${i})"><span>+</span>`;s.style.display=i===0?"":"none";}promoEnabled=false;document.getElementById("promo-toggle").classList.remove("on");document.getElementById("promo-lbl").textContent=t("promo_off");document.getElementById("promo-opts").style.display="none";}
+
+async function payPromoStars(){
+  if(!currentListingId)return;
+  const pfd=new FormData();pfd.append("user_id",tgUser?.id||0);
+  const pres=await fetch(`${API}/api/listings/${currentListingId}/pay_stars`,{method:"POST",body:pfd});
+  if(pres.ok){
+    const pdata=await pres.json();
+    if(tg&&pdata.invoice_url){
+      closeModal("pay-modal");
+      tg.openInvoice(pdata.invoice_url,(s)=>{
+        if(s==="paid"){showToast("⭐ ЗОЛОТОЕ активировано!");loadListings();}
+        else showToast("❌ Отменено");
+      });
+    }
+  } else showToast("❌ Ошибка");
+}
+
+async function payPromoCard(){
+  if(!currentListingId)return;
+  const pfd=new FormData();pfd.append("user_id",tgUser?.id||0);
+  await fetch(`${API}/api/listings/${currentListingId}/pay_card`,{method:"POST",body:pfd});
+  closeModal("pay-modal");
+  if(tg)tg.openLink("https://t.me/tribute/app?startapp=diuS");
+  else window.open("https://t.me/tribute/app?startapp=diuS","_blank");
+  showToast("💳 Оплатите — объявление уже опубликовано!");
+}
+
+async function payLegStars(){
+  if(!currentListingId)return;
+  const pfd=new FormData();pfd.append("user_id",tgUser?.id||0);
+  const pres=await fetch(`${API}/api/listings/${currentListingId}/pay_legendary`,{method:"POST",body:pfd});
+  if(pres.ok){
+    const pdata=await pres.json();
+    if(tg&&pdata.invoice_url){
+      closeModal("pay-modal");
+      tg.openInvoice(pdata.invoice_url,(s)=>{
+        if(s==="paid"){showToast("⚡ ЛЕГЕНДАРНОЕ активировано!");loadListings();}
+        else showToast("❌ Отменено");
+      });
+    }
+  } else showToast("❌ Ошибка");
+}
+
+async function payLegCard(){
+  if(!currentListingId)return;
+  const pfd=new FormData();pfd.append("user_id",tgUser?.id||0);
+  await fetch(`${API}/api/listings/${currentListingId}/pay_card`,{method:"POST",body:pfd});
+  closeModal("pay-modal");
+  if(tg)tg.openLink("https://t.me/tribute/app?startapp=diuS");
+  else window.open("https://t.me/tribute/app?startapp=diuS","_blank");
+  showToast("💳 Оплатите — объявление уже опубликовано!");
+}
+function resetForm(){
+  ["inp-title","inp-desc","inp-price","inp-phone"].forEach(id=>document.getElementById(id).value="");
+  photoFiles=[null,null,null,null,null,null,null,null];
+  document.getElementById("photo-thumbs").innerHTML="";
+  const lbl=document.getElementById("photo-slot-lbl");
+  if(lbl)lbl.textContent="Выбрать фото (до 8)";
+  promoEnabled=false;legendaryEnabled=false;
+  document.getElementById("promo-toggle").classList.remove("on");
+  document.getElementById("promo-lbl").textContent="Не продвигать";
+  document.getElementById("promo-opts").style.display="none";
+  document.getElementById("legend-toggle").classList.remove("on");
+  document.getElementById("legend-lbl").textContent="Не активировать";
+  document.getElementById("legend-opts").style.display="none";
+}
 
 function showToast(msg){const el=document.getElementById("toast");el.textContent=msg;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2800);}
 

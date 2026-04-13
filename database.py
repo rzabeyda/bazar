@@ -26,9 +26,15 @@ def init_db():
     # migrations
     for col, defn in [
         ("photo_path2","TEXT"), ("photo_path3","TEXT"), ("photo_path4","TEXT"),
+        ("photo_path5","TEXT"), ("photo_path6","TEXT"), ("photo_path7","TEXT"), ("photo_path8","TEXT"),
         ("is_promoted","INTEGER DEFAULT 0"), ("seller_username","TEXT"),
         ("expires_at","TIMESTAMP DEFAULT (datetime('now','+30 days'))"),
         ("notified_expiry","INTEGER DEFAULT 0"),
+        ("phone","TEXT"),
+        ("promoted_until","TIMESTAMP"),
+        ("is_legendary","INTEGER DEFAULT 0"),
+        ("legendary_until","TIMESTAMP"),
+        ("condition","TEXT DEFAULT 'new'"),
     ]:
         try: c.execute(f"ALTER TABLE listings ADD COLUMN {col} {defn}")
         except: pass
