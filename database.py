@@ -23,7 +23,19 @@ def init_db():
         expires_at TIMESTAMP DEFAULT (datetime('now','+30 days')),
         notified_expiry INTEGER DEFAULT 0,
         FOREIGN KEY (user_id) REFERENCES users(telegram_id))""")
-    # migrations
+    c.execute("""CREATE TABLE IF NOT EXISTS offers (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        listing_id INTEGER NOT NULL,
+        listing_title TEXT,
+        seller_id INTEGER NOT NULL,
+        buyer_id INTEGER NOT NULL,
+        buyer_username TEXT,
+        amount REAL NOT NULL,
+        currency TEXT DEFAULT 'USD',
+        status TEXT DEFAULT 'pending',
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (listing_id) REFERENCES listings(id))""")
+    # migrations listings
     for col, defn in [
         ("photo_path2","TEXT"), ("photo_path3","TEXT"), ("photo_path4","TEXT"),
         ("photo_path5","TEXT"), ("photo_path6","TEXT"), ("photo_path7","TEXT"), ("photo_path8","TEXT"),
@@ -35,8 +47,16 @@ def init_db():
         ("is_legendary","INTEGER DEFAULT 0"),
         ("legendary_until","TIMESTAMP"),
         ("condition","TEXT DEFAULT 'new'"),
+        ("views","INTEGER DEFAULT 0"),
     ]:
         try: c.execute(f"ALTER TABLE listings ADD COLUMN {col} {defn}")
+        except: pass
+    # migrations users
+    for col, defn in [
+        ("is_verified","INTEGER DEFAULT 0"),
+        ("verified_until","TIMESTAMP"),
+    ]:
+        try: c.execute(f"ALTER TABLE users ADD COLUMN {col} {defn}")
         except: pass
     conn.commit(); conn.close(); print("DB initialized")
 
