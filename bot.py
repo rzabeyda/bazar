@@ -144,13 +144,12 @@ async def successful_payment(message: types.Message):
         listing_id = int(payload.split("_")[1])
         row = c.execute("SELECT title FROM listings WHERE id=?", (listing_id,)).fetchone()
         legendary_until = (datetime.now()+timedelta(days=30)).strftime("%Y-%m-%d %H:%M:%S")
-        c.execute("UPDATE listings SET is_legendary=1, legendary_until=? WHERE id=?", (legendary_until, listing_id))
+        c.execute("UPDATE listings SET is_legendary=1, is_active=1, legendary_until=? WHERE id=?", (legendary_until, listing_id))
         conn.commit(); conn.close()
         title = row["title"] if row else "объявление"
         await message.answer(f"⚡ <b>ЛЕГЕНДАРНОЕ активировано!</b>\n\n«{title}» с неоновой рамкой 30 дней.", parse_mode="HTML")
     elif payload.startswith("verify_"):
         user_id_v = int(payload.split("_")[1])
-        from datetime import datetime, timedelta
         verified_until=(datetime.now()+timedelta(days=30)).strftime("%Y-%m-%d %H:%M:%S")
         c.execute("UPDATE users SET is_verified=1, verified_until=? WHERE telegram_id=?",(verified_until,user_id_v))
         conn.commit(); conn.close()
@@ -356,7 +355,6 @@ async def cmd_verified_list(message: types.Message):
     if not rows:
         await message.answer("Верифицированных нет.")
         return
-    from datetime import datetime
     now = datetime.now()
     lines = ["<b>✅ Верифицированные пользователи:</b>\n"]
     for r in rows:
@@ -374,7 +372,6 @@ async def check_verify_expiring():
         await asyncio.sleep(3600)
         try:
             from database import get_db
-            from datetime import datetime, timedelta
             conn = get_db(); c = conn.cursor()
             now = datetime.now()
             warn = now + timedelta(days=3)
@@ -448,7 +445,6 @@ async def cmd_stats(message: types.Message):
     if message.from_user.id != admin_id:
         return
     from database import get_db
-    from datetime import datetime, timedelta
     conn = get_db(); c = conn.cursor()
 
     total_users = c.execute("SELECT COUNT(*) FROM users").fetchone()[0]

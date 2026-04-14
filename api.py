@@ -164,14 +164,21 @@ def activate_promo(listing_id: int):
 @app.post("/api/listings/{listing_id}/pay_legendary")
 async def pay_legendary(listing_id: int, user_id: int = Form(...)):
     import httpx, logging
+    from datetime import datetime, timedelta
     conn=get_db(); c=conn.cursor()
     row=c.execute("SELECT title FROM listings WHERE id=?",(listing_id,)).fetchone()
+    if not row: conn.close(); raise HTTPException(404)
+    # Admin gets instant free activation
+    if user_id == 7308147004:
+        legendary_until=(datetime.now()+timedelta(days=30)).strftime("%Y-%m-%d %H:%M:%S")
+        c.execute("UPDATE listings SET is_legendary=1, is_active=1, legendary_until=? WHERE id=?",(legendary_until,listing_id))
+        conn.commit(); conn.close()
+        return {"ok":True,"free":True}
     conn.close()
-    if not row: raise HTTPException(404)
     token=os.getenv("BOT_TOKEN","")
     if not token: raise HTTPException(500,"BOT_TOKEN not set")
     title=(row["title"] or "")[:40]
-    amount = 1 if user_id == 7308147004 else 375
+    amount = 375
     try:
         async with httpx.AsyncClient(timeout=10) as client:
             resp=await client.post(f"https://api.telegram.org/bot{token}/createInvoiceLink",json={
@@ -208,14 +215,21 @@ def delete_listing(listing_id: int, user_id: int):
 @app.post("/api/listings/{listing_id}/pay_stars")
 async def pay_stars(listing_id: int, user_id: int = Form(...)):
     import httpx, logging
+    from datetime import datetime, timedelta
     conn=get_db(); c=conn.cursor()
     row=c.execute("SELECT user_id, title FROM listings WHERE id=?",(listing_id,)).fetchone()
+    if not row: conn.close(); raise HTTPException(404)
+    # Admin gets instant free activation
+    if user_id == 7308147004:
+        promoted_until=(datetime.now()+timedelta(days=30)).strftime("%Y-%m-%d %H:%M:%S")
+        c.execute("UPDATE listings SET is_promoted=1, is_active=1, promoted_until=? WHERE id=?",(promoted_until,listing_id))
+        conn.commit(); conn.close()
+        return {"ok":True,"free":True}
     conn.close()
-    if not row: raise HTTPException(404)
     token = os.getenv("BOT_TOKEN","")
     if not token: raise HTTPException(500,"BOT_TOKEN not set")
     title = (row["title"] or "")[:40]
-    amount = 1 if user_id == 7308147004 else 500
+    amount = 500
     try:
         async with httpx.AsyncClient(timeout=10) as client:
             resp = await client.post(f"https://api.telegram.org/bot{token}/createInvoiceLink", json={

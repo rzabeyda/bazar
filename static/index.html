@@ -1255,7 +1255,7 @@ function rotateBanner(dir){
 }
 
 async function loadListings(){
-  try{const res=await fetch(`${API}/api/listings?_=${V}`);allListings=await res.json();initBanners();renderListings(filterData());}
+  try{const res=await fetch(`${API}/api/listings?_=${Date.now()}`);allListings=await res.json();initBanners();renderListings(filterData());}
   catch(e){document.getElementById("listings-grid").innerHTML=`<div class="empty"><div class="empty-icon">⚠️</div><div>Ошибка соединения</div></div>`;}
 }
 
@@ -1386,11 +1386,13 @@ function contactSeller(u,phone){
 
 function buyPromo(id){
   currentListingId=id;
+  currentPayType="gold";
   document.getElementById("pay-modal").classList.add("open");
 }
 
 function buyLegendary(id){
   currentListingId=id;
+  currentPayType="legendary";
   document.getElementById("pay-modal").classList.add("open");
 }
 
@@ -1581,23 +1583,16 @@ async function loadProfile(){
   }
   const uid=tgUser?.id||0;
   const myActive=allListings.filter(l=>l.user_id===uid&&l.is_active!==0);
-  document.getElementById("stat-deals").textContent=0;
-  // load deals count
+  // load stats in parallel
   if(uid){
-    try{
-      const dr=await fetch(`${API}/api/listings/sold/${uid}`);
-      const sold=await dr.json();
-      document.getElementById("stat-deals").textContent=sold.length;
-    }catch(e){}
-  }
-  // load orders count
-  if(uid){
-    try{
-      const or=await fetch(`${API}/api/offers/${uid}`);
-      const offers=await or.json();
+    Promise.all([
+      fetch(`${API}/api/listings/sold/${uid}`).then(r=>r.json()).catch(()=>[]),
+      fetch(`${API}/api/offers/${uid}`).then(r=>r.json()).catch(()=>[])
+    ]).then(([sold,offers])=>{
+      document.getElementById("stat-deals").textContent=sold.length||0;
       const pending=offers.filter(o=>o.status==="pending").length;
-      document.getElementById("stat-orders").textContent=pending||offers.length;
-    }catch(e){}
+      document.getElementById("stat-orders").textContent=pending||offers.length||0;
+    });
   }
   const list=document.getElementById("my-listings-list");
   if(!myActive.length){list.innerHTML=`<div class="no-ads">${t("no_listings")}</div>`;return;}
@@ -1699,7 +1694,10 @@ async function deleteListing(id){if(!confirm(t("del_confirm")))return;try{await 
 /* MODALS */
 function openAddModal(){
   buildCatSelect();
-  document.getElementById("add-modal").classList.add("open");
+  const modal=document.getElementById("add-modal");
+  modal.classList.add("open");
+  // Scroll modal content to top
+  setTimeout(()=>{const m=modal.querySelector(".modal");if(m)m.scrollTop=0;},50);
   document.getElementById("fab-btn").classList.add("hidden");
   const sel=document.getElementById("inp-city");
   const other=document.getElementById("inp-city-other");
@@ -1758,6 +1756,7 @@ async function setPromoAndPublish(type,payment){
   }
 }
 let currentListingId=null;
+let currentPayType="gold"; // "gold" or "legendary"
 
 function validateForm(){
   const title=document.getElementById("inp-title").value.trim();
@@ -1800,8 +1799,24 @@ async function submitListing(){
     if(res.ok){
       const data=await res.json();
       currentListingId=data.id;
-      closeModal("add-modal");resetForm();loadListings();
+      closeModal("add-modal");
+      resetForm();
       showToast("✅ Объявление опубликовано!");
+      // Force reload listings
+      try{
+        const r=await fetch(`${API}/api/listings?_=${Date.now()}`);
+        allListings=await r.json();
+        initBanners();
+        renderListings(filterData());
+        window.scrollTo({top:0,behavior:"smooth"});
+      }catch(ex){}
+      setTimeout(async()=>{
+        try{
+          const r=await fetch(`${API}/api/listings?_=${Date.now()}`);
+          allListings=await r.json();
+          renderListings(filterData());
+        }catch(ex){}
+      },1500);
     } else {
       const err=await res.json().catch(()=>({}));
       showToast("❌ "+(err.detail||res.status));
@@ -1816,11 +1831,20 @@ async function payPromoStars(){
   const pres=await fetch(`${API}/api/listings/${currentListingId}/pay_stars`,{method:"POST",body:pfd});
   if(pres.ok){
     const pdata=await pres.json();
+    if(pdata.free){
+      closeModal("pay-modal");
+      closeModal("detail-modal");
+      showToast("⭐ ЗОЛОТОЕ активировано!");
+      await loadListings();
+      return;
+    }
     if(tg&&pdata.invoice_url){
       closeModal("pay-modal");
       tg.openInvoice(pdata.invoice_url,(s)=>{
-        if(s==="paid"){showToast("⭐ ЗОЛОТОЕ активировано!");loadListings();}
-        // НЕ закрываем add-modal — объявление уже опубликовано, пусть человек видит его
+        if(s==="paid"){
+          showToast("⭐ ЗОЛОТОЕ активировано!");
+          setTimeout(()=>loadListings(),1500);
+        }
       });
     }
   } else showToast("❌ Ошибка");
@@ -1842,10 +1866,20 @@ async function payLegStars(){
   const pres=await fetch(`${API}/api/listings/${currentListingId}/pay_legendary`,{method:"POST",body:pfd});
   if(pres.ok){
     const pdata=await pres.json();
+    if(pdata.free){
+      closeModal("pay-modal");
+      closeModal("detail-modal");
+      showToast("⚡ ЛЕГЕНДАРНОЕ активировано!");
+      await loadListings();
+      return;
+    }
     if(tg&&pdata.invoice_url){
       closeModal("pay-modal");
       tg.openInvoice(pdata.invoice_url,(s)=>{
-        if(s==="paid"){showToast("⚡ ЛЕГЕНДАРНОЕ активировано!");loadListings();}
+        if(s==="paid"){
+          showToast("⚡ ЛЕГЕНДАРНОЕ активировано!");
+          setTimeout(()=>loadListings(),1500);
+        }
       });
     }
   } else showToast("❌ Ошибка");
@@ -1864,6 +1898,9 @@ function resetForm(){
   ["inp-title","inp-desc","inp-price","inp-phone"].forEach(id=>document.getElementById(id).value="");
   photoFiles=[null,null,null,null,null,null,null,null];
   document.getElementById("photo-thumbs").innerHTML="";
+  // Reset file input so same file can be selected again next time
+  const slotInput=document.querySelector("#slot-multi input");
+  if(slotInput)slotInput.value="";
   const lbl=document.getElementById("photo-slot-lbl");
   if(lbl)lbl.textContent="Выбрать фото (до 8)";
   promoEnabled=false;legendaryEnabled=false;
@@ -1873,6 +1910,7 @@ function resetForm(){
   document.getElementById("legend-toggle").classList.remove("on");
   document.getElementById("legend-lbl").textContent="Не активировать";
   document.getElementById("legend-opts").style.display="none";
+  selectCondition("new");
 }
 
 function showToast(msg){const el=document.getElementById("toast");el.textContent=msg;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2800);}
@@ -2024,7 +2062,7 @@ applyLang();loadListings();
 window.addEventListener('scroll',function(){
   const btn=document.getElementById('scroll-top-btn');
   if(!btn)return;
-  if(window.scrollY>300){btn.style.display='flex';}
+  if(window.scrollY>300 && currentPage==='market'){btn.style.display='flex';}
   else{btn.style.display='none';}
 });
 // check unread messages on load
@@ -2053,7 +2091,7 @@ setTimeout(async()=>{
     </div>
     <div id="chat-messages" style="flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-height:200px;max-height:50vh;"></div>
     <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end;flex-shrink:0;">
-      <textarea id="chat-input" placeholder="${t('chat_placeholder')}" style="flex:1;background:var(--card2);border:1.5px solid var(--border);border-radius:12px;padding:10px 12px;color:#fff;font-size:14px;outline:none;resize:none;height:42px;max-height:100px;font-family:inherit;line-height:1.4;" oninput="this.style.height='42px';this.style.height=Math.min(this.scrollHeight,100)+'px'" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMsg();}"></textarea>
+      <textarea id="chat-input" placeholder="Сообщение..." style="flex:1;background:var(--card2);border:1.5px solid var(--border);border-radius:12px;padding:10px 12px;color:#fff;font-size:14px;outline:none;resize:none;height:42px;max-height:100px;font-family:inherit;line-height:1.4;" oninput="this.style.height='42px';this.style.height=Math.min(this.scrollHeight,100)+'px'" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMsg();}"></textarea>
       <button onclick="vib();sendChatMsg()" style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
       </button>
