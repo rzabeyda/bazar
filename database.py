@@ -58,6 +58,23 @@ def init_db():
     ]:
         try: c.execute(f"ALTER TABLE users ADD COLUMN {col} {defn}")
         except: pass
+    # messages table
+    c.execute("""CREATE TABLE IF NOT EXISTS messages (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        sender_id INTEGER NOT NULL,
+        receiver_id INTEGER NOT NULL,
+        listing_id INTEGER,
+        text TEXT NOT NULL,
+        sender_username TEXT,
+        is_read INTEGER DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
+    # reports table
+    c.execute("""CREATE TABLE IF NOT EXISTS reports (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        listing_id INTEGER NOT NULL,
+        reporter_id INTEGER,
+        reason TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
     conn.commit(); conn.close(); print("DB initialized")
 
 if __name__=="__main__": init_db()

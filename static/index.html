@@ -99,6 +99,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
 .card.mine{border:2px solid #fff;}
 .card.promoted-card{border:2px solid var(--accent);box-shadow:0 0 12px rgba(240,165,0,.4),0 0 24px rgba(240,165,0,.15);animation:gold-glow 2s ease-in-out infinite alternate;}
 @keyframes gold-glow{0%{box-shadow:0 0 8px rgba(240,165,0,.4);}100%{box-shadow:0 0 18px rgba(240,165,0,.7),0 0 32px rgba(240,165,0,.2);}}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.4);}}
 .card.legendary{border:2px solid #ff00ff;box-shadow:0 0 12px rgba(255,0,255,.5),0 0 24px rgba(0,255,255,.3),inset 0 0 12px rgba(255,0,255,.05);animation:neon-glow 2s ease-in-out infinite alternate;}
 @keyframes neon-glow{0%{box-shadow:0 0 8px rgba(255,0,255,.6),0 0 20px rgba(0,255,255,.3);}100%{box-shadow:0 0 16px rgba(255,0,255,.9),0 0 32px rgba(0,255,255,.5),0 0 48px rgba(255,0,255,.2);}}
 .card.legendary .card-badge{background:linear-gradient(135deg,#9b00ff,#ff00aa);color:#fff;font-weight:900;box-shadow:0 0 8px rgba(155,0,255,.7);border:none;}
@@ -110,7 +111,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
 .card-idots{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);display:flex;gap:3px;z-index:2;}
 .card-idot{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.4);}
 .card-idot.active{background:#fff;}
-.promoted-badge{position:absolute;top:7px;right:7px;background:var(--accent);border-radius:6px;padding:2px 7px;font-size:9px;font-weight:800;color:#000;z-index:2;}
+.promoted-badge{position:absolute;top:7px;left:7px;background:var(--accent);border-radius:6px;padding:2px 7px;font-size:9px;font-weight:800;color:#000;z-index:2;}
 .card-badge{position:absolute;top:7px;left:7px;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);border-radius:6px;padding:2px 7px;font-size:10px;font-weight:600;color:#fff;z-index:2;}
 .card-body{padding:8px 9px 10px;}
 .card-title{font-size:13px;font-weight:600;color:#fff;margin-bottom:4px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
@@ -153,9 +154,9 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
 .profile-info{flex:1;min-width:0;}
 .profile-name{font-size:17px;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .profile-handle{font-size:13px;color:#fff;opacity:.55;margin-top:2px;}
-.share-btn{width:42px;height:42px;border-radius:50%;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:transform .15s;}
+.share-btn{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,rgba(240,165,0,.15),rgba(240,165,0,.05));border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:transform .15s;box-shadow:0 0 10px rgba(240,165,0,.25);}
 .share-btn:active{transform:scale(.9);}
-.share-btn svg{width:20px;height:20px;stroke:var(--accent);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.share-btn svg{width:19px;height:19px;stroke:var(--accent);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
 .profile-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px;}
 .stat-box{background:var(--card2);border-radius:12px;padding:12px;text-align:center;cursor:pointer;transition:background .15s;}
 .stat-box:active{background:#2a2a2a;}
@@ -331,11 +332,15 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
 
 <!-- AUCTION -->
 <div class="page" id="page-auction">
-  <div class="auction-page">
-    <div class="coming-icon"><img src="/static/icons/hammer.png" style="width:68px;height:68px;object-fit:contain;opacity:.9;"></div>
-    <div class="coming-title" id="auction-title">Аукцион</div>
-    <div class="coming-sub" id="auction-sub">Здесь скоро появятся аукционы.</div>
-    <div class="coming-badge" id="auction-badge">Скоро</div>
+  <div style="padding:16px 14px 0;">
+    <div id="chats-page-title" style="font-size:20px;font-weight:900;color:#fff;margin-bottom:16px;">💬 Чаты</div>
+    <div id="messages-list">
+      <div style="text-align:center;padding:60px 20px;">
+        <div style="font-size:52px;margin-bottom:14px;">💬</div>
+        <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:8px;">Нет сообщений</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.5;">Когда вы получите предложения по цене — они появятся здесь</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -346,7 +351,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
       <div class="profile-top">
         <div class="avatar" id="prof-avatar">?</div>
         <div class="profile-info">
-          <div class="profile-name" id="prof-name">—</div>
+          <div class="profile-name" id="prof-name" style="display:flex;align-items:center;gap:6px;">—</div>
           <div class="profile-handle" id="prof-handle">@</div>
         </div>
         <div class="share-btn" onclick="vib();shareProfile()">
@@ -354,27 +359,35 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
         </div>
       </div>
       <div class="profile-stats">
-        <div class="stat-box" onclick="vib();openDeals()"><div class="stat-num" id="stat-deals">0</div><div class="stat-lbl" id="s-deals-l">Сделки</div></div>        <div class="stat-box" onclick="vib();openOrders()"><div class="stat-num" id="stat-orders">0</div><div class="stat-lbl">Ордера</div></div>
-        <div class="stat-box" onclick="vib();openFavourites()" style="border:1.5px solid #e0245e;">
-          <div class="stat-num" style="color:#e0245e;">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="#e0245e" stroke="#e0245e" stroke-width="1.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-          </div>
-          <div class="stat-lbl" id="fav-count-lbl">0</div>
+        <div class="stat-box" onclick="vib();openDeals()" style="background:rgba(46,204,113,.1);border:1.5px solid #2ecc71;">
+          <div class="stat-num" style="color:#2ecc71;" id="stat-deals">0</div>
+          <div class="stat-lbl" id="s-deals-l" style="color:#2ecc71;opacity:.9;">Сделки</div>
+        </div>
+        <div class="stat-box" onclick="vib();openFavourites()" style="background:rgba(231,76,60,.1);border:1.5px solid #e74c3c;">
+          <div class="stat-num" id="fav-count-lbl" style="color:#e74c3c;">0</div>
+          <div class="stat-lbl" id="stat-bookmarks-lbl" style="color:#e74c3c;opacity:.9;">Закладки</div>
+        </div>
+        <div class="stat-box" onclick="vib();openOrders()" style="background:rgba(0,136,204,.1);border:1.5px solid #0088cc;">
+          <div class="stat-num" style="color:#0088cc;" id="stat-orders">0</div>
+          <div class="stat-lbl" id="stat-orders-lbl" style="color:#0088cc;opacity:.9;">Ордера</div>
         </div>
       </div>
+    </div>
+    <div id="verify-profile-btn" onclick="vib();openVerifyModal()" style="display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(0,136,204,.18),rgba(0,136,204,.06));border:1.5px solid #0088cc;border-radius:16px;padding:14px 16px;margin-bottom:12px;cursor:pointer;position:relative;overflow:hidden;">
+      <div style="position:absolute;inset:0;background:linear-gradient(105deg,transparent 60%,rgba(0,136,204,.08) 80%,transparent 100%);pointer-events:none;"></div>
+      <div style="width:42px;height:42px;background:linear-gradient(135deg,#0088cc,#0055aa);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(0,136,204,.4);">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:14px;font-weight:800;color:#fff;" id="verify-btn-title">User Verified</div>
+        <div style="font-size:11px;color:#0099dd;margin-top:2px;font-weight:600;">Синяя галочка · Больше доверия</div>
+      </div>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0088cc" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
     <button class="add-btn" onclick="vib();openAddModal()">
       <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       <span id="add-btn-lbl">Добавить объявление</span>
     </button>
-    <div id="verify-profile-btn" onclick="vib();openVerifyModal()" style="display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,rgba(0,200,83,.15),rgba(0,200,83,.05));border:1.5px solid #00c853;border-radius:14px;padding:13px 16px;margin-bottom:12px;cursor:pointer;">
-      <div style="width:36px;height:36px;background:#00c853;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:#fff;flex-shrink:0;">✓</div>
-      <div style="flex:1;">
-        <div style="font-size:13px;font-weight:700;color:#fff;" id="verify-btn-title">Подтвердить профиль</div>
-        <div style="font-size:11px;color:#00c853;margin-top:1px;">Верифицированный продавец · $10/мес</div>
-      </div>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
-    </div>
     <div class="section-title" id="my-listings-lbl">Мои объявления</div>
     <div id="my-listings-list"></div>
   </div>
@@ -389,8 +402,8 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
     <div id="nav-lbl-market">Рынок</div>
   </div>
   <div class="nav-item" id="nav-auction" onclick="vib();goPage('auction')">
-    <div class="nav-icon"><img src="/static/icons/hammer.png" class="nav-png" id="ico-auction" alt=""></div>
-    <div id="nav-lbl-auction">Аукцион</div>
+    <div class="nav-icon"><img src="/static/icons/message.png" class="nav-png" alt="" onerror="this.style.display='none'"></div>
+    <div id="nav-lbl-auction">Чаты</div>
   </div>
   <div class="nav-item" id="nav-profile" onclick="vib();goPage('profile')">
     <div class="nav-icon"><img src="/static/icons/profile.png" class="nav-png" id="ico-profile" alt=""></div>
@@ -401,6 +414,10 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
 <!-- FAB -->
 <button class="fab" onclick="vib();openAddModal()" id="fab-btn">
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="12" y1="4" x2="12" y2="20"/><line x1="4" y1="12" x2="20" y2="12"/></svg>
+</button>
+
+<button id="scroll-top-btn" onclick="vib();window.scrollTo({top:0,behavior:'smooth'})" style="position:fixed;bottom:72px;left:16px;width:40px;height:40px;border-radius:50%;background:rgba(30,30,30,.92);border:1.5px solid var(--border);color:#fff;display:none;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.4);cursor:pointer;z-index:9998;transition:opacity .2s;">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
 </button>
 
 <!-- DROPDOWNS -->
@@ -662,33 +679,43 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-close-btn" onclick="vib();closeModal('verify-modal')">✕</div>
-    <div class="modal-title">🟢 Верификация профиля</div>
+    <div class="modal-title" style="border:none;padding-bottom:0;">User Verified</div>
     <div class="modal-body">
-      <div style="text-align:center;padding:16px 0 20px;">
-        <div style="width:72px;height:72px;background:linear-gradient(135deg,#00c853,#00e676);border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;color:#fff;box-shadow:0 0 24px rgba(0,200,83,.5);">✓</div>
-        <div style="font-size:16px;font-weight:800;color:#fff;margin-bottom:8px;">Верифицированный продавец</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.6;">Зелёная галочка на всех ваших объявлениях.<br>Больше доверия — больше покупателей.</div>
+      <div style="text-align:center;padding:10px 0 22px;">
+        <div style="width:80px;height:80px;background:linear-gradient(135deg,#0055aa,#0088cc);border-radius:20px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,136,204,.45);">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+        </div>
+        <div id="verified-seller-title" style="font-size:18px;font-weight:900;color:#fff;margin-bottom:6px;">Верифицированный продавец</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.6;">Синяя галочка на всех объявлениях.<br>Вызывает доверие — приносит больше сделок.</div>
       </div>
-      <div style="background:var(--card2);border-radius:14px;padding:14px;margin-bottom:16px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
-          <span style="color:#fff;font-size:14px;font-weight:600;">Срок</span>
-          <span style="color:var(--accent);font-weight:700;">30 дней</span>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
+        <div style="background:var(--card2);border-radius:12px;padding:12px 8px;text-align:center;">
+          <div style="font-size:20px;margin-bottom:4px;">✅</div>
+          <div style="font-size:11px;color:#fff;font-weight:600;opacity:.8;">Галочка</div>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <span style="color:#fff;font-size:14px;font-weight:600;">Стоимость</span>
-          <span style="color:var(--accent);font-weight:700;"><span style="text-decoration:line-through;opacity:.5;font-size:12px;margin-right:4px;">$20</span>$10</span>
+        <div style="background:var(--card2);border-radius:12px;padding:12px 8px;text-align:center;">
+          <div style="font-size:20px;margin-bottom:4px;">🔝</div>
+          <div style="font-size:11px;color:#fff;font-weight:600;opacity:.8;">Доверие</div>
         </div>
+        <div style="background:var(--card2);border-radius:12px;padding:12px 8px;text-align:center;">
+          <div style="font-size:20px;margin-bottom:4px;">📅</div>
+          <div style="font-size:11px;color:#fff;font-weight:600;opacity:.8;">30 дней</div>
+        </div>
+      </div>
+      <div style="background:linear-gradient(135deg,rgba(0,136,204,.12),rgba(0,85,170,.08));border:1px solid rgba(0,136,204,.3);border-radius:14px;padding:14px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="color:#fff;font-size:15px;font-weight:700;">Стоимость</span>
+        <span style="color:#0099dd;font-weight:800;font-size:17px;"><span style="text-decoration:line-through;opacity:.45;font-size:13px;margin-right:6px;color:var(--muted);">$10</span>$5 / мес</span>
       </div>
       <div style="display:flex;gap:8px;">
         <div class="popt" style="flex:1;" onclick="vib();payVerifyCard()">
           <div class="popt-icon">💳</div>
           <div class="popt-name">Карта/Крипто</div>
-          <div class="popt-price">$10</div>
+          <div class="popt-price"><span style="text-decoration:line-through;opacity:.5;font-size:11px;font-weight:500;">$10</span> $5</div>
         </div>
         <div class="popt" style="flex:1;" onclick="vib();payVerifyStars()">
           <div class="popt-icon">⭐</div>
           <div class="popt-name">Stars</div>
-          <div class="popt-price">700⭐</div>
+          <div class="popt-price"><span style="text-decoration:line-through;opacity:.5;font-size:11px;font-weight:500;">700⭐</span> 350⭐</div>
         </div>
       </div>
     </div>
@@ -794,13 +821,13 @@ fetchEgpRate();
 setInterval(fetchEgpRate, 3600000);
 
 const T={
-  ru:{search:"Поиск...",fp:"$",fc:"Город",fs:"Раздел",apply:"Применить",new_listing:"Новое объявление",lbl_photos:"Фото (до 8)",lbl_title:"Заголовок *",lbl_desc:"Описание *",lbl_price:"Цена (USD)",lbl_cat:"Категория *",lbl_city:"Город *",publish:"Опубликовать",contact:"Написать продавцу",edit:"Редактировать",empty:"Объявлений нет",free:"Бесплатно",nav_market:"Рынок",nav_auction:"Аукцион",nav_profile:"Профиль",auction_title:"Аукцион",auction_sub:"Здесь скоро появятся аукционы.",auction_badge:"Скоро",add_listing:"Добавить объявление",my_listings:"Мои объявления",no_listings:"Нет объявлений",recs:"Похожие",del_confirm:"Удалить объявление?",s_active:"Активных",s_total:"Всего",s_deals:"Сделки",promo_on:"Продвигается · $5 · 24ч",promo_off:"Не продвигать",all_cities:"Все города",all_cats:"Все разделы",deals_title:"История сделок",
+  ru:{search:"Поиск...",fp:"$",fc:"Город",fs:"Раздел",apply:"Применить",new_listing:"Новое объявление",lbl_photos:"Фото (до 8)",lbl_title:"Заголовок *",lbl_desc:"Описание *",lbl_price:"Цена (USD)",lbl_cat:"Категория *",lbl_city:"Город *",publish:"Опубликовать",contact:"Написать продавцу",edit:"Редактировать",empty:"Объявлений нет",free:"Бесплатно",nav_market:"Рынок",nav_auction:"Аукцион",nav_profile:"Профиль",auction_title:"Аукцион",auction_sub:"Здесь скоро появятся аукционы.",auction_badge:"Скоро",add_listing:"Добавить объявление",my_listings:"Мои объявления",no_listings:"Нет объявлений",recs:"Похожие",del_confirm:"Удалить объявление?",s_active:"Активных",s_total:"Всего",s_deals:"Сделки",promo_on:"Продвигается · $5 · 24ч",promo_off:"Не продвигать",all_cities:"Все города",all_cats:"Все разделы",deals_title:"История сделок",loading:"Загрузка...",no_msgs:"Нет сообщений",msgs_hint:"Когда покупатели напишут — диалоги появятся здесь",start_chat:"Начните общение!",load_err:"Ошибка загрузки",conn_err:"Ошибка соединения",chats_title:"💬 Чаты",chat_placeholder:"Сообщение...",verified_seller:"Верифицированный продавец",dialogs_lbl:"Диалоги",offers_lbl:"Предложения цены",deleted:"🗑 Удалено",err:"❌ Ошибка",bookmarks:"Закладки",orders_lbl:"Ордера",chats_nav:"Чаты",profile_nav:"Профиль",share_lbl:"Поделиться",condition_new:"✨ Новое",condition_used:"🔧 Б/У",sold_btn:"Продано!",delete_btn:"Удалить",edit_btn:"Редактировать",contact_btn:"Написать",offer_btn:"💰 Предложить цену",share_btn:"Поделиться",report_btn:"Пожаловаться",extend_btn:"✅ Продлить на 30 дней",my_ads:"Мои объявления",
     cities:{sharm:"Шарм-эль-Шейх",hurghada:"Хургада",cairo:"Каир",alexandria:"Александрия",dahab:"Дахаб",marsa:"Марса-Алам","el-gouna":"Эль-Гуна",taba:"Таба",luxor:"Луксор",aswan:"Асуан",safaga:"Сафага","el-quseir":"Эль-Кусейр",nuweiba:"Нувейба","soma-bay":"Сома-Бей",other:"Другой город"},
     cats:{realestate:"Продажа недвижимости",rent:"Аренда жилья",transport:"Транспорт",services:"Услуги",beauty:"Мода и красота",clothes:"Одежда",kids:"Детские товары",home:"Дом и сад",jobs:"Работа",animals:"Животные",hobby:"Хобби",sport:"Спорт",electronics:"Электроника",food:"Продовольствие",business:"Бизнес",money:"Деньги и финансы",alcohol:"Алкоголь",furniture:"Мебель",household:"Бытовые товары",repair:"Ремонт",smoking:"Курение",tours:"Туры",excursions:"Экскурсии",medicine:"Медицина",education:"Обучение",other:"Другое"}},
-  en:{search:"Search...",fp:"$",fc:"City",fs:"Section",apply:"Apply",new_listing:"New Listing",lbl_photos:"Photos (up to 8)",lbl_title:"Title *",lbl_desc:"Description *",lbl_price:"Price (USD)",lbl_cat:"Category *",lbl_city:"City *",publish:"Publish",contact:"Contact seller",edit:"Edit",empty:"No listings",free:"Free",nav_market:"Market",nav_auction:"Auction",nav_profile:"Profile",auction_title:"Auction",auction_sub:"Auctions coming soon.",auction_badge:"Soon",add_listing:"Add listing",my_listings:"My listings",no_listings:"No listings yet",recs:"Similar",del_confirm:"Delete listing?",s_active:"Active",s_total:"Total",s_deals:"Deals",promo_on:"Promoted · $5 · 24h",promo_off:"Don't promote",all_cities:"All cities",all_cats:"All sections",deals_title:"Deal history",
+  en:{search:"Search...",fp:"$",fc:"City",fs:"Section",apply:"Apply",new_listing:"New Listing",lbl_photos:"Photos (up to 8)",lbl_title:"Title *",lbl_desc:"Description *",lbl_price:"Price (USD)",lbl_cat:"Category *",lbl_city:"City *",publish:"Publish",contact:"Contact seller",edit:"Edit",empty:"No listings",free:"Free",nav_market:"Market",nav_auction:"Auction",nav_profile:"Profile",auction_title:"Auction",auction_sub:"Auctions coming soon.",auction_badge:"Soon",add_listing:"Add listing",my_listings:"My listings",no_listings:"No listings yet",recs:"Similar",del_confirm:"Delete listing?",s_active:"Active",s_total:"Total",s_deals:"Deals",promo_on:"Promoted · $5 · 24h",promo_off:"Don't promote",all_cities:"All cities",all_cats:"All sections",deals_title:"Deal history",loading:"Loading...",no_msgs:"No messages",msgs_hint:"When buyers write to you — dialogs will appear here",start_chat:"Start chatting!",load_err:"Loading error",conn_err:"Connection error",chats_title:"💬 Chats",chat_placeholder:"Message...",verified_seller:"Verified seller",dialogs_lbl:"Dialogs",offers_lbl:"Price offers",deleted:"🗑 Deleted",err:"❌ Error",bookmarks:"Bookmarks",orders_lbl:"Orders",chats_nav:"Chats",profile_nav:"Profile",share_lbl:"Share",condition_new:"✨ New",condition_used:"🔧 Used",sold_btn:"Sold!",delete_btn:"Delete",edit_btn:"Edit",contact_btn:"Message",offer_btn:"💰 Make offer",share_btn:"Share",report_btn:"Report",extend_btn:"✅ Extend 30 days",my_ads:"My listings",
     cities:{sharm:"Sharm",hurghada:"Hurghada",cairo:"Cairo",alexandria:"Alexandria",dahab:"Dahab",marsa:"Marsa Alam","el-gouna":"El Gouna",taba:"Taba",luxor:"Luxor",aswan:"Aswan",safaga:"Safaga","el-quseir":"El Quseir",nuweiba:"Nuweiba","soma-bay":"Soma Bay",other:"Other city"},
     cats:{realestate:"Real Estate (Sale)",rent:"Rent",transport:"Transport",services:"Services",beauty:"Fashion & Beauty",clothes:"Clothes",kids:"Kids",home:"Home & Garden",jobs:"Jobs",animals:"Animals",hobby:"Hobby",sport:"Sport",electronics:"Electronics",food:"Grocery",business:"Business",money:"Finance",alcohol:"Alcohol",furniture:"Furniture",household:"Household",repair:"Repair",smoking:"Smoking",tours:"Tours",excursions:"Excursions",medicine:"Medicine",education:"Education",other:"Other"}},
-  ar:{search:"بحث...",fp:"$",fc:"المدينة",fs:"القسم",apply:"تطبيق",new_listing:"إعلان جديد",lbl_photos:"صور (حتى 8)",lbl_title:"العنوان *",lbl_desc:"الوصف *",lbl_price:"السعر (USD)",lbl_cat:"الفئة *",lbl_city:"المدينة *",publish:"نشر",contact:"تواصل",edit:"تعديل",empty:"لا إعلانات",free:"مجاني",nav_market:"السوق",nav_auction:"مزاد",nav_profile:"الملف",auction_title:"مزاد",auction_sub:"قريباً.",auction_badge:"قريباً",add_listing:"إضافة إعلان",my_listings:"إعلاناتي",no_listings:"لا إعلانات",recs:"مشابهة",del_confirm:"حذف؟",s_active:"نشط",s_total:"المجموع",s_deals:"صفقات",promo_on:"مميز · $5",promo_off:"بدون ترويج",all_cities:"كل المدن",all_cats:"كل الأقسام",deals_title:"سجل الصفقات",
+  ar:{search:"بحث...",fp:"$",fc:"المدينة",fs:"القسم",apply:"تطبيق",new_listing:"إعلان جديد",lbl_photos:"صور (حتى 8)",lbl_title:"العنوان *",lbl_desc:"الوصف *",lbl_price:"السعر (USD)",lbl_cat:"الفئة *",lbl_city:"المدينة *",publish:"نشر",contact:"تواصل",edit:"تعديل",empty:"لا إعلانات",free:"مجاني",nav_market:"السوق",nav_auction:"مزاد",nav_profile:"الملف",auction_title:"مزاد",auction_sub:"قريباً.",auction_badge:"قريباً",add_listing:"إضافة إعلان",my_listings:"إعلاناتي",no_listings:"لا إعلانات",recs:"مشابهة",del_confirm:"حذف؟",s_active:"نشط",s_total:"المجموع",s_deals:"صفقات",promo_on:"مميز · $5",promo_off:"بدون ترويج",all_cities:"كل المدن",all_cats:"كل الأقسام",deals_title:"سجل الصفقات",loading:"جار التحميل...",no_msgs:"لا رسائل",msgs_hint:"عندما يكتب المشترون — ستظهر المحادثات هنا",start_chat:"ابدأ المحادثة!",load_err:"خطأ في التحميل",conn_err:"خطأ في الاتصال",chats_title:"💬 الدردشات",chat_placeholder:"رسالة...",verified_seller:"بائع موثق",dialogs_lbl:"المحادثات",offers_lbl:"عروض الأسعار",deleted:"🗑 تم الحذف",err:"❌ خطأ",bookmarks:"المفضلة",orders_lbl:"الطلبات",chats_nav:"الدردشات",profile_nav:"الملف",share_lbl:"مشاركة",condition_new:"✨ جديد",condition_used:"🔧 مستعمل",sold_btn:"تم البيع!",delete_btn:"حذف",edit_btn:"تعديل",contact_btn:"تواصل",offer_btn:"💰 اقتراح سعر",share_btn:"مشاركة",report_btn:"إبلاغ",extend_btn:"✅ تمديد 30 يوم",my_ads:"إعلاناتي",
     cities:{sharm:"شرم الشيخ",hurghada:"الغردقة",cairo:"القاهرة",alexandria:"الإسكندرية",dahab:"دهب",marsa:"مرسى علم","el-gouna":"الجونة",taba:"طابا",luxor:"الأقصر",aswan:"أسوان",safaga:"سفاجا","el-quseir":"القصير",nuweiba:"نويبع","soma-bay":"سوما باي",other:"مدينة أخرى"},
     cats:{realestate:"عقارات",rent:"إيجار",transport:"مواصلات",services:"خدمات",beauty:"موضة وجمال",clothes:"ملابس",kids:"أطفال",home:"المنزل",jobs:"وظائف",animals:"حيوانات",hobby:"هوايات",sport:"رياضة",electronics:"إلكترونيات",food:"بقالة",business:"أعمال",money:"مال",alcohol:"كحول",furniture:"أثاث",household:"منزلية",repair:"تجديد",smoking:"تدخين",tours:"جولات",excursions:"رحلات",medicine:"طب",education:"تعليم",other:"أخرى"}}
 };
@@ -825,13 +852,15 @@ function applyLang(){
   document.getElementById("lbl-city-f").textContent=t("lbl_city");
   document.getElementById("submit-btn").textContent=t("publish");
   document.getElementById("nav-lbl-market").textContent=t("nav_market");
-  document.getElementById("nav-lbl-auction").textContent=t("nav_auction");
+  document.getElementById("nav-lbl-auction").textContent=t("chats_nav")||"Чаты";
   document.getElementById("nav-lbl-profile").textContent=t("nav_profile");
-  document.getElementById("auction-title").textContent=t("auction_title");
-  document.getElementById("auction-sub").textContent=t("auction_sub");
-  document.getElementById("auction-badge").textContent=t("auction_badge");
   document.getElementById("add-btn-lbl").textContent=t("add_listing");
   document.getElementById("my-listings-lbl").textContent=t("my_listings");
+  const bkLbl=document.getElementById("stat-bookmarks-lbl");if(bkLbl)bkLbl.textContent=t("bookmarks");
+  const orLbl=document.getElementById("stat-orders-lbl");if(orLbl)orLbl.textContent=t("orders_lbl");
+  const ctLbl=document.getElementById("chats-page-title");if(ctLbl)ctLbl.textContent=t("chats_title");
+  const vsLbl=document.getElementById("verified-seller-title");if(vsLbl)vsLbl.textContent=t("verified_seller");
+  const chatInp=document.getElementById("chat-input");if(chatInp)chatInp.placeholder=t("chat_placeholder");
   document.getElementById("s-deals-l").textContent=t("s_deals");
   document.getElementById("deals-modal-title").textContent=t("deals_title");
   document.querySelectorAll(".dd-apply").forEach(b=>b.textContent=t("apply"));
@@ -870,6 +899,108 @@ function goPage(page){
   // FAB only on market
   document.getElementById("fab-btn").classList.toggle("hidden", page!=="market");
   if(page==="profile")loadProfile();
+  if(page==="auction"){
+    loadChats();
+    // remove unread pulse
+    const lbl=document.getElementById("nav-lbl-auction");
+    if(lbl)lbl.innerHTML="Чаты";
+  }
+}
+
+async function loadChats(){
+  const uid=tgUser?.id||0;
+  if(!uid)return;
+  const el=document.getElementById("messages-list");
+  el.innerHTML="<div style='text-align:center;padding:40px;color:var(--muted);'>"+t("loading")+"</div>";
+  try{
+    const [dr,or]=await Promise.all([
+      fetch(API+"/api/dialogs/"+uid+"?_="+Date.now()).then(r=>r.json()).catch(()=>[]),
+      fetch(API+"/api/offers/"+uid+"?_="+Date.now()).then(r=>r.json()).catch(()=>[])
+    ]);
+    const offers=or.filter(o=>o.status==="pending");
+    if(!dr.length&&!offers.length){
+      el.innerHTML="<div style='text-align:center;padding:60px 20px'><div style='font-size:52px;margin-bottom:14px'>💬</div><div style='font-size:16px;font-weight:700;color:#fff;margin-bottom:8px'>"+t("no_msgs")+"</div><div style='font-size:13px;color:var(--muted);line-height:1.5'>"+t("msgs_hint")+"</div></div>";
+      return;
+    }
+    const wrap=document.createElement("div");
+    if(offers.length){
+      const lbl=document.createElement("div");
+      lbl.style.cssText="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px;";
+      lbl.textContent=t("offers_lbl");
+      wrap.appendChild(lbl);
+      offers.forEach(o=>{
+        const buyer=o.buyer_username?"@"+o.buyer_username:"#"+o.buyer_id;
+        const card=document.createElement("div");
+        card.style.cssText="background:var(--card);border:1px solid var(--accent);border-radius:14px;padding:14px;margin-bottom:8px;";
+        card.innerHTML="<div style='display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px'>"
+          +"<div style='font-size:13px;font-weight:700;color:#fff;flex:1;margin-right:8px'>"+esc(o.listing_title||"")+"</div>"
+          +"<span style='font-size:11px;color:var(--accent);font-weight:700'>⏳ Ожидает</span></div>"
+          +"<div style='font-size:12px;color:var(--muted);margin-bottom:6px'>От: "+buyer+"</div>"
+          +"<div style='font-size:15px;font-weight:800;color:var(--accent);margin-bottom:10px'>"+o.amount+" "+o.currency+"</div>"
+          +"<div style='display:flex;gap:8px'>"
+          +"<button data-oid='"+o.id+"' data-act='accept' style='flex:1;padding:9px;background:rgba(0,136,204,.15);border:1px solid #0088cc;border-radius:10px;color:#0088cc;font-weight:700;font-size:13px;cursor:pointer'>✅ Принять</button>"
+          +"<button data-oid='"+o.id+"' data-act='decline' style='flex:1;padding:9px;background:rgba(231,76,60,.1);border:1px solid #e74c3c;border-radius:10px;color:#e74c3c;font-weight:700;font-size:13px;cursor:pointer'>❌ Отклонить</button>"
+          +"</div>";
+        card.querySelectorAll("button[data-oid]").forEach(btn=>{
+          btn.addEventListener("click",()=>{vib();respondOffer(btn.dataset.oid,btn.dataset.act);});
+        });
+        wrap.appendChild(card);
+      });
+    }
+    if(dr.length){
+      if(offers.length){
+        const lbl2=document.createElement("div");
+        lbl2.style.cssText="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin:12px 0 8px;";
+        lbl2.textContent=t("dialogs_lbl");
+        wrap.appendChild(lbl2);
+      }
+      dr.forEach(d=>{
+        const partnerName=d.partner_first_name||d.partner_username?d.partner_first_name||(d.partner_username?"@"+d.partner_username:""):"Пользователь";
+        const listingTitle=d.listing_title||"";
+        const unread=!d.is_read&&d.receiver_id===uid;
+        const card=document.createElement("div");
+        card.style.cssText="background:var(--card);border:1px solid "+(unread?"#0088cc":"var(--border)")+";border-radius:14px;padding:14px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:12px;";
+        const colors=["#e74c3c","#e67e22","#2ecc71","#1abc9c","#3498db","#9b59b6","#e91e63","#00bcd4"];
+        const color=colors[(d.partner_id||0)%colors.length];
+        const letter=partnerName.replace("@","")[0]?.toUpperCase()||"?";
+        const avatarHtml=d.partner_avatar
+          ?"<img src='"+d.partner_avatar+"' style='width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0' onerror=\"this.outerHTML='<div style=\\'width:44px;height:44px;border-radius:50%;background:"+color+";display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff;flex-shrink:0\\'>"+letter+"</div>'\">"
+          :"<div style='width:44px;height:44px;border-radius:50%;background:"+color+";display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff;flex-shrink:0'>"+letter+"</div>";
+        card.innerHTML=avatarHtml
+          +"<div style='flex:1;min-width:0'>"
+          +"<div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:3px'>"
+          +"<div style='font-size:14px;font-weight:700;color:#fff'>"+partnerName+"</div>"
+          +"<div style='font-size:11px;color:var(--muted)'>"+new Date(d.created_at).toLocaleDateString([],{day:"numeric",month:"short"})+"</div>"
+          +"</div>"
+          +(listingTitle?"<div style='font-size:11px;color:var(--accent);margin-bottom:2px'>"+esc(listingTitle)+"</div>":"")
+          +"<div style='font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>"+esc(d.text)+"</div>"
+          +"</div>"
+          +(unread?"<div style='width:8px;height:8px;border-radius:50%;background:#0088cc;flex-shrink:0'></div>":"");
+        card.addEventListener("click",()=>{vib();openChatById(d.partner_id,partnerName,d.listing_id||0,listingTitle);});
+        wrap.appendChild(card);
+      });
+    }
+    el.innerHTML="";
+    el.appendChild(wrap);
+  }catch(e){el.innerHTML="<div style='text-align:center;padding:40px;color:var(--muted)'>"+t("load_err")+"</div>";}
+}
+
+function openChatById(partnerId, partnerName, listingId, listingTitle){
+  chatPartnerId=partnerId;
+  chatListingId=listingId;
+  document.getElementById("chat-title").textContent=partnerName;
+  document.getElementById("chat-subtitle").textContent=listingTitle||"";
+  document.getElementById("chat-messages").innerHTML=`<div style="text-align:center;color:var(--muted);font-size:13px;padding:20px;">Загрузка...</div>`;
+  document.getElementById("chat-modal").classList.add("open");
+  loadChatMessages();
+}
+
+async function respondOffer(offerId,action){
+  try{
+    const fd=new FormData();fd.append("action",action);
+    await fetch(`${API}/api/offers/${offerId}/respond`,{method:"POST",body:fd});
+    loadChats();
+  }catch(e){}
 }
 
 /* PRICE — 2 states: asc / desc, toggle */
@@ -951,7 +1082,7 @@ function togglePendingCat(k){
 }
 function applyCat(){
   selectedCats=new Set(pendingCats);
-  updateCatLabel();closeAllDD();renderListings(filterData());saveFilters();
+  updateCatLabel();closeAllDD();updateResetBtn();renderListings(filterData());saveFilters();
 }
 function resetFilters(){
   vib();
@@ -966,8 +1097,8 @@ function resetFilters(){
   saveFilters();
 }
 function updateResetBtn(){
-  const hasFilters=selectedCities.size>0||selectedCats.size>0||priceSort>0;
-  document.getElementById("filter-reset").style.display=hasFilters?"":"none";
+  const hasFilters=selectedCities.size>0||selectedCats.size>0||(priceSort!==3&&priceSort!==0);
+  document.getElementById("filter-reset").style.display=hasFilters?"inline-flex":"none";
 }
 
 function filterData(){
@@ -1012,9 +1143,11 @@ function renderListings(data){
       <div class="card-imgs" data-id="${l.id}" data-idx="0">${imgHtml}${dots}</div>
       ${l.is_promoted?`<div class="promoted-badge">⭐ ЗОЛОТОЕ</div>`:""}
       <div class="card-badge">${l.is_legendary?"⚡ ЛЕГЕНДАРНОЕ":l.is_promoted?"":t(`cats.${l.category}`)}</div>
-      ${l.seller_verified?`<div style="position:absolute;top:7px;left:${l.is_legendary||l.is_promoted?'auto':'7px'};right:${l.is_legendary||l.is_promoted?'7px':'auto'};z-index:3;"><span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;background:#00c853;border-radius:50%;border:2px solid #000;font-size:10px;">✓</span></div>`:""}
       <div class="card-body" onclick="vib();openDetail(${l.id})">
-        <div class="card-title">${esc(l.title)}</div>
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px;">
+          <div class="card-title" style="flex:1;">${esc(l.title)}</div>
+          ${l.seller_verified?`<span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;background:#0088cc;border-radius:50%;font-size:9px;color:#fff;font-weight:900;flex-shrink:0;margin-top:2px;">✓</span>`:""}
+        </div>
         <div class="card-price">${priceStr(l)}</div>
         <div class="card-city" style="display:flex;align-items:center;">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px;opacity:.7;flex-shrink:0"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -1068,7 +1201,7 @@ function initBanners(){
         <div class="banner-default-left">
           <div class="banner-default-icon">📢</div>
           <div class="banner-default-title">Реклама в баннере</div>
-          <div class="banner-default-sub">400 ⭐ · 24 часа · все города</div>
+          <div class="banner-default-sub">500 ⭐ · 30 дней · все города</div>
         </div>
         <div class="banner-default-btn">Разместить</div>
       </div>
@@ -1134,7 +1267,7 @@ async function openDetail(id){
     detailPhotos=getPhotos(l);detailPhotoIdx=0;currentDetailMine=isMine(l);renderDetailImgs();
     document.getElementById("detail-price").textContent=priceStr(l);
     // title with verified badge
-    const verBadge=l.seller_verified?`<span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;background:#00c853;border-radius:50%;margin-left:6px;font-size:11px;vertical-align:middle;flex-shrink:0;">✓</span>`:"";
+    const verBadge=l.seller_verified?`<span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;background:#0088cc;border-radius:50%;margin-left:6px;font-size:11px;vertical-align:middle;flex-shrink:0;">✓</span>`:"";
     document.getElementById("detail-title").innerHTML=esc(l.title)+verBadge;
     document.getElementById("detail-desc").textContent=l.description||"";
     const phoneMeta=l.phone?`<span class="detail-chip">📞 ${l.phone}</span>`:"";
@@ -1167,9 +1300,11 @@ async function openDetail(id){
         `<button class="sold-btn" onclick="vib();markSold(${l.id})"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Продано!</button>`+
         `<button class="delete-btn-red" onclick="vib();deleteListingFromDetail(${l.id})"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Удалить</button>`;
     } else {
-      const contactHtml=`<button class="contact-btn" onclick="vib();contactSeller('${l.seller_username||''}','${l.phone||''}')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 0 2 2z"/></svg>Написать</button>
+      const _su=l.seller_username||'';const _lt=esc(l.title);
+      const contactHtml=`<button class="contact-btn" onclick="vib();openChat(${l.user_id},'${_su}',${l.id},'${_lt}')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 0 2 2z"/></svg>Написать</button>
         <button class="edit-btn" style="margin-bottom:0;margin-top:8px;" onclick="vib();openOfferModal(${l.id},'${esc(l.title)}')">💰 Предложить цену</button>
-        <button class="edit-btn" style="margin-bottom:0;margin-top:8px;border-color:var(--muted);color:var(--muted);" onclick="vib();shareListing(${l.id},'${esc(l.title)}')"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Поделиться</button>`;
+        <button class="edit-btn" style="margin-bottom:0;margin-top:8px;border-color:#0088cc;color:#0088cc;background:rgba(0,136,204,.08);" onclick="vib();shareListing(${l.id},'${esc(l.title)}')"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Поделиться</button>
+        <button class="edit-btn" style="margin-bottom:0;margin-top:8px;border-color:#e74c3c;color:#e74c3c;background:rgba(231,76,60,.06);" onclick="vib();reportListing(${l.id})"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#e74c3c;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:inline;vertical-align:middle;margin-right:6px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Пожаловаться</button>`;
       document.getElementById("action-btns").innerHTML=contactHtml;
     }
     const recs=allListings.filter(x=>x.id!==id&&(x.category===l.category||x.city===l.city)).slice(0,8);
@@ -1186,6 +1321,63 @@ function shareListing(id, title){
   else if(navigator.share) navigator.share({title:text,url});
   else{navigator.clipboard?.writeText(url);showToast("🔗 Ссылка скопирована");}
 }
+let chatPartnerId=0, chatListingId=0, chatPartnerUsername="";
+
+function openChat(sellerId, sellerUsername, listingId, listingTitle){
+  chatPartnerId=sellerId;
+  chatListingId=listingId;
+  chatPartnerUsername=sellerUsername||"";
+  document.getElementById("chat-title").textContent=sellerUsername?`@${sellerUsername}`:`Продавец`;
+  document.getElementById("chat-subtitle").textContent=listingTitle||"";
+  document.getElementById("chat-messages").innerHTML=`<div style="text-align:center;color:var(--muted);font-size:13px;padding:20px;">Загрузка...</div>`;
+  document.getElementById("chat-modal").classList.add("open");
+  loadChatMessages();
+}
+
+async function loadChatMessages(){
+  const myId=tgUser?.id||0;
+  if(!myId||!chatPartnerId)return;
+  try{
+    const r=await fetch(`${API}/api/messages/${myId}/${chatPartnerId}?listing_id=${chatListingId}&_=${Date.now()}`);
+    const msgs=await r.json();
+    const el=document.getElementById("chat-messages");
+    if(!msgs.length){
+      el.innerHTML=`<div style="text-align:center;color:var(--muted);font-size:13px;padding:20px;">${t("start_chat")}</div>`;
+      return;
+    }
+    el.innerHTML=msgs.map(m=>{
+      const mine=m.sender_id===myId;
+      const checks=mine?`<span style="font-size:10px;opacity:.7;margin-left:3px;">${m.is_read?"✓✓":"✓"}</span>`:"";
+      return `<div style="display:flex;justify-content:${mine?'flex-end':'flex-start'};">
+        <div style="max-width:75%;background:${mine?'linear-gradient(135deg,var(--accent2),var(--accent))':'var(--card2)'};color:${mine?'#000':'#fff'};padding:9px 13px;border-radius:${mine?'16px 16px 4px 16px':'16px 16px 16px 4px'};font-size:14px;line-height:1.4;">
+          ${esc(m.text)}
+          <div style="font-size:10px;opacity:.6;margin-top:4px;text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:2px;">${new Date(m.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}${checks}</div>
+        </div>
+      </div>`;
+    }).join("");
+    el.scrollTop=el.scrollHeight;
+  }catch(e){}
+}
+
+async function sendChatMsg(){
+  const myId=tgUser?.id||0;
+  const inp=document.getElementById("chat-input");
+  const text=inp.value.trim();
+  if(!text||!myId||!chatPartnerId)return;
+  inp.value="";inp.style.height="42px";
+  try{
+    const fd=new FormData();
+    fd.append("sender_id",myId);
+    fd.append("receiver_id",chatPartnerId);
+    fd.append("listing_id",chatListingId);
+    fd.append("text",text);
+    fd.append("sender_username",tgUser?.username||"");
+    fd.append("receiver_username",chatPartnerUsername||"");
+    await fetch(`${API}/api/messages`,{method:"POST",body:fd});
+    loadChatMessages();
+  }catch(e){}
+}
+
 function contactSeller(u,phone){
   if(u&&tg)tg.openTelegramLink(`https://t.me/${u}`);
   else if(phone)window.open(`tel:${phone}`);
@@ -1360,17 +1552,31 @@ async function loadProfile(){
     document.getElementById("prof-handle").textContent=tgUser.username?`@${tgUser.username}`:`ID: ${tgUser.id}`;
     // check verification
     try{
-      const vr=await fetch(`${API}/api/users/${tgUser.id}/verified`);
+      const vr=await fetch(`${API}/api/users/${tgUser.id}/verified?_=${Date.now()}`);
       const vd=await vr.json();
-      const badge=document.getElementById("verified-badge");
+      const oldBadge=document.getElementById("verified-badge");
+      if(oldBadge)oldBadge.remove();
+      const oldExpiry=document.getElementById("verify-expiry");
+      if(oldExpiry)oldExpiry.remove();
       if(vd.verified){
-        if(!badge){
-          const b=document.createElement("div");b.id="verified-badge";
-          b.style="position:absolute;bottom:0;right:0;width:20px;height:20px;background:#00c853;border-radius:50%;border:2px solid var(--bg);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;";
-          b.textContent="✓";
-          av.style.position="relative";av.appendChild(b);
+        const b=document.createElement("span");b.id="verified-badge";
+        b.style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#0088cc;border-radius:50%;font-size:12px;font-weight:900;color:#fff;flex-shrink:0;";
+        b.textContent="✓";
+        const nameEl=document.getElementById("prof-name");
+        if(nameEl)nameEl.appendChild(b);
+        const vbtn=document.getElementById("verify-profile-btn");
+        if(vbtn){
+          const until=vd.until?new Date(vd.until).toLocaleDateString("ru",{day:"numeric",month:"long",year:"numeric"}):"";
+          vbtn.style.background="linear-gradient(135deg,rgba(0,136,204,.25),rgba(0,136,204,.1))";
+          document.getElementById("verify-btn-title").textContent="✓ Верифицирован";
+          if(until){
+            const exp=document.createElement("div");exp.id="verify-expiry";
+            exp.style="font-size:11px;color:#0099dd;margin-top:1px;";
+            exp.textContent="До: "+until;
+            vbtn.querySelector("div[style*='flex:1']")?.appendChild(exp);
+          }
         }
-      }else if(badge)badge.remove();
+      }
     }catch(e){}
   }
   const uid=tgUser?.id||0;
@@ -1426,6 +1632,39 @@ async function openDeals(){
 
 function openVerifyModal(){document.getElementById("verify-modal").classList.add("open");}
 
+async function reportListing(id){
+  const reasons=[
+    {k:"spam",l:"🚫 Спам / реклама"},
+    {k:"fraud",l:"💸 Мошенничество"},
+    {k:"wrong",l:"📋 Неверная категория"},
+    {k:"fake",l:"🤖 Фейк / не реальное"},
+    {k:"other",l:"❓ Другое"},
+  ];
+  const overlay=document.createElement("div");
+  overlay.style="position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9000;display:flex;align-items:flex-end;justify-content:center;";
+  const box=document.createElement("div");
+  box.style="background:var(--card);border-radius:22px 22px 0 0;width:100%;max-width:480px;padding:20px 16px 36px;";
+  box.innerHTML=`<div style="width:36px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 18px;"></div>
+    <div style="font-size:16px;font-weight:800;color:#fff;margin-bottom:16px;padding:0 4px;">Пожаловаться на объявление</div>
+    ${reasons.map(r=>`<div onclick="sendReport(${id},'${r.k}',this.parentElement.parentElement)" style="padding:13px 14px;border-radius:12px;border:1px solid var(--border);margin-bottom:8px;font-size:14px;color:#fff;font-weight:500;cursor:pointer;background:var(--card2);">${r.l}</div>`).join("")}
+    <div onclick="this.parentElement.parentElement.remove()" style="padding:13px;text-align:center;font-size:14px;color:var(--muted);cursor:pointer;margin-top:4px;">Отмена</div>`;
+  overlay.appendChild(box);
+  overlay.addEventListener("click",e=>{if(e.target===overlay)overlay.remove();});
+  document.body.appendChild(overlay);
+}
+async function sendReport(listingId, reason, overlay){
+  overlay.remove();
+  try{
+    const fd=new FormData();
+    fd.append("listing_id",listingId);
+    fd.append("reporter_id",tgUser?.id||0);
+    fd.append("reason",reason);
+    await fetch(`${API}/api/reports`,{method:"POST",body:fd});
+  }catch(e){}
+  if(window.Telegram?.WebApp) Telegram.WebApp.showAlert("✅ Жалоба отправлена. Мы рассмотрим её в ближайшее время.");
+  else alert("✅ Жалоба отправлена.");
+}
+
 async function payVerifyStars(){
   if(!tgUser){showToast("Войдите через Telegram");return;}
   const amount = tgUser.id===7308147004 ? 1 : 700;
@@ -1470,7 +1709,7 @@ function closeModal(id){
   document.getElementById(id).classList.remove("open");
   if(id==="add-modal"||id==="detail-modal")document.getElementById("fab-btn").classList.toggle("hidden",currentPage!=="market");
 }
-["add-modal","detail-modal","deals-modal","edit-modal","pay-modal","orders-modal","offer-modal","fav-modal","verify-modal"].forEach(id=>{document.getElementById(id).addEventListener("click",e=>{if(e.target===e.currentTarget)closeModal(id);});});
+["add-modal","detail-modal","deals-modal","edit-modal","pay-modal","orders-modal","offer-modal","fav-modal","verify-modal","chat-modal"].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener("click",e=>{if(e.target===e.currentTarget)closeModal(id);});});
 
 /* PHOTOS */
 function addPhotosMulti(input){
@@ -1729,7 +1968,9 @@ function toggleFav(id){
 
 function updateFavCount(){
   const el=document.getElementById("fav-count-lbl");
-  if(el)el.textContent=favs.size||"0";
+  // only count favs that exist in active listings
+  const activeFavs=allListings.filter(l=>favs.has(l.id)).length;
+  if(el)el.textContent=activeFavs||"0";
 }
 
 function openFavourites(){
@@ -1778,6 +2019,47 @@ loadFilters();
 updateFavCount();
 
 applyLang();loadListings();
+
+// scroll-to-top button
+window.addEventListener('scroll',function(){
+  const btn=document.getElementById('scroll-top-btn');
+  if(!btn)return;
+  if(window.scrollY>300){btn.style.display='flex';}
+  else{btn.style.display='none';}
+});
+// check unread messages on load
+setTimeout(async()=>{
+  const uid=tgUser?.id||0;
+  if(!uid)return;
+  try{
+    const r=await fetch(API+"/api/dialogs/"+uid+"?_="+Date.now());
+    const dialogs=await r.json();
+    const hasUnread=dialogs.some(d=>!d.is_read&&d.receiver_id===uid);
+    const lbl=document.getElementById("nav-lbl-auction");
+    if(lbl&&hasUnread){
+      lbl.innerHTML="Чаты <span id='chat-pulse' style='display:inline-block;width:7px;height:7px;background:#e74c3c;border-radius:50%;vertical-align:middle;margin-left:2px;animation:pulse-dot 1.2s ease-in-out infinite;'></span>";
+    }
+  }catch(e){}
+},1000);
 </script>
+<!-- CHAT MODAL -->
+<div class="modal-overlay" id="chat-modal" style="z-index:700;">
+  <div class="modal" style="max-height:96vh;display:flex;flex-direction:column;">
+    <div class="modal-handle"></div>
+    <div class="modal-close-btn" onclick="vib();closeModal('chat-modal')">✕</div>
+    <div style="padding:0 20px 12px;border-bottom:1px solid var(--border);flex-shrink:0;">
+      <div style="font-size:15px;font-weight:800;color:#fff;" id="chat-title">Чат</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px;" id="chat-subtitle"></div>
+    </div>
+    <div id="chat-messages" style="flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-height:200px;max-height:50vh;"></div>
+    <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end;flex-shrink:0;">
+      <textarea id="chat-input" placeholder="${t('chat_placeholder')}" style="flex:1;background:var(--card2);border:1.5px solid var(--border);border-radius:12px;padding:10px 12px;color:#fff;font-size:14px;outline:none;resize:none;height:42px;max-height:100px;font-family:inherit;line-height:1.4;" oninput="this.style.height='42px';this.style.height=Math.min(this.scrollHeight,100)+'px'" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMsg();}"></textarea>
+      <button onclick="vib();sendChatMsg()" style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

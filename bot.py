@@ -5,6 +5,24 @@ from datetime import datetime, timedelta
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import CommandStart, Command
 
+from aiogram.types import (
+    InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo,
+    LabeledPrice, PreCheckoutQuery
+)
+from dotenv import load_dotenv
+from database import get_db, init_db
+
+load_dotenv()
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+WEBAPP_URL = os.getenv("WEBAPP_URL", "https://bazaregypt.store")
+TON_WALLET = "UQDngkmwbJxausCBgrbXcS_LmQYtGLG0-qfsaCYijyczQVap"
+TRIBUTE_URL = "https://t.me/tribute/app?startapp=diuS"
+COMMUNITY_URL = "https://t.me/egypt_links"
+
+logging.basicConfig(level=logging.INFO)
+bot = Bot(token=BOT_TOKEN)
+dp = Dispatcher()
+
 @dp.message(Command("verify"))
 async def cmd_verify(message: types.Message):
     admin_id = int(os.getenv("ADMIN_ID", "0"))
@@ -45,23 +63,7 @@ async def cmd_unverify(message: types.Message):
         await client.post(f"http://localhost:8002/api/admin/unverify/{user_id}",
             data={"admin_key": "egypt_admin_2024"})
     await message.answer(f"✅ Верификация снята с {user_id}")
-from aiogram.types import (
-    InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo,
-    LabeledPrice, PreCheckoutQuery
-)
-from dotenv import load_dotenv
-from database import get_db, init_db
 
-load_dotenv()
-BOT_TOKEN = os.getenv("BOT_TOKEN")
-WEBAPP_URL = os.getenv("WEBAPP_URL", "https://bazaregypt.store")
-TON_WALLET = "UQDngkmwbJxausCBgrbXcS_LmQYtGLG0-qfsaCYijyczQVap"
-TRIBUTE_URL = "https://t.me/tribute/app?startapp=diuS"
-COMMUNITY_URL = "https://t.me/egypt_links"
-
-logging.basicConfig(level=logging.INFO)
-bot = Bot(token=BOT_TOKEN)
-dp = Dispatcher()
 
 
 @dp.message(CommandStart())
@@ -72,12 +74,49 @@ async def start(message: types.Message):
             InlineKeyboardButton(text="💬 Community", url=COMMUNITY_URL)
         ]
     ])
-    await message.answer(
-        "🌴 <b>Добро пожаловать в Egypt Bazar!</b>\n\n"
-        "Покупай и продавай в Шарм-эль-Шейхе, Хургаде и других городах Египта.\n\n"
-        "Нажми кнопку ниже 👇",
-        parse_mode="HTML", reply_markup=keyboard
-    )
+    # Save user + try to get avatar
+    try:
+        from database import get_db
+        user = message.from_user
+        # Get profile photo
+        avatar_url = None
+        try:
+            photos = await bot.get_user_profile_photos(user.id, limit=1)
+            if photos.photos:
+                file = await bot.get_file(photos.photos[0][-1].file_id)
+                avatar_url = f"https://api.telegram.org/file/bot{os.getenv('BOT_TOKEN')}/{file.file_path}"
+        except: pass
+        conn = get_db(); c = conn.cursor()
+        # Add avatar_url column if not exists
+        try: c.execute("ALTER TABLE users ADD COLUMN avatar_url TEXT")
+        except: pass
+        c.execute("""INSERT INTO users (telegram_id,username,first_name,avatar_url)
+            VALUES (?,?,?,?) ON CONFLICT(telegram_id) DO UPDATE SET
+            username=excluded.username,first_name=excluded.first_name,
+            avatar_url=COALESCE(excluded.avatar_url,avatar_url)""",
+            (user.id, user.username, user.first_name, avatar_url))
+        conn.commit(); conn.close()
+    except Exception as e:
+        logging.warning(f"start save user: {e}")
+    try:
+        photo = types.FSInputFile("/root/bazar/static/icons/hey.png")
+        await message.answer_photo(
+            photo=photo,
+            caption="🌴 <b>Добро пожаловать в Egypt Bazar!</b>\n"
+                    "Покупай и продавай в Шарм-эль-Шейхе, Хургаде и других городах Египта.\n\n"
+                    "🌴 <b>Welcome to Egypt Bazar!</b>\n"
+                    "Buy and sell in Sharm el-Sheikh, Hurghada and other cities of Egypt.",
+            parse_mode="HTML", reply_markup=keyboard
+        )
+    except Exception as e:
+        logging.warning(f"start photo error: {e}")
+        await message.answer(
+            "🌴 <b>Добро пожаловать в Egypt Bazar!</b>\n"
+            "Покупай и продавай в Шарм-эль-Шейхе, Хургаде и других городах Египта.\n\n"
+            "🌴 <b>Welcome to Egypt Bazar!</b>\n"
+            "Buy and sell in Sharm el-Sheikh, Hurghada and other cities of Egypt.",
+            parse_mode="HTML", reply_markup=keyboard
+        )
 
 
 # ── STARS ─────────────────────────────────────────────────────────────────────
@@ -302,9 +341,198 @@ async def check_expiring():
         conn.commit(); conn.close()
 
 
+@dp.message(Command("verified"))
+async def cmd_verified_list(message: types.Message):
+    admin_id = int(os.getenv("ADMIN_ID", "0"))
+    if message.from_user.id != admin_id:
+        return
+    import httpx
+    from database import get_db
+    conn = get_db(); c = conn.cursor()
+    rows = c.execute("""SELECT telegram_id, username, verified_until 
+        FROM users WHERE is_verified=1 AND verified_until IS NOT NULL 
+        ORDER BY verified_until ASC""").fetchall()
+    conn.close()
+    if not rows:
+        await message.answer("Верифицированных нет.")
+        return
+    from datetime import datetime
+    now = datetime.now()
+    lines = ["<b>✅ Верифицированные пользователи:</b>\n"]
+    for r in rows:
+        until = datetime.strptime(r["verified_until"], "%Y-%m-%d %H:%M:%S")
+        days_left = (until - now).days
+        status = "🔴 истёк" if days_left < 0 else f"🟢 {days_left} дн."
+        name = f"@{r['username']}" if r['username'] else f"#{r['telegram_id']}"
+        lines.append(f"{name} — до {until.strftime('%d.%m.%Y')} ({status})")
+    await message.answer("\n".join(lines), parse_mode="HTML")
+
+
+async def check_verify_expiring():
+    """Remind users 3 days before verification expires"""
+    while True:
+        await asyncio.sleep(3600)
+        try:
+            from database import get_db
+            from datetime import datetime, timedelta
+            conn = get_db(); c = conn.cursor()
+            now = datetime.now()
+            warn = now + timedelta(days=3)
+            # users expiring in 3 days
+            expiring = c.execute("""SELECT telegram_id, username, verified_until FROM users
+                WHERE is_verified=1 AND verified_until <= ? AND verified_until > ?""",
+                (warn.strftime("%Y-%m-%d %H:%M:%S"), now.strftime("%Y-%m-%d %H:%M:%S"))).fetchall()
+            for u in expiring:
+                try:
+                    until = datetime.strptime(u["verified_until"], "%Y-%m-%d %H:%M:%S")
+                    days_left = (until - now).days
+                    await bot.send_message(u["telegram_id"],
+                        f"⚠️ <b>Ваша верификация истекает через {days_left} дн.</b>\n\n"
+                        f"До: {until.strftime('%d.%m.%Y')}\n\n"
+                        f"Продлите верификацию в профиле Egypt Bazar.",
+                        parse_mode="HTML")
+                except: pass
+            # expired - remove verification
+            c.execute("""UPDATE users SET is_verified=0 WHERE is_verified=1 
+                AND verified_until IS NOT NULL AND verified_until <= ?""",
+                (now.strftime("%Y-%m-%d %H:%M:%S"),))
+            # notify admin about expired
+            expired = c.execute("""SELECT telegram_id, username FROM users
+                WHERE is_verified=0 AND verified_until IS NOT NULL 
+                AND verified_until <= ? AND verified_until > ?""",
+                (now.strftime("%Y-%m-%d %H:%M:%S"),
+                 (now - timedelta(hours=1)).strftime("%Y-%m-%d %H:%M:%S"))).fetchall()
+            if expired:
+                admin_id = int(os.getenv("ADMIN_ID", "0"))
+                names = ", ".join([f"@{u['username']}" if u['username'] else f"#{u['telegram_id']}" for u in expired])
+                try:
+                    await bot.send_message(admin_id,
+                        f"🔴 <b>Верификация истекла:</b> {names}",
+                        parse_mode="HTML")
+                except: pass
+            conn.commit(); conn.close()
+        except Exception as e:
+            logging.warning(f"check_verify_expiring: {e}")
+
+
+@dp.message(F.text & ~F.text.startswith("/"))
+async def forward_to_admin(message: types.Message):
+    """Forward any user message to admin so he sees replies"""
+    admin_id = int(os.getenv("ADMIN_ID", "0"))
+    user = message.from_user
+    # Save user to DB so their username appears in chats
+    try:
+        from database import get_db
+        conn = get_db(); c = conn.cursor()
+        c.execute("INSERT INTO users (telegram_id,username,first_name) VALUES (?,?,?) ON CONFLICT(telegram_id) DO UPDATE SET username=excluded.username,first_name=excluded.first_name",
+                  (user.id, user.username, user.first_name))
+        conn.commit(); conn.close()
+    except Exception as e:
+        logging.warning(f"save user: {e}")
+    if not admin_id or user.id == admin_id:
+        return
+    name = f"@{user.username}" if user.username else f"{user.first_name or ''} #{user.id}"
+    try:
+        await bot.send_message(
+            admin_id,
+            f"💬 <b>Сообщение от {name}:</b>\n\n{message.text}",
+            parse_mode="HTML"
+        )
+    except Exception as e:
+        logging.warning(f"forward_to_admin: {e}")
+
+
+@dp.message(Command("stats"))
+async def cmd_stats(message: types.Message):
+    admin_id = int(os.getenv("ADMIN_ID", "0"))
+    if message.from_user.id != admin_id:
+        return
+    from database import get_db
+    from datetime import datetime, timedelta
+    conn = get_db(); c = conn.cursor()
+
+    total_users = c.execute("SELECT COUNT(*) FROM users").fetchone()[0]
+    new_today = c.execute("SELECT COUNT(*) FROM users WHERE date(created_at)=date('now')").fetchone()[0]
+    new_week = c.execute("SELECT COUNT(*) FROM users WHERE created_at >= datetime('now','-7 days')").fetchone()[0]
+
+    total_listings = c.execute("SELECT COUNT(*) FROM listings WHERE is_active=1 AND user_id!=9999999999").fetchone()[0]
+    new_listings_today = c.execute("SELECT COUNT(*) FROM listings WHERE is_active=1 AND user_id!=9999999999 AND date(created_at)=date('now')").fetchone()[0]
+    new_listings_week = c.execute("SELECT COUNT(*) FROM listings WHERE is_active=1 AND user_id!=9999999999 AND created_at >= datetime('now','-7 days')").fetchone()[0]
+
+    total_messages = c.execute("SELECT COUNT(*) FROM messages").fetchone()[0]
+    total_offers = c.execute("SELECT COUNT(*) FROM offers").fetchone()[0]
+    verified_count = c.execute("SELECT COUNT(*) FROM users WHERE is_verified=1").fetchone()[0]
+
+    conn.close()
+    await message.answer(
+        f"📊 <b>Статистика Egypt Bazar</b>\n\n"
+        f"👥 <b>Пользователи:</b>\n"
+        f"  Всего: <b>{total_users}</b>\n"
+        f"  Сегодня: <b>+{new_today}</b>\n"
+        f"  За неделю: <b>+{new_week}</b>\n"
+        f"  Верифицированных: <b>{verified_count}</b>\n\n"
+        f"📋 <b>Объявления (реальные):</b>\n"
+        f"  Активных: <b>{total_listings}</b>\n"
+        f"  Сегодня: <b>+{new_listings_today}</b>\n"
+        f"  За неделю: <b>+{new_listings_week}</b>\n\n"
+        f"💬 <b>Активность:</b>\n"
+        f"  Сообщений: <b>{total_messages}</b>\n"
+        f"  Офферов: <b>{total_offers}</b>",
+        parse_mode="HTML"
+    )
+
+
+@dp.message(Command("new"))
+async def cmd_new_listings(message: types.Message):
+    admin_id = int(os.getenv("ADMIN_ID", "0"))
+    if message.from_user.id != admin_id:
+        return
+    from database import get_db
+    conn = get_db(); c = conn.cursor()
+    rows = c.execute("""
+        SELECT l.id, l.title, l.price, l.currency, l.category, l.city,
+               u.username, u.first_name, l.created_at
+        FROM listings l
+        LEFT JOIN users u ON l.user_id=u.telegram_id
+        WHERE l.is_active=1 AND l.user_id!=9999999999
+        ORDER BY l.created_at DESC LIMIT 10
+    """).fetchall()
+    conn.close()
+    if not rows:
+        await message.answer("Новых объявлений нет.")
+        return
+    lines = ["📋 <b>Последние 10 объявлений:</b>\n"]
+    for r in rows:
+        name = f"@{r['username']}" if r['username'] else r['first_name'] or f"#{r['user_id'] if 'user_id' in r.keys() else '?'}"
+        price = f"{r['price']} {r['currency']}" if r['price'] else "Договорная"
+        lines.append(f"#{r['id']} <b>{r['title']}</b>\n  💰 {price} · 📍 {r['city']} · 👤 {name}")
+    await message.answer("\n\n".join(lines), parse_mode="HTML")
+
+
+@dp.message(Command("newusers"))
+async def cmd_new_users(message: types.Message):
+    admin_id = int(os.getenv("ADMIN_ID", "0"))
+    if message.from_user.id != admin_id:
+        return
+    from database import get_db
+    conn = get_db(); c = conn.cursor()
+    rows = c.execute("""
+        SELECT telegram_id, username, first_name, created_at
+        FROM users ORDER BY created_at DESC LIMIT 15
+    """).fetchall()
+    conn.close()
+    lines = ["👥 <b>Последние 15 пользователей:</b>\n"]
+    for r in rows:
+        name = f"@{r['username']}" if r['username'] else r['first_name'] or f"#{r['telegram_id']}"
+        dt = r['created_at'][:10] if r['created_at'] else "?"
+        lines.append(f"{name} · {dt}")
+    await message.answer("\n".join(lines), parse_mode="HTML")
+
+
 async def main():
     init_db()
     asyncio.create_task(check_expiring())
+    asyncio.create_task(check_verify_expiring())
     await dp.start_polling(bot)
 
 

@@ -42,7 +42,7 @@ def get_listings(category: str=None, city: str=None, search: str=None):
     if category and category in CATEGORIES: q+=" AND l.category=?"; params.append(category)
     if city: q+=" AND l.city=?"; params.append(city)
     if search: q+=" AND (l.title LIKE ? OR l.description LIKE ?)"; params+=[f"%{search}%",f"%{search}%"]
-    q += " ORDER BY l.is_promoted DESC, l.created_at DESC"
+    q += " ORDER BY l.is_legendary DESC, l.is_promoted DESC, l.created_at DESC"
     rows = c.execute(q,params).fetchall(); conn.close()
     from datetime import datetime
     now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -413,6 +413,135 @@ def admin_unverify(user_id: int, admin_key: str = Form(...)):
     c.execute("UPDATE users SET is_verified=0, verified_until=NULL WHERE telegram_id=?",(user_id,))
     conn.commit(); conn.close()
     return {"ok":True}
+
+@app.post("/api/messages")
+async def send_message(
+    sender_id: int = Form(...),
+    receiver_id: int = Form(...),
+    listing_id: int = Form(None),
+    text: str = Form(...),
+    sender_username: str = Form(None),
+    receiver_username: str = Form(None),
+):
+    import httpx, logging
+    conn=get_db(); c=conn.cursor()
+    c.execute("""CREATE TABLE IF NOT EXISTS messages (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        sender_id INTEGER NOT NULL,
+        receiver_id INTEGER NOT NULL,
+        listing_id INTEGER,
+        text TEXT NOT NULL,
+        sender_username TEXT,
+        receiver_username TEXT,
+        is_read INTEGER DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
+    # migration
+    try: c.execute("ALTER TABLE messages ADD COLUMN receiver_username TEXT")
+    except: pass
+    c.execute("INSERT INTO messages (sender_id,receiver_id,listing_id,text,sender_username,receiver_username) VALUES (?,?,?,?,?,?)",
+              (sender_id,receiver_id,listing_id,text,sender_username,receiver_username))
+    conn.commit()
+    # notify receiver via bot
+    token=os.getenv("BOT_TOKEN","")
+    if token:
+        try:
+            from_label=f"@{sender_username}" if sender_username else f"#{sender_id}"
+            listing_row=c.execute("SELECT title FROM listings WHERE id=?",(listing_id,)).fetchone() if listing_id else None
+            listing_info=f"\nОбъявление: «{listing_row['title']}»" if listing_row else ""
+            async with httpx.AsyncClient(timeout=5) as client:
+                await client.post(f"https://api.telegram.org/bot{token}/sendMessage",json={
+                    "chat_id": receiver_id,
+                    "text": f"💬 <b>Новое сообщение от {from_label}</b>{listing_info}\n\n{text}\n\n<i>Ответить можно в Egypt Bazar → Чаты</i>",
+                    "parse_mode": "HTML"
+                })
+        except Exception as e:
+            logging.warning(f"Message notify: {e}")
+    conn.close()
+    return {"ok": True}
+
+@app.get("/api/messages/{user1}/{user2}")
+def get_messages(user1: int, user2: int, listing_id: int = None):
+    conn=get_db(); c=conn.cursor()
+    try:
+        if listing_id:
+            rows=c.execute("""SELECT * FROM messages
+                WHERE listing_id=? AND (
+                    (sender_id=? AND receiver_id=?) OR (sender_id=? AND receiver_id=?)
+                ) ORDER BY created_at ASC""",
+                (listing_id,user1,user2,user2,user1)).fetchall()
+        else:
+            rows=c.execute("""SELECT * FROM messages
+                WHERE (sender_id=? AND receiver_id=?) OR (sender_id=? AND receiver_id=?)
+                ORDER BY created_at ASC""",
+                (user1,user2,user2,user1)).fetchall()
+        # mark as read
+        c.execute("UPDATE messages SET is_read=1 WHERE receiver_id=? AND sender_id=?",(user1,user2))
+        conn.commit()
+    except:
+        rows=[]
+    conn.close()
+    return [dict(r) for r in rows]
+
+@app.get("/api/dialogs/{user_id}")
+def get_dialogs(user_id: int):
+    conn=get_db(); c=conn.cursor()
+    try:
+        rows=c.execute("""SELECT m.*,
+            CASE WHEN m.sender_id=? THEN m.receiver_id ELSE m.sender_id END as partner_id,
+            COALESCE(
+                CASE WHEN m.sender_id=? THEN m.receiver_username ELSE m.sender_username END,
+                CASE WHEN m.sender_id=? THEN u_r.username ELSE u_s.username END
+            ) as partner_username,
+            CASE WHEN m.sender_id=? THEN u_r.first_name ELSE u_s.first_name END as partner_first_name,
+            CASE WHEN m.sender_id=? THEN u_r.avatar_url ELSE u_s.avatar_url END as partner_avatar
+            FROM messages m
+            LEFT JOIN users u_s ON m.sender_id=u_s.telegram_id
+            LEFT JOIN users u_r ON m.receiver_id=u_r.telegram_id
+            WHERE m.id IN (
+                SELECT MAX(id) FROM messages
+                WHERE sender_id=? OR receiver_id=?
+                GROUP BY MIN(sender_id,receiver_id), MAX(sender_id,receiver_id)
+            )
+            ORDER BY m.created_at DESC""",
+            (user_id,user_id,user_id,user_id,user_id,user_id,user_id)).fetchall()
+    except:
+        rows=[]
+    conn.close()
+    return [dict(r) for r in rows]
+
+@app.post("/api/reports")
+async def create_report(listing_id: int = Form(...), reporter_id: int = Form(None), reason: str = Form(None)):
+    import logging
+    conn=get_db(); c=conn.cursor()
+    # ensure reports table exists
+    c.execute("""CREATE TABLE IF NOT EXISTS reports (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        listing_id INTEGER NOT NULL,
+        reporter_id INTEGER,
+        reason TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
+    c.execute("INSERT INTO reports (listing_id, reporter_id, reason) VALUES (?,?,?)", (listing_id, reporter_id, reason))
+    conn.commit()
+    # notify admin
+    row = c.execute("SELECT title FROM listings WHERE id=?", (listing_id,)).fetchone()
+    conn.close()
+    token = os.getenv("BOT_TOKEN","")
+    admin_id = int(os.getenv("ADMIN_ID","0"))
+    if token and admin_id:
+        try:
+            import httpx
+            reason_labels = {"spam":"🚫 Спам","fraud":"💸 Мошенничество","wrong":"📋 Неверная категория","fake":"🤖 Фейк","other":"❓ Другое"}
+            label = reason_labels.get(reason, reason or "—")
+            title = row["title"] if row else f"#{listing_id}"
+            async with httpx.AsyncClient(timeout=5) as client:
+                await client.post(f"https://api.telegram.org/bot{token}/sendMessage", json={
+                    "chat_id": admin_id,
+                    "text": f"⚠️ <b>Жалоба на объявление</b>\n\n«{title}» (#{listing_id})\nПричина: {label}\nОт: {reporter_id or '—'}",
+                    "parse_mode": "HTML"
+                })
+        except Exception as e:
+            logging.warning(f"Report notify: {e}")
+    return {"ok": True}
 
 if __name__=="__main__":
     import uvicorn
