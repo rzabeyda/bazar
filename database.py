@@ -48,6 +48,16 @@ def init_db():
         ("legendary_until","TIMESTAMP"),
         ("condition","TEXT DEFAULT 'new'"),
         ("views","INTEGER DEFAULT 0"),
+        ("prop_deal","TEXT"),
+        ("prop_rent_period","TEXT"),
+        ("prop_type","TEXT"),
+        ("prop_area","TEXT"),
+        ("prop_rooms","TEXT"),
+        ("prop_year","TEXT"),
+        ("prop_floor","TEXT"),
+        ("prop_material","TEXT"),
+        ("prop_condition","TEXT"),
+        ("prop_district","TEXT"),
     ]:
         try: c.execute(f"ALTER TABLE listings ADD COLUMN {col} {defn}")
         except: pass
@@ -55,6 +65,7 @@ def init_db():
     for col, defn in [
         ("is_verified","INTEGER DEFAULT 0"),
         ("verified_until","TIMESTAMP"),
+        ("avatar_url","TEXT"),
     ]:
         try: c.execute(f"ALTER TABLE users ADD COLUMN {col} {defn}")
         except: pass

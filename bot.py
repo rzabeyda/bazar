@@ -3,7 +3,10 @@ import logging
 import os
 from datetime import datetime, timedelta
 from aiogram import Bot, Dispatcher, types, F
+from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.filters import CommandStart, Command
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup
 
 from aiogram.types import (
     InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo,
@@ -21,7 +24,7 @@ COMMUNITY_URL = "https://t.me/egypt_links"
 
 logging.basicConfig(level=logging.INFO)
 bot = Bot(token=BOT_TOKEN)
-dp = Dispatcher()
+dp = Dispatcher(storage=MemoryStorage())
 
 @dp.message(Command("verify"))
 async def cmd_verify(message: types.Message):
@@ -38,7 +41,7 @@ async def cmd_verify(message: types.Message):
     import httpx
     async with httpx.AsyncClient() as client:
         r = await client.post(f"http://localhost:8002/api/admin/verify/{user_id}",
-            data={"months": months, "admin_key": "egypt_admin_2024"})
+            data={"months": months, "admin_key": os.getenv("ADMIN_KEY","")})
     if r.json().get("ok"):
         await message.answer(f"✅ Пользователь {user_id} верифицирован на {months} мес.\nДо: {r.json()['verified_until']}")
         try:
@@ -61,7 +64,7 @@ async def cmd_unverify(message: types.Message):
     import httpx
     async with httpx.AsyncClient() as client:
         await client.post(f"http://localhost:8002/api/admin/unverify/{user_id}",
-            data={"admin_key": "egypt_admin_2024"})
+            data={"admin_key": os.getenv("ADMIN_KEY","")})
     await message.answer(f"✅ Верификация снята с {user_id}")
 
 
@@ -70,21 +73,29 @@ async def cmd_unverify(message: types.Message):
 async def start(message: types.Message):
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [
-            InlineKeyboardButton(text="🛒 Open Bazar", web_app=WebAppInfo(url=WEBAPP_URL)),
-            InlineKeyboardButton(text="💬 Community", url=COMMUNITY_URL)
+            InlineKeyboardButton(text="🛒 Открыть Базар", web_app=WebAppInfo(url=WEBAPP_URL)),
         ]
     ])
     # Save user + try to get avatar
     try:
-        from database import get_db
+
         user = message.from_user
-        # Get profile photo
+        # Get profile photo — download and save locally
         avatar_url = None
         try:
             photos = await bot.get_user_profile_photos(user.id, limit=1)
             if photos.photos:
                 file = await bot.get_file(photos.photos[0][-1].file_id)
-                avatar_url = f"https://api.telegram.org/file/bot{os.getenv('BOT_TOKEN')}/{file.file_path}"
+                # Download to local uploads dir
+                import aiohttp, uuid as _uuid
+                local_path = f"/root/bazar/uploads/avatar_{user.id}.jpg"
+                tg_url = f"https://api.telegram.org/file/bot{os.getenv('BOT_TOKEN')}/{file.file_path}"
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(tg_url) as resp:
+                        if resp.status == 200:
+                            with open(local_path, "wb") as f:
+                                f.write(await resp.read())
+                            avatar_url = f"/uploads/avatar_{user.id}.jpg"
         except: pass
         conn = get_db(); c = conn.cursor()
         # Add avatar_url column if not exists
@@ -95,7 +106,17 @@ async def start(message: types.Message):
             username=excluded.username,first_name=excluded.first_name,
             avatar_url=COALESCE(excluded.avatar_url,avatar_url)""",
             (user.id, user.username, user.first_name, avatar_url))
+        # Always update avatar if we got a new one
+        if avatar_url:
+            c.execute("UPDATE users SET avatar_url=? WHERE telegram_id=?", (avatar_url, user.id))
         conn.commit(); conn.close()
+        # Уведомить админа о новом юзере
+        try:
+            admin_id = int(os.getenv("ADMIN_ID", "0"))
+            if admin_id and admin_id != user.id:
+                name = f"@{user.username}" if user.username else f"{user.first_name or ''} #{user.id}"
+                await bot.send_message(admin_id, f"👤 Новый пользователь: {name}")
+        except: pass
     except Exception as e:
         logging.warning(f"start save user: {e}")
     try:
@@ -103,18 +124,22 @@ async def start(message: types.Message):
         await message.answer_photo(
             photo=photo,
             caption="🌴 <b>Добро пожаловать в Egypt Bazar!</b>\n"
-                    "Покупай и продавай в Шарм-эль-Шейхе, Хургаде и других городах Египта.\n\n"
+                    "Покупай и продавай в Шарм-эль-Шейхе, Хургаде и других городах Египта.\n"
+                    "➕ Нажми <b>Открыть Базар</b> → кнопка «+» → опубликуй объявление за минуту. Это бесплатно.\n\n"
                     "🌴 <b>Welcome to Egypt Bazar!</b>\n"
-                    "Buy and sell in Sharm el-Sheikh, Hurghada and other cities of Egypt.",
+                    "Buy and sell in Sharm el-Sheikh, Hurghada and other cities of Egypt.\n"
+                    "➕ Tap <b>Открыть Базар</b> → the «+» button → post a listing in a minute. It's free.",
             parse_mode="HTML", reply_markup=keyboard
         )
     except Exception as e:
         logging.warning(f"start photo error: {e}")
         await message.answer(
             "🌴 <b>Добро пожаловать в Egypt Bazar!</b>\n"
-            "Покупай и продавай в Шарм-эль-Шейхе, Хургаде и других городах Египта.\n\n"
+            "Покупай и продавай в Шарм-эль-Шейхе, Хургаде и других городах Египта.\n"
+            "➕ Нажми <b>Открыть Базар</b> → кнопка «+» → опубликуй объявление за минуту. Это бесплатно.\n\n"
             "🌴 <b>Welcome to Egypt Bazar!</b>\n"
-            "Buy and sell in Sharm el-Sheikh, Hurghada and other cities of Egypt.",
+            "Buy and sell in Sharm el-Sheikh, Hurghada and other cities of Egypt.\n"
+            "➕ Tap <b>Открыть Базар</b> → the «+» button → post a listing in a minute. It's free.",
             parse_mode="HTML", reply_markup=keyboard
         )
 
@@ -160,7 +185,10 @@ async def successful_payment(message: types.Message):
 
 # ── TON/USDT ──────────────────────────────────────────────────────────────────
 
-@dp.callback_query(F.data.startswith("ton_confirm_"))
+
+
+
+
 async def ton_confirm(call: types.CallbackQuery):
     listing_id = int(call.data.split("_")[2])
     conn = get_db(); c = conn.cursor()
@@ -272,6 +300,8 @@ async def admin_activate_verify(call: types.CallbackQuery):
     try:
         await bot.send_message(user_id_v,"🟢 <b>Верификация активирована!</b>\n\nЗелёная галочка появится на всех ваших объявлениях.",parse_mode="HTML")
     except: pass
+
+@dp.callback_query(F.data.startswith("extend_"))
 async def extend_listing(call: types.CallbackQuery):
     listing_id = int(call.data.split("_")[1])
     conn = get_db(); c = conn.cursor()
@@ -346,7 +376,6 @@ async def cmd_verified_list(message: types.Message):
     if message.from_user.id != admin_id:
         return
     import httpx
-    from database import get_db
     conn = get_db(); c = conn.cursor()
     rows = c.execute("""SELECT telegram_id, username, verified_until 
         FROM users WHERE is_verified=1 AND verified_until IS NOT NULL 
@@ -371,7 +400,7 @@ async def check_verify_expiring():
     while True:
         await asyncio.sleep(3600)
         try:
-            from database import get_db
+    
             conn = get_db(); c = conn.cursor()
             now = datetime.now()
             warn = now + timedelta(days=3)
@@ -412,20 +441,46 @@ async def check_verify_expiring():
             logging.warning(f"check_verify_expiring: {e}")
 
 
+async def update_user_avatar(user_id: int):
+    """Download and save user avatar locally. Called on any interaction."""
+    try:
+        photos = await bot.get_user_profile_photos(user_id, limit=1)
+        if not photos.photos:
+            return
+        file = await bot.get_file(photos.photos[0][-1].file_id)
+        tg_url = f"https://api.telegram.org/file/bot{os.getenv('BOT_TOKEN')}/{file.file_path}"
+        import aiohttp
+        async with aiohttp.ClientSession() as session:
+            async with session.get(tg_url) as resp:
+                if resp.status == 200:
+                    with open(f"/root/bazar/uploads/avatar_{user_id}.jpg", "wb") as f:
+                        f.write(await resp.read())
+        conn = get_db(); c = conn.cursor()
+        c.execute("UPDATE users SET avatar_url=? WHERE telegram_id=?",
+                  (f"/uploads/avatar_{user_id}.jpg", user_id))
+        conn.commit(); conn.close()
+    except: pass
+
+
 @dp.message(F.text & ~F.text.startswith("/"))
-async def forward_to_admin(message: types.Message):
+async def forward_to_admin(message: types.Message, state: FSMContext):
     """Forward any user message to admin so he sees replies"""
+    current = await state.get_state()
+    if current == BroadcastState.waiting_text:
+        return
     admin_id = int(os.getenv("ADMIN_ID", "0"))
     user = message.from_user
     # Save user to DB so their username appears in chats
     try:
-        from database import get_db
+
         conn = get_db(); c = conn.cursor()
         c.execute("INSERT INTO users (telegram_id,username,first_name) VALUES (?,?,?) ON CONFLICT(telegram_id) DO UPDATE SET username=excluded.username,first_name=excluded.first_name",
                   (user.id, user.username, user.first_name))
         conn.commit(); conn.close()
     except Exception as e:
         logging.warning(f"save user: {e}")
+    # Update avatar in background (non-blocking)
+    asyncio.create_task(update_user_avatar(user.id))
     if not admin_id or user.id == admin_id:
         return
     name = f"@{user.username}" if user.username else f"{user.first_name or ''} #{user.id}"
@@ -439,12 +494,100 @@ async def forward_to_admin(message: types.Message):
         logging.warning(f"forward_to_admin: {e}")
 
 
+@dp.message(Command("promo"))
+async def cmd_promo(message: types.Message):
+    admin_id = int(os.getenv("ADMIN_ID", "0"))
+    if message.from_user.id != admin_id:
+        return
+    parts = message.text.split()
+    if len(parts) < 2:
+        await message.answer("Использование: /promo LISTING_ID\nПример: /promo 42")
+        return
+    listing_id = int(parts[1])
+    conn = get_db(); c = conn.cursor()
+    row = c.execute("SELECT title, user_id FROM listings WHERE id=?", (listing_id,)).fetchone()
+    if not row:
+        await message.answer("❌ Объявление не найдено")
+        conn.close(); return
+    promoted_until = (datetime.now() + timedelta(days=30)).strftime("%Y-%m-%d %H:%M:%S")
+    c.execute("UPDATE listings SET is_promoted=1, promoted_until=? WHERE id=?", (promoted_until, listing_id))
+    conn.commit(); conn.close()
+    await message.answer(f"⭐ Объявление #{listing_id} «{row['title']}» — ЗОЛОТОЕ на 30 дней!")
+    try:
+        await bot.send_message(row["user_id"],
+            f"⭐ <b>Ваше объявление «{row['title']}» получило статус ЗОЛОТОЕ!</b>\n\nОно будет в баннере 30 дней.",
+            parse_mode="HTML")
+    except: pass
+
+
 @dp.message(Command("stats"))
 async def cmd_stats(message: types.Message):
     admin_id = int(os.getenv("ADMIN_ID", "0"))
     if message.from_user.id != admin_id:
         return
-    from database import get_db
+    conn = get_db(); c = conn.cursor()
+    total_users = c.execute("SELECT COUNT(*) FROM users").fetchone()[0]
+    new_today_users = c.execute("SELECT COUNT(*) FROM users WHERE date(created_at)=date('now')").fetchone()[0]
+    verified = c.execute("SELECT COUNT(*) FROM users WHERE is_verified=1").fetchone()[0]
+    # только живые объявления — созданные реальными юзерами после запуска (id > 52)
+    total_listings = c.execute("SELECT COUNT(*) FROM listings WHERE is_active=1 AND user_id!=9999999999 AND id>52").fetchone()[0]
+    new_today_listings = c.execute("SELECT COUNT(*) FROM listings WHERE is_active=1 AND user_id!=9999999999 AND id>52 AND date(created_at)=date('now')").fetchone()[0]
+    total_msgs = c.execute("SELECT COUNT(*) FROM messages").fetchone()[0]
+    today_msgs = c.execute("SELECT COUNT(*) FROM messages WHERE date(created_at)=date('now')").fetchone()[0]
+    total_offers = c.execute("SELECT COUNT(*) FROM offers").fetchone()[0]
+    today_offers = c.execute("SELECT COUNT(*) FROM offers WHERE date(created_at)=date('now')").fetchone()[0]
+    conn.close()
+    await message.answer(
+        f"📊 <b>Egypt Bazar — статистика</b>\n\n"
+        f"👥 Пользователей: <b>{total_users}</b> (+{new_today_users} сегодня)\n"
+        f"✅ С верификацией: <b>{verified}</b>\n\n"
+        f"📋 Объявлений: <b>{total_listings}</b> (+{new_today_listings} сегодня)\n\n"
+        f"💬 Сообщений: <b>{total_msgs}</b> (+{today_msgs} сегодня)\n"
+        f"💰 Офферов: <b>{total_offers}</b> (+{today_offers} сегодня)",
+        parse_mode="HTML"
+    )
+
+
+@dp.message(Command("users"))
+async def cmd_users(message: types.Message):
+    admin_id = int(os.getenv("ADMIN_ID", "0"))
+    if message.from_user.id != admin_id:
+        return
+    conn = get_db(); c = conn.cursor()
+    rows = c.execute("""
+        SELECT telegram_id, username, first_name, created_at
+        FROM users ORDER BY created_at DESC
+    """).fetchall()
+    conn.close()
+    if not rows:
+        await message.answer("Пользователей нет.")
+        return
+    lines = [f"👥 <b>Все пользователи ({len(rows)}):</b>\n"]
+    for r in rows:
+        name = f"@{r['username']}" if r['username'] else r['first_name'] or f"#{r['telegram_id']}"
+        dt = r['created_at'][:10] if r['created_at'] else "?"
+        lines.append(f"{name} · {dt}")
+    # Telegram limit 4096 chars — split if needed
+    text = "\n".join(lines)
+    if len(text) <= 4096:
+        await message.answer(text, parse_mode="HTML")
+    else:
+        chunks = []
+        chunk = lines[0] + "\n"
+        for line in lines[1:]:
+            if len(chunk) + len(line) + 1 > 4000:
+                chunks.append(chunk)
+                chunk = ""
+            chunk += line + "\n"
+        chunks.append(chunk)
+        for ch in chunks:
+            await message.answer(ch, parse_mode="HTML")
+
+
+
+    admin_id = int(os.getenv("ADMIN_ID", "0"))
+    if message.from_user.id != admin_id:
+        return
     conn = get_db(); c = conn.cursor()
 
     total_users = c.execute("SELECT COUNT(*) FROM users").fetchone()[0]
@@ -483,7 +626,6 @@ async def cmd_new_listings(message: types.Message):
     admin_id = int(os.getenv("ADMIN_ID", "0"))
     if message.from_user.id != admin_id:
         return
-    from database import get_db
     conn = get_db(); c = conn.cursor()
     rows = c.execute("""
         SELECT l.id, l.title, l.price, l.currency, l.category, l.city,
@@ -505,12 +647,10 @@ async def cmd_new_listings(message: types.Message):
     await message.answer("\n\n".join(lines), parse_mode="HTML")
 
 
-@dp.message(Command("newusers"))
 async def cmd_new_users(message: types.Message):
     admin_id = int(os.getenv("ADMIN_ID", "0"))
     if message.from_user.id != admin_id:
         return
-    from database import get_db
     conn = get_db(); c = conn.cursor()
     rows = c.execute("""
         SELECT telegram_id, username, first_name, created_at
@@ -523,6 +663,39 @@ async def cmd_new_users(message: types.Message):
         dt = r['created_at'][:10] if r['created_at'] else "?"
         lines.append(f"{name} · {dt}")
     await message.answer("\n".join(lines), parse_mode="HTML")
+
+
+# ── BROADCAST ─────────────────────────────────────────────────────────────────
+
+class BroadcastState(StatesGroup):
+    waiting_text = State()
+
+@dp.message(Command("broadcast"))
+async def cmd_broadcast(message: types.Message, state: FSMContext):
+    admin_id = int(os.getenv("ADMIN_ID", "0"))
+    if message.from_user.id != admin_id:
+        return
+    await message.answer("📢 Отправь текст рассылки (можно с HTML-форматированием).\n\nДля отмены — /cancel")
+    await state.set_state(BroadcastState.waiting_text)
+
+@dp.message(Command("cancel"))
+async def cmd_cancel(message: types.Message, state: FSMContext):
+    await state.clear()
+    await message.answer("❌ Отменено")
+
+@dp.message(BroadcastState.waiting_text)
+async def do_broadcast(message: types.Message, state: FSMContext):
+    await state.clear()
+    text = message.text or message.caption or ""
+    try:
+        import httpx
+        async with httpx.AsyncClient(timeout=30) as client:
+            resp = await client.post("http://localhost:8002/api/broadcast",
+                data={"text": text, "admin_key": os.getenv("ADMIN_KEY","")})
+        result = resp.json()
+        await message.answer(f"📢 Рассылка завершена!\n✅ Отправлено в чаты: {result.get('sent', 0)}")
+    except Exception as e:
+        await message.answer(f"❌ Ошибка: {e}")
 
 
 async def main():

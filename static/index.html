@@ -21,10 +21,10 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
 .header-inner{display:flex;align-items:center;justify-content:space-between;}
 .logo{font-size:20px;font-weight:900;letter-spacing:-.5px;}
 .logo-em{color:var(--accent);}
-.chat-btn{width:34px;height:34px;border-radius:50%;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--accent);transition:transform .15s;}
+.chat-btn{height:26px;padding:0 10px;border-radius:13px;background:var(--card2);border:1.5px solid var(--accent);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--accent);transition:transform .15s;}
 .chat-btn:active{transform:scale(.9);}
 /* lang switcher — always LTR regardless of page direction */
-.lang-sw{display:flex;background:var(--card2);border-radius:20px;border:1px solid var(--border);padding:3px;gap:2px;direction:ltr;}
+.lang-sw{display:flex;background:var(--card2);border-radius:20px;border:1.5px solid #fff;padding:3px;gap:2px;direction:ltr;box-shadow:0 0 0 1px rgba(255,255,255,.07);}
 .lang-opt{padding:4px 9px;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;border-radius:16px;transition:all .2s;display:flex;align-items:center;gap:3px;}
 .lang-opt.active{background:var(--accent);color:#000;}
 .flag{font-size:13px;}
@@ -61,7 +61,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
 .search-wrap{padding:10px 16px 0;direction:ltr;}
 .search-box{position:relative;}
 .search-ico{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--muted);fill:none;pointer-events:none;}
-.search-input{width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:12px;padding:10px 36px 10px 37px;color:#fff;font-size:14px;outline:none;transition:border-color .2s;direction:auto;}
+.search-input{width:100%;background:var(--card2);border:1.5px solid #fff;border-radius:12px;padding:10px 36px 10px 37px;color:#fff;font-size:14px;outline:none;transition:border-color .2s;direction:auto;box-shadow:0 0 0 1px rgba(255,255,255,.05);}
 .search-clear{position:absolute;right:10px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .search-clear svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;}
 .search-input:focus{border-color:var(--accent);}
@@ -69,8 +69,15 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
 
 /* FILTERS — always LTR, fixed widths */
 .filters-row{display:flex;gap:7px;padding:10px 16px 8px;direction:ltr;}
-.filter-btn{display:inline-flex;align-items:center;gap:4px;padding:8px 10px;border-radius:20px;border:1.5px solid var(--border);background:var(--card2);color:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0;}
+.filter-btn{display:inline-flex;align-items:center;gap:4px;padding:8px 10px;border-radius:20px;border:1.5px solid #fff;background:var(--card2);color:#fff;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;flex-shrink:0;box-shadow:0 0 0 1px rgba(255,255,255,.05);}
 .filter-btn.active{border-color:var(--accent);background:rgba(240,165,0,.13);color:var(--accent);}
+.cat-chips{display:flex;gap:8px;overflow-x:auto;padding:2px 16px 10px;direction:ltr;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
+.cat-chips::-webkit-scrollbar{display:none;}
+.cat-chip{flex-shrink:0;display:inline-flex;align-items:center;gap:5px;padding:8px 13px;border-radius:20px;background:var(--card2);color:#fff;border:1.5px solid transparent;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s;}
+.cat-chip:active{transform:scale(.96);}
+.cat-chip.active{background:rgba(240,165,0,.15);border-color:var(--accent);color:var(--accent);}
+.cat-chip .cnt{opacity:.55;font-size:11px;font-weight:700;}
+.res-count{padding:0 18px 6px;font-size:12px;color:var(--muted);}
 .filter-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
 #filter-price{width:58px;justify-content:center;}
 #filter-city-btn{flex:1;justify-content:center;min-width:0;}
@@ -102,7 +109,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
 @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.4);}}
 .card.legendary{border:2px solid #ff00ff;box-shadow:0 0 12px rgba(255,0,255,.5),0 0 24px rgba(0,255,255,.3),inset 0 0 12px rgba(255,0,255,.05);animation:neon-glow 2s ease-in-out infinite alternate;}
 @keyframes neon-glow{0%{box-shadow:0 0 8px rgba(255,0,255,.6),0 0 20px rgba(0,255,255,.3);}100%{box-shadow:0 0 16px rgba(255,0,255,.9),0 0 32px rgba(0,255,255,.5),0 0 48px rgba(255,0,255,.2);}}
-.card.legendary .card-badge{background:linear-gradient(135deg,#9b00ff,#ff00aa);color:#fff;font-weight:900;box-shadow:0 0 8px rgba(155,0,255,.7);border:none;}
+.card.legendary .card-badge{background:linear-gradient(135deg,#9b00ff,#ff00aa);color:#fff;font-weight:800;font-size:10px;box-shadow:0 0 8px rgba(155,0,255,.7);border:none;}
 .card-imgs{position:relative;width:100%;aspect-ratio:1;background:var(--card2);overflow:hidden;}
 /* swipeable photos */
 .card-imgs img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .3s;}
@@ -111,7 +118,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
 .card-idots{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);display:flex;gap:3px;z-index:2;}
 .card-idot{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.4);}
 .card-idot.active{background:#fff;}
-.promoted-badge{position:absolute;top:7px;left:7px;background:var(--accent);border-radius:6px;padding:2px 7px;font-size:9px;font-weight:800;color:#000;z-index:2;}
+.promoted-badge{position:absolute;top:7px;left:7px;background:var(--accent);border-radius:6px;padding:2px 7px;font-size:10px;font-weight:800;color:#000;z-index:2;}
 .card-badge{position:absolute;top:7px;left:7px;background:rgba(0,0,0,.72);backdrop-filter:blur(4px);border-radius:6px;padding:2px 7px;font-size:10px;font-weight:600;color:#fff;z-index:2;}
 .card-body{padding:8px 9px 10px;}
 .card-title{font-size:13px;font-weight:600;color:#fff;margin-bottom:4px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
@@ -127,16 +134,25 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
 
 /* NAV */
 .bottom-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;height:var(--nav-h);background:rgba(20,20,20,.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);border-radius:20px 20px 0 0;display:flex;z-index:140;padding:0 10px;direction:ltr;}
-.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;color:var(--muted);font-size:10px;font-weight:600;border-radius:16px;transition:color .2s;padding-bottom:4px;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer;color:var(--muted);font-size:10px;font-weight:600;border-radius:16px;transition:color .2s;padding-bottom:4px;padding-top:6px;}
 .nav-item.active{color:var(--accent);}
 .nav-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;}
 .nav-icon svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s;}
 .nav-item.active .nav-icon svg{transform:scale(1.1);}
 .nav-png{width:24px;height:24px;object-fit:contain;opacity:.5;transition:opacity .2s,transform .2s;}
 .nav-item.active .nav-png{opacity:1;transform:scale(1.1);}
+.ptab{display:inline-flex;align-items:center;padding:6px 16px;border-radius:20px;border:1.5px solid var(--border);background:var(--card2);color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s;}
+.ptab.active{border-color:var(--accent);background:rgba(240,165,0,.13);color:var(--accent);}
+.partner-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px;cursor:pointer;text-decoration:none;transition:transform .15s;}
+.partner-card:active{transform:scale(.97);}
+.partner-card.top{border:2px solid var(--accent);box-shadow:0 0 14px rgba(240,165,0,.2);}
+.partner-avatar{width:52px;height:52px;border-radius:50%;object-fit:cover;flex-shrink:0;}
+.partner-add{background:var(--card);border:1.5px dashed #3a3a3a;border-radius:16px;padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:transform .15s;}
+.partner-add:active{transform:scale(.97);}
 
 .page{display:none;}
 .page.active{display:block;}
+.page#page-partners.active{display:block;position:absolute;top:0;left:0;right:0;min-height:100vh;background:var(--bg);z-index:50;}
 
 /* AUCTION */
 .auction-page{padding:60px 20px;text-align:center;}
@@ -147,27 +163,29 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
 
 /* PROFILE */
 .profile-page{padding:14px;}
-.profile-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:12px;}
+.profile-card{background:var(--card);border:1.5px solid #fff;border-radius:18px;padding:18px;margin-bottom:12px;box-shadow:0 0 0 1px rgba(255,255,255,.06);}
 .profile-top{display:flex;align-items:center;gap:12px;direction:ltr;}
 .avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--accent2),var(--accent));display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#000;overflow:hidden;flex-shrink:0;border:2px solid var(--accent);}
 .avatar img{width:100%;height:100%;object-fit:cover;}
 .profile-info{flex:1;min-width:0;}
 .profile-name{font-size:17px;font-weight:800;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .profile-handle{font-size:13px;color:#fff;opacity:.55;margin-top:2px;}
-.share-btn{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,rgba(240,165,0,.15),rgba(240,165,0,.05));border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:transform .15s;box-shadow:0 0 10px rgba(240,165,0,.25);}
+.share-btn{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,rgba(240,165,0,.15),rgba(240,165,0,.05));border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:transform .15s;box-shadow:0 0 10px rgba(240,165,0,.25);align-self:flex-start;}
 .share-btn:active{transform:scale(.9);}
-.share-btn svg{width:19px;height:19px;stroke:var(--accent);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;}
+.share-btn svg{width:18px;height:18px;stroke:var(--accent);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;display:block;margin:auto;}
 .profile-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px;}
-.stat-box{background:var(--card2);border-radius:12px;padding:12px;text-align:center;cursor:pointer;transition:background .15s;}
+.stat-box{background:var(--card2);border-radius:12px;padding:12px;text-align:center;cursor:pointer;transition:background .15s;border:1.5px solid #fff;}
 .stat-box:active{background:#2a2a2a;}
-.stat-num{font-size:22px;font-weight:800;color:var(--accent);}
-.stat-lbl{font-size:10px;color:#fff;margin-top:3px;font-weight:500;opacity:.65;}
+.stat-num{font-size:26px;font-weight:900;color:var(--accent);line-height:1;}
+.stat-lbl{font-size:11px;color:#fff;margin-top:5px;font-weight:700;opacity:.9;letter-spacing:.3px;}
 .add-btn{width:100%;background:linear-gradient(135deg,var(--accent2),var(--accent));color:#000;font-size:15px;font-weight:800;padding:14px;border-radius:14px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;transition:transform .15s;direction:ltr;}
 .add-btn:active{transform:scale(.97);}
 .add-btn svg{width:20px;height:20px;stroke:#000;fill:none;stroke-width:2.5;stroke-linecap:round;}
 .section-title{font-size:15px;font-weight:700;margin-bottom:10px;color:#fff;}
 .my-row{display:flex;align-items:center;gap:12px;background:var(--card);border:2px solid #fff;border-radius:14px;padding:11px;margin-bottom:8px;transition:transform .15s;direction:ltr;}
 .my-row:active{transform:scale(.98);}
+.my-row.paused{border:2px solid #f0a500;background:rgba(240,165,0,.06);}
+.paused-badge{background:#f0a500;color:#000;font-size:10px;font-weight:900;padding:2px 8px;border-radius:6px;white-space:nowrap;letter-spacing:.5px;}
 .my-thumb{width:46px;height:46px;border-radius:10px;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;overflow:hidden;cursor:pointer;}
 .my-thumb img{width:100%;height:100%;object-fit:cover;}
 .my-info{flex:1;min-width:0;cursor:pointer;}
@@ -269,9 +287,6 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
   <div class="header-inner">
     <div class="logo"><span class="logo-em">Egypt</span> Bazar</div>
     <div style="display:flex;align-items:center;gap:8px;">
-      <div class="chat-btn" onclick="vib();openTgChat()" title="Help" style="border:1.5px solid var(--accent);background:transparent;">
-        <span style="font-size:8px;font-weight:900;letter-spacing:.8px;color:var(--accent);">HELP</span>
-      </div>
       <div class="lang-sw">
         <div class="lang-opt active" onclick="setLang('ru')" id="lo-ru"><span class="flag">🇷🇺</span></div>
         <div class="lang-opt" onclick="setLang('ar')" id="lo-ar"><span class="flag">🇪🇬</span></div>
@@ -297,33 +312,45 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
     <div class="banner-dots" id="banner-dots"></div>
   </div>
   <div class="search-wrap">
-    <div class="search-box">
-      <svg class="search-ico" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input class="search-input" id="search-input" type="text" placeholder="Поиск..." oninput="filterListings();toggleClearBtn()">
-      <div class="search-clear" id="search-clear" onclick="clearSearch()" style="display:none">
-        <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div class="filter-btn active" id="filter-price" onclick="vib();cyclePrice()" style="flex-shrink:0;padding:10px 12px;">
+        <span id="filter-price-lbl" style="font-size:13px;font-weight:700;display:flex;align-items:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+      </div>
+      <div class="search-box" style="flex:1;position:relative;">
+        <svg class="search-ico" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input class="search-input" id="search-input" type="text" placeholder="Поиск..." oninput="filterListings();toggleClearBtn()">
+        <div class="search-clear" id="search-clear" onclick="clearSearch()" style="display:none">
+          <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </div>
+        <!-- RESET крестик справа в поиске -->
+        <div id="filter-reset" onclick="vib();resetFilters()" style="display:none;position:absolute;right:10px;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:50%;background:var(--red);align-items:center;justify-content:center;cursor:pointer;z-index:5;">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </div>
       </div>
     </div>
   </div>
   <div class="filters-row">
-    <!-- PRICE: 2 states only -->
-    <div class="filter-btn active" id="filter-price" onclick="cyclePrice()">
-      <span id="filter-price-lbl" style="font-size:13px;font-weight:700;display:flex;align-items:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
-    </div>
-    <!-- CITY: multi-select -->
+    <!-- CITY -->
     <div class="filter-btn" id="filter-city-btn" onclick="toggleDD(event,'city-dd')">
       <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
       <span class="filter-label" id="filter-city-lbl">Город</span>
     </div>
-    <!-- CAT: multi-select -->
+    <!-- CAT -->
     <div class="filter-btn" id="filter-cat-btn" onclick="toggleDD(event,'cat-dd')">
       <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
       <span class="filter-label" id="filter-cat-lbl">Раздел</span>
     </div>
-    <!-- RESET -->
-    <div class="filter-btn" id="filter-reset" onclick="resetFilters()" style="display:none;border-color:var(--red);color:var(--red);">
-      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    <!-- CONDITION -->
+    <div class="filter-btn" id="filter-cond-btn" onclick="vib();cycleCondition()" style="flex-shrink:0;">
+      <span id="filter-cond-lbl">Состояние</span>
     </div>
+  </div>
+  <div class="cat-chips" id="cat-chips" style="display:none"></div>
+  <div class="res-count" id="res-count" style="display:none"></div>
+  <!-- DEAL ROW: only for property -->
+  <div id="filter-deal-btn" style="display:none;gap:8px;padding:0 14px 10px;flex-shrink:0;">
+    <div class="filter-btn" id="deal-btn-rent" onclick="setDeal('rent')" style="background:var(--accent);color:#000;font-weight:800;flex:1;justify-content:center;">📅 Аренда</div>
+    <div class="filter-btn" id="deal-btn-sale" onclick="setDeal('sale')" style="background:var(--card2);color:var(--muted);font-weight:600;flex:1;justify-content:center;">💰 Продажа</div>
   </div>
   <div class="listings" id="listings-grid">
     <div class="empty"><div class="empty-icon">⏳</div><div id="empty-text">Загрузка...</div></div>
@@ -333,7 +360,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
 <!-- AUCTION -->
 <div class="page" id="page-auction">
   <div style="padding:16px 14px 0;">
-    <div id="chats-page-title" style="font-size:20px;font-weight:900;color:#fff;margin-bottom:16px;">💬 Чаты</div>
+    <div id="chats-page-title" style="margin-bottom:16px;"><div style="display:inline-block;border:2px solid #fff;border-radius:30px;padding:4px 16px;"><span style="font-size:13px;font-weight:900;color:#fff;letter-spacing:2px;">ЧАТЫ</span></div></div>
     <div id="messages-list">
       <div style="text-align:center;padding:60px 20px;">
         <div style="font-size:52px;margin-bottom:14px;">💬</div>
@@ -355,7 +382,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
           <div class="profile-handle" id="prof-handle">@</div>
         </div>
         <div class="share-btn" onclick="vib();shareProfile()">
-          <svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          <svg viewBox="1 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
         </div>
       </div>
       <div class="profile-stats">
@@ -379,17 +406,75 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
       </div>
       <div style="flex:1;min-width:0;">
-        <div style="font-size:14px;font-weight:800;color:#fff;" id="verify-btn-title">User Verified</div>
-        <div style="font-size:11px;color:#0099dd;margin-top:2px;font-weight:600;">Синяя галочка · Больше доверия</div>
+        <div style="font-size:14px;font-weight:800;color:#fff;" id="verify-btn-title">Получить верификацию</div>
+        <div id="verify-btn-sub" style="font-size:11px;color:#0099dd;margin-top:3px;font-weight:600;line-height:1.6;">✓ Синяя галочка&nbsp;&nbsp;✓ Топ в поиске<br>✓ Доверие покупателей&nbsp;&nbsp;✓ Больше сделок</div>
       </div>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0088cc" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
+
+
+
     <button class="add-btn" onclick="vib();openAddModal()">
       <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       <span id="add-btn-lbl">Добавить объявление</span>
     </button>
+
     <div class="section-title" id="my-listings-lbl">Мои объявления</div>
     <div id="my-listings-list"></div>
+  </div>
+</div>
+
+</div>
+
+
+
+<!-- PAGE PARTNERS -->
+<div class="page" id="page-partners">
+  <div class="banner-wrap" style="margin-top:56px;">
+    <div class="banner-area" id="partners-banner-area">
+      <div class="banner-slide active" style="background:linear-gradient(135deg,#1a0a00,#3d1500);" onclick="vib();window.open('https://imperiya-turizma24.com/','_blank');">
+        <div class="banner-info">
+          <div class="banner-name">Империя Туризма 24</div>
+          <div class="banner-row">
+            <div class="banner-city-tag">Экскурсии без посредников напрямую от организатора</div>
+          </div>
+          <div class="banner-row" style="margin-top:3px;">
+            <div class="banner-city-tag">📍 Марса Алам · Хургада · Шарм</div>
+          </div>
+        </div>
+        <div class="banner-photo-empty" style="display:flex;align-items:center;justify-content:center;width:110px;flex-shrink:0;">
+          <svg width="72" height="72" viewBox="0 0 100 80" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 85,65 15,65" fill="#e87722" opacity="0.9"/>
+            <polygon points="50,5 72,65 28,65" fill="#c8541a" opacity="0.7"/>
+            <polygon points="30,30 55,65 5,65" fill="#d4691e" opacity="0.8"/>
+            <circle cx="50" cy="18" r="10" fill="#f5a623" opacity="0.95"/>
+            <line x1="44" y1="14" x2="40" y2="8" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="56" y1="14" x2="60" y2="8" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
+            <line x1="50" y1="12" x2="50" y2="6" stroke="#f5a623" stroke-width="2.5" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="banner-dots" id="partners-banner-dots">
+      <div class="bdot active"></div>
+    </div>
+  </div>
+  <div style="padding:10px 16px 8px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;">
+    <div class="ptab active" onclick="filterPartners('all',this)">Все</div>
+    <div class="ptab" onclick="filterPartners('housing',this)">Жильё</div>
+    <div class="ptab" onclick="filterPartners('leisure',this)">Отдых</div>
+    <div class="ptab" onclick="filterPartners('tours',this)">Туры</div>
+    <div class="ptab" onclick="filterPartners('market',this)">Маркет</div>
+  </div>
+  <div id="partners-list" style="padding:4px 14px 80px;display:flex;flex-direction:column;gap:10px;"></div>
+  <div onclick="vib();if(tg)tg.openTelegramLink('https://t.me/rzabeyda');else window.open('https://t.me/rzabeyda','_blank');" style="position:fixed;bottom:calc(var(--nav-h) + 10px);left:50%;transform:translateX(-50%);width:calc(100% - 28px);max-width:452px;background:rgba(240,165,0,.1);border:2px solid var(--accent);border-radius:18px;padding:11px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;z-index:51;">
+    <div style="width:38px;height:38px;border-radius:50%;background:rgba(240,165,0,.15);border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;line-height:1;">🤝</div>
+    <div style="flex:1;">
+      <div style="font-size:15px;font-weight:900;color:var(--accent);">Стать партнёром</div>
+      <div style="font-size:11px;color:var(--muted);">Разместите свой ресурс в боте</div>
+    </div>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+  </div>
   </div>
 </div>
 
@@ -401,8 +486,12 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
     <div class="nav-icon"><img src="/static/icons/cage.png" class="nav-png" id="ico-market" alt=""></div>
     <div id="nav-lbl-market">Рынок</div>
   </div>
+  <div class="nav-item" id="nav-partners" onclick="vib();goPage('partners')" style="display:none">
+    <div class="nav-icon"><img src="/static/icons/partners.png" class="nav-png" alt="" style="mix-blend-mode:lighten;width:28px;height:28px;" onerror="this.style.display='none'"></div>
+    <div id="nav-lbl-partners">Партнёры</div>
+  </div>
   <div class="nav-item" id="nav-auction" onclick="vib();goPage('auction')">
-    <div class="nav-icon"><img src="/static/icons/message.png" class="nav-png" alt="" onerror="this.style.display='none'"></div>
+    <div class="nav-icon"><img src="/static/icons/chats.png" class="nav-png" alt="" style="mix-blend-mode:lighten;" onerror="this.style.display='none'"></div>
     <div id="nav-lbl-auction">Чаты</div>
   </div>
   <div class="nav-item" id="nav-profile" onclick="vib();goPage('profile')">
@@ -450,6 +539,46 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
       <div class="photo-grid" id="photo-thumbs" style="margin-top:-6px;"></div>
       <label class="form-label" id="lbl-title">Заголовок *</label>
       <input class="form-input" id="inp-title" type="text" maxlength="100">
+      <label class="form-label" id="lbl-cat">Категория *</label>
+      <div style="position:relative;">
+        <div id="cat-display" onclick="toggleCatPicker()" style="width:100%;background:var(--card2);border:1.5px solid var(--border);border-radius:12px;padding:11px 13px;color:var(--muted);font-size:14px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;margin-bottom:0;">
+          <span id="cat-display-text">Выберите раздел</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div id="cat-picker" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--card);border:1px solid var(--border);border-radius:12px;z-index:500;box-shadow:0 8px 30px rgba(0,0,0,.7);margin-top:4px;overflow:hidden;">
+          <div style="padding:8px;">
+            <input id="cat-picker-search" class="form-input" placeholder="🔍 Поиск раздела..." style="margin-bottom:0;" oninput="filterCatPicker()" onclick="event.stopPropagation()">
+          </div>
+          <div id="cat-picker-list" style="max-height:220px;overflow-y:auto;padding:4px 8px 8px;"></div>
+        </div>
+      </div>
+      <input type="hidden" id="inp-cat" onchange="togglePropertyFields()">
+      <label class="form-label" id="lbl-city-f" style="margin-top:14px;">Город (необязательно)</label>
+      <select class="form-select" id="inp-city" onchange="updateDistricts()">
+        <option value="">— Не указан —</option>
+        <option value="alexandria">Александрия</option>
+        <option value="aswan">Асуан</option>
+        <option value="dahab">Дахаб</option>
+        <option value="cairo">Каир</option>
+        <option value="luxor">Луксор</option>
+        <option value="marsa">Марса-Алам</option>
+        <option value="nuweiba">Нувейба</option>
+        <option value="safaga">Сафага</option>
+        <option value="soma-bay">Сома-Бей</option>
+        <option value="taba">Таба</option>
+        <option value="hurghada">Хургада</option>
+        <option value="sharm">Шарм-эль-Шейх</option>
+        <option value="el-gouna">Эль-Гуна</option>
+        <option value="el-quseir">Эль-Кусейр</option>
+        <option value="other">Другой город...</option>
+      </select>
+      <input class="form-input" id="inp-city-other" type="text" placeholder="Введите название города" style="display:none;margin-top:-8px;" maxlength="60">
+      <div id="district-row" style="display:none;">
+        <label class="form-label">Район (необязательно)</label>
+        <select class="form-select" id="inp-district">
+          <option value="">— Выберите район —</option>
+        </select>
+      </div>
       <label class="form-label">Состояние *</label>
       <div style="display:flex;gap:8px;margin-bottom:14px;">
         <div id="cond-new" onclick="vib();selectCondition('new')" style="flex:1;padding:10px;border-radius:12px;border:1.5px solid var(--accent);background:rgba(240,165,0,.15);color:var(--accent);font-weight:700;font-size:13px;text-align:center;cursor:pointer;">Новое</div>
@@ -468,27 +597,78 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
       </div>
       <label class="form-label">Телефон (необязательно)</label>
       <input class="form-input" id="inp-phone" type="tel" placeholder="+7 / +20 / +972..." maxlength="20">
-      <label class="form-label" id="lbl-cat">Категория *</label>
-      <select class="form-select" id="inp-cat"></select>
-      <label class="form-label" id="lbl-city-f">Город *</label>
-      <select class="form-select" id="inp-city">
-        <option value="sharm">Шарм-эль-Шейх</option>
-        <option value="hurghada">Хургада</option>
-        <option value="cairo">Каир</option>
-        <option value="alexandria">Александрия</option>
-        <option value="dahab">Дахаб</option>
-        <option value="marsa">Марса-Алам</option>
-        <option value="el-gouna">Эль-Гуна</option>
-        <option value="soma-bay">Сома-Бей</option>
-        <option value="taba">Таба</option>
-        <option value="nuweiba">Нувейба</option>
-        <option value="safaga">Сафага</option>
-        <option value="el-quseir">Эль-Кусейр</option>
-        <option value="luxor">Луксор</option>
-        <option value="aswan">Асуан</option>
-        <option value="other">Другой город...</option>
-      </select>
-      <input class="form-input" id="inp-city-other" type="text" placeholder="Введите название города" style="display:none;margin-top:-8px;" maxlength="60">
+
+      <!-- Доп поля для Недвижимости -->
+      <div id="property-fields" style="display:none;">
+        <label class="form-label">Тип сделки *</label>
+        <div style="display:flex;gap:8px;margin-bottom:14px;">
+          <div class="popt" id="prop-deal-sale" onclick="selectPropDeal('sale')" style="border-color:var(--accent);background:rgba(240,165,0,.1);color:#fff;">🔑 Продажа</div>
+          <div class="popt" id="prop-deal-rent" onclick="selectPropDeal('rent')" style="color:#fff;">🏠 Аренда</div>
+        </div>
+        <div id="rent-period-row" style="display:none;margin-bottom:14px;">
+          <label class="form-label">Тип аренды</label>
+          <div style="display:flex;gap:8px;">
+            <div class="popt" id="prop-rent-monthly" onclick="selectRentPeriod('monthly')" style="border-color:var(--accent);background:rgba(240,165,0,.1);color:#fff;">📅 Помесячно</div>
+            <div class="popt" id="prop-rent-daily" onclick="selectRentPeriod('daily')" style="color:#fff;">☀️ Посуточно</div>
+          </div>
+        </div>
+        <label class="form-label">Тип жилья</label>
+        <select class="form-select" id="prop-type">
+          <option value="">— Выберите —</option>
+          <option value="apartment">🏢 Квартира</option>
+          <option value="studio">🛏 Студия</option>
+          <option value="house">🏡 Дом</option>
+          <option value="villa">🏖️ Вилла</option>
+          <option value="townhouse">🏘️ Таунхаус</option>
+          <option value="compound">🏰 Компаунд</option>
+        </select>
+        <div style="display:flex;gap:8px;">
+          <div style="flex:1;">
+            <label class="form-label">Площадь (м²)</label>
+            <input class="form-input" id="prop-area" type="text" placeholder="85">
+          </div>
+          <div style="flex:1;">
+            <label class="form-label">Комнат</label>
+            <input class="form-input" id="prop-rooms" type="text" placeholder="2+1">
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <div style="flex:1;">
+            <label class="form-label">Этаж</label>
+            <input class="form-input" id="prop-floor" type="text" placeholder="3/9">
+          </div>
+          <div style="flex:1;">
+            <label class="form-label">Год постройки</label>
+            <input class="form-input" id="prop-year" type="text" placeholder="2018">
+          </div>
+        </div>
+        <label class="form-label">Материал стен</label>
+        <select class="form-select" id="prop-material">
+          <option value="">— Выберите —</option>
+          <option value="brick">🧱 Кирпич</option>
+          <option value="panel">Панель</option>
+          <option value="monolith">Монолит</option>
+          <option value="wood">Дерево</option>
+          <option value="log">Деревянный сруб</option>
+          <option value="stone">Камень</option>
+          <option value="cassette">Кассетный</option>
+          <option value="other_mat">Другой материал</option>
+        </select>
+        <label class="form-label">Состояние</label>
+        <select class="form-select" id="prop-condition">
+          <option value="">— Выберите —</option>
+          <option value="newbuild">🏗 Новостройка</option>
+          <option value="renovated">✨ Реновировано</option>
+          <option value="finished">✅ Завершён</option>
+          <option value="good">👍 В хорошем состоянии</option>
+          <option value="average">📊 Среднее</option>
+          <option value="new_finish">🎨 Новая отделка</option>
+          <option value="sanitary">🚿 Санитарный ремонт</option>
+          <option value="needs_sanitary">🔧 Требуется санитарный ремонт</option>
+          <option value="needs_update">🔄 Нуждается в обновлении</option>
+          <option value="needs_major">⚠️ Нужен капитальный ремонт</option>
+        </select>
+      </div>
       <div class="promote-box" style="border-color:var(--accent);box-shadow:0 0 10px rgba(240,165,0,.3);animation:gold-glow 2s ease-in-out infinite alternate;margin-bottom:10px;">
         <div class="promote-header">
           <div class="promote-ttl" style="background:linear-gradient(135deg,#ffd700,#f0a500,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">⭐ ЗОЛОТОЕ</div>
@@ -534,6 +714,9 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
         </div>
       </div>
       <button class="submit-btn" id="submit-btn" onclick="vib();submitListing()">Опубликовать бесплатно</button>
+      <button onclick="vib();saveDraft(true);showToast('💾 Черновик сохранён');" style="width:100%;background:rgba(46,204,113,.15);color:#2ecc71;font-size:14px;font-weight:700;padding:12px;border-radius:14px;border:1.5px solid #2ecc71;cursor:pointer;margin-top:8px;transition:transform .1s;active:transform:scale(.97);" ontouchstart="this.style.transform='scale(.97)'" ontouchend="this.style.transform=''">💾 Сохранить черновик</button>
+      <button onclick="vib();clearDraft();resetForm();showToast('🗑 Форма очищена');" style="width:100%;background:rgba(231,76,60,.1);color:#e74c3c;font-size:14px;font-weight:700;padding:12px;border-radius:14px;border:1.5px solid #e74c3c;cursor:pointer;margin-top:8px;transition:transform .1s;" ontouchstart="this.style.transform='scale(.97)'" ontouchend="this.style.transform=''">🗑 Очистить форму</button>
+      <button onclick="vib();closeModal('add-modal');" style="width:100%;background:var(--card2);color:var(--muted);font-size:14px;font-weight:700;padding:12px;border-radius:14px;border:1.5px solid var(--border);cursor:pointer;margin-top:8px;transition:transform .1s;" ontouchstart="this.style.transform='scale(.97)'" ontouchend="this.style.transform=''">✕ Закрыть</button>
     </div>
   </div>
 </div>
@@ -589,7 +772,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
           </div>
         </div>
       </div>
-      <button class="submit-btn" style="background:var(--card2);color:var(--muted);margin-top:8px;" onclick="vib();closeModal('pay-modal');closeModal('add-modal');resetForm();showToast('✅ Объявление опубликовано!')">Пропустить →</button>
+      <button class="submit-btn" style="background:var(--card2);color:var(--muted);margin-top:8px;" onclick="vib();closeModal('pay-modal');closeModal('add-modal');resetForm();showToast('✅ Объявление опубликовано!');loadListings();loadProfile();">Пропустить →</button>
     </div>
   </div>
 </div>
@@ -776,17 +959,30 @@ const API="";
 const V=Date.now(); // cache bust
 const tg=window.Telegram?.WebApp;
 if(tg){tg.ready();tg.expand();}
+// sign every API call with Telegram initData so the server knows who is calling
+(function(){const _f=window.fetch.bind(window);window.fetch=function(u,o){
+  try{const id=tg&&tg.initData;
+    if(id&&typeof u==="string"&&u.indexOf("/api/")!==-1){
+      o=o||{};
+      if(o.headers instanceof Headers){o.headers.set("X-Tg-Init-Data",id);}
+      else{o.headers=Object.assign({},o.headers||{},{"X-Tg-Init-Data":id});}
+    }
+  }catch(e){}
+  return _f(u,o);
+};})();
 
 let lang="ru";
 // multi-select filters
 let selectedCities=new Set(); // empty = all
 let selectedCats=new Set();   // empty = all
-let priceSort=3; // 0=none, 1=asc, 2=desc, 3=newest
+let priceSort=3;
+let conditionFilter=0;
 // pending selections (before apply)
 let pendingCities=new Set();
 let pendingCats=new Set();
 
 let allListings=[],currentPage="market";
+let _cachedVerified=false; // кеш верификации
 let tgUser=tg?.initDataUnsafe?.user||null;
 let promoEnabled=false,promoPayment="card";
 let legendaryEnabled=false,legendaryPayment="card";
@@ -802,11 +998,11 @@ function selectCondition(v){
   document.getElementById("cond-new").style.cssText=`flex:1;padding:10px;border-radius:12px;border:1.5px solid ${v==="new"?"var(--accent)":"var(--border)"};background:${v==="new"?"rgba(240,165,0,.15)":"var(--card2)"};color:${v==="new"?"var(--accent)":"var(--muted)"};font-weight:700;font-size:13px;text-align:center;cursor:pointer;`;
   document.getElementById("cond-used").style.cssText=`flex:1;padding:10px;border-radius:12px;border:1.5px solid ${v==="used"?"var(--accent)":"var(--border)"};background:${v==="used"?"rgba(240,165,0,.15)":"var(--card2)"};color:${v==="used"?"var(--accent)":"var(--muted)"};font-weight:700;font-size:13px;text-align:center;cursor:pointer;`;
 }
-function openTgChat(){if(tg)tg.openTelegramLink("https://t.me/egypt_links");else window.open("https://t.me/egypt_links","_blank");}
+function openTgChat(){const u="https://t.me/rzabeyda";if(tg&&tg.openTelegramLink)tg.openTelegramLink(u);else window.open(u,"_blank");}
 
 const CITY_KEYS=["sharm","hurghada","cairo","alexandria","dahab","marsa","el-gouna","taba","luxor","aswan","safaga","el-quseir","nuweiba","soma-bay","other"];
-const CAT_KEYS=["realestate","rent","transport","services","beauty","clothes","kids","home","furniture","household","repair","jobs","animals","hobby","sport","electronics","food","business","money","alcohol","smoking","tours","excursions","medicine","education","other"];
-const CAT_EMOJI={realestate:"🏠",rent:"🏡",transport:"🚗",services:"🔧",beauty:"💄",clothes:"👗",kids:"🧸",home:"🌿",jobs:"💼",animals:"🐱",hobby:"🎨",sport:"⚽",electronics:"📱",food:"🛒",business:"📈",money:"💰",alcohol:"🍾",furniture:"🛋",household:"🏺",repair:"🪚",smoking:"🚬",tours:"✈️",excursions:"🏖️",medicine:"💊",education:"📚",other:"📦"};
+const CAT_KEYS=["alcohol","medicine","business","household","diving","money","kids","home","other","animals","smoking","furniture","beauty","property","education","clothes","food","rental","jobs","repair","restaurant","sport","construction","transport","shipping","transfer","tours","services","hobby","excursions","electronics"];
+const CAT_EMOJI={property:"🏠",transport:"🚗",services:"🔧",beauty:"💄",clothes:"👗",kids:"🧸",home:"🌿",jobs:"💼",animals:"🐱",hobby:"🎨",sport:"⚽",electronics:"📱",food:"🛒",business:"📈",money:"💰",alcohol:"🍾",furniture:"🛋",household:"🏺",repair:"🪚",smoking:"🚬",tours:"🏖️",excursions:"🗺️",medicine:"💊",education:"📚",restaurant:"🍽️",rental:"🤝",diving:"🤿",construction:"🏗️",transfer:"🚕",shipping:"✈️",other:"📦"};
 
 // ── CURRENCY ──────────────────────────────────────────────────────────────────
 let egpRate = 50; // fallback
@@ -819,17 +1015,20 @@ async function fetchEgpRate(){
 }
 fetchEgpRate();
 setInterval(fetchEgpRate, 3600000);
+let _chatsPollingTimer=null;
+let _chatMsgTimer=null;
+startChatsPolling();
 
 const T={
   ru:{search:"Поиск...",fp:"$",fc:"Город",fs:"Раздел",apply:"Применить",new_listing:"Новое объявление",lbl_photos:"Фото (до 8)",lbl_title:"Заголовок *",lbl_desc:"Описание *",lbl_price:"Цена (USD)",lbl_cat:"Категория *",lbl_city:"Город *",publish:"Опубликовать",contact:"Написать продавцу",edit:"Редактировать",empty:"Объявлений нет",free:"Бесплатно",nav_market:"Рынок",nav_auction:"Аукцион",nav_profile:"Профиль",auction_title:"Аукцион",auction_sub:"Здесь скоро появятся аукционы.",auction_badge:"Скоро",add_listing:"Добавить объявление",my_listings:"Мои объявления",no_listings:"Нет объявлений",recs:"Похожие",del_confirm:"Удалить объявление?",s_active:"Активных",s_total:"Всего",s_deals:"Сделки",promo_on:"Продвигается · $5 · 24ч",promo_off:"Не продвигать",all_cities:"Все города",all_cats:"Все разделы",deals_title:"История сделок",loading:"Загрузка...",no_msgs:"Нет сообщений",msgs_hint:"Когда покупатели напишут — диалоги появятся здесь",start_chat:"Начните общение!",load_err:"Ошибка загрузки",conn_err:"Ошибка соединения",chats_title:"💬 Чаты",chat_placeholder:"Сообщение...",verified_seller:"Верифицированный продавец",dialogs_lbl:"Диалоги",offers_lbl:"Предложения цены",deleted:"🗑 Удалено",err:"❌ Ошибка",bookmarks:"Закладки",orders_lbl:"Ордера",chats_nav:"Чаты",profile_nav:"Профиль",share_lbl:"Поделиться",condition_new:"✨ Новое",condition_used:"🔧 Б/У",sold_btn:"Продано!",delete_btn:"Удалить",edit_btn:"Редактировать",contact_btn:"Написать",offer_btn:"💰 Предложить цену",share_btn:"Поделиться",report_btn:"Пожаловаться",extend_btn:"✅ Продлить на 30 дней",my_ads:"Мои объявления",
     cities:{sharm:"Шарм-эль-Шейх",hurghada:"Хургада",cairo:"Каир",alexandria:"Александрия",dahab:"Дахаб",marsa:"Марса-Алам","el-gouna":"Эль-Гуна",taba:"Таба",luxor:"Луксор",aswan:"Асуан",safaga:"Сафага","el-quseir":"Эль-Кусейр",nuweiba:"Нувейба","soma-bay":"Сома-Бей",other:"Другой город"},
-    cats:{realestate:"Продажа недвижимости",rent:"Аренда жилья",transport:"Транспорт",services:"Услуги",beauty:"Мода и красота",clothes:"Одежда",kids:"Детские товары",home:"Дом и сад",jobs:"Работа",animals:"Животные",hobby:"Хобби",sport:"Спорт",electronics:"Электроника",food:"Продовольствие",business:"Бизнес",money:"Деньги и финансы",alcohol:"Алкоголь",furniture:"Мебель",household:"Бытовые товары",repair:"Ремонт",smoking:"Курение",tours:"Туры",excursions:"Экскурсии",medicine:"Медицина",education:"Обучение",other:"Другое"}},
+    cats:{property:"Недвижимость",transport:"Транспорт",services:"Услуги",beauty:"Мода и красота",clothes:"Одежда",kids:"Детские товары",home:"Дом и сад",jobs:"Работа",animals:"Животные",hobby:"Хобби",sport:"Спорт",electronics:"Электроника",food:"Продовольствие",business:"Бизнес",money:"Деньги и финансы",alcohol:"Алкоголь",furniture:"Мебель",household:"Бытовые товары",repair:"Ремонт",smoking:"Курение",tours:"Туры",excursions:"Экскурсии",medicine:"Аптека",education:"Обучение",restaurant:"Рестораны и кафе",rental:"Прокат",diving:"Дайвинг",construction:"Стройматериалы",transfer:"Трансфер",shipping:"Транспортировка",other:"Другое"}},
   en:{search:"Search...",fp:"$",fc:"City",fs:"Section",apply:"Apply",new_listing:"New Listing",lbl_photos:"Photos (up to 8)",lbl_title:"Title *",lbl_desc:"Description *",lbl_price:"Price (USD)",lbl_cat:"Category *",lbl_city:"City *",publish:"Publish",contact:"Contact seller",edit:"Edit",empty:"No listings",free:"Free",nav_market:"Market",nav_auction:"Auction",nav_profile:"Profile",auction_title:"Auction",auction_sub:"Auctions coming soon.",auction_badge:"Soon",add_listing:"Add listing",my_listings:"My listings",no_listings:"No listings yet",recs:"Similar",del_confirm:"Delete listing?",s_active:"Active",s_total:"Total",s_deals:"Deals",promo_on:"Promoted · $5 · 24h",promo_off:"Don't promote",all_cities:"All cities",all_cats:"All sections",deals_title:"Deal history",loading:"Loading...",no_msgs:"No messages",msgs_hint:"When buyers write to you — dialogs will appear here",start_chat:"Start chatting!",load_err:"Loading error",conn_err:"Connection error",chats_title:"💬 Chats",chat_placeholder:"Message...",verified_seller:"Verified seller",dialogs_lbl:"Dialogs",offers_lbl:"Price offers",deleted:"🗑 Deleted",err:"❌ Error",bookmarks:"Bookmarks",orders_lbl:"Orders",chats_nav:"Chats",profile_nav:"Profile",share_lbl:"Share",condition_new:"✨ New",condition_used:"🔧 Used",sold_btn:"Sold!",delete_btn:"Delete",edit_btn:"Edit",contact_btn:"Message",offer_btn:"💰 Make offer",share_btn:"Share",report_btn:"Report",extend_btn:"✅ Extend 30 days",my_ads:"My listings",
     cities:{sharm:"Sharm",hurghada:"Hurghada",cairo:"Cairo",alexandria:"Alexandria",dahab:"Dahab",marsa:"Marsa Alam","el-gouna":"El Gouna",taba:"Taba",luxor:"Luxor",aswan:"Aswan",safaga:"Safaga","el-quseir":"El Quseir",nuweiba:"Nuweiba","soma-bay":"Soma Bay",other:"Other city"},
-    cats:{realestate:"Real Estate (Sale)",rent:"Rent",transport:"Transport",services:"Services",beauty:"Fashion & Beauty",clothes:"Clothes",kids:"Kids",home:"Home & Garden",jobs:"Jobs",animals:"Animals",hobby:"Hobby",sport:"Sport",electronics:"Electronics",food:"Grocery",business:"Business",money:"Finance",alcohol:"Alcohol",furniture:"Furniture",household:"Household",repair:"Repair",smoking:"Smoking",tours:"Tours",excursions:"Excursions",medicine:"Medicine",education:"Education",other:"Other"}},
+    cats:{property:"Real Estate",transport:"Transport",services:"Services",beauty:"Fashion & Beauty",clothes:"Clothes",kids:"Kids",home:"Home & Garden",jobs:"Jobs",animals:"Animals",hobby:"Hobby",sport:"Sport",electronics:"Electronics",food:"Grocery",business:"Business",money:"Finance",alcohol:"Alcohol",furniture:"Furniture",household:"Household",repair:"Repair",smoking:"Smoking",tours:"Tours",excursions:"Excursions",medicine:"Pharmacy",education:"Education",restaurant:"Restaurants & Cafes",rental:"Rental",diving:"Diving",construction:"Construction",transfer:"Transfer",shipping:"Shipping",other:"Other"}},
   ar:{search:"بحث...",fp:"$",fc:"المدينة",fs:"القسم",apply:"تطبيق",new_listing:"إعلان جديد",lbl_photos:"صور (حتى 8)",lbl_title:"العنوان *",lbl_desc:"الوصف *",lbl_price:"السعر (USD)",lbl_cat:"الفئة *",lbl_city:"المدينة *",publish:"نشر",contact:"تواصل",edit:"تعديل",empty:"لا إعلانات",free:"مجاني",nav_market:"السوق",nav_auction:"مزاد",nav_profile:"الملف",auction_title:"مزاد",auction_sub:"قريباً.",auction_badge:"قريباً",add_listing:"إضافة إعلان",my_listings:"إعلاناتي",no_listings:"لا إعلانات",recs:"مشابهة",del_confirm:"حذف؟",s_active:"نشط",s_total:"المجموع",s_deals:"صفقات",promo_on:"مميز · $5",promo_off:"بدون ترويج",all_cities:"كل المدن",all_cats:"كل الأقسام",deals_title:"سجل الصفقات",loading:"جار التحميل...",no_msgs:"لا رسائل",msgs_hint:"عندما يكتب المشترون — ستظهر المحادثات هنا",start_chat:"ابدأ المحادثة!",load_err:"خطأ في التحميل",conn_err:"خطأ في الاتصال",chats_title:"💬 الدردشات",chat_placeholder:"رسالة...",verified_seller:"بائع موثق",dialogs_lbl:"المحادثات",offers_lbl:"عروض الأسعار",deleted:"🗑 تم الحذف",err:"❌ خطأ",bookmarks:"المفضلة",orders_lbl:"الطلبات",chats_nav:"الدردشات",profile_nav:"الملف",share_lbl:"مشاركة",condition_new:"✨ جديد",condition_used:"🔧 مستعمل",sold_btn:"تم البيع!",delete_btn:"حذف",edit_btn:"تعديل",contact_btn:"تواصل",offer_btn:"💰 اقتراح سعر",share_btn:"مشاركة",report_btn:"إبلاغ",extend_btn:"✅ تمديد 30 يوم",my_ads:"إعلاناتي",
     cities:{sharm:"شرم الشيخ",hurghada:"الغردقة",cairo:"القاهرة",alexandria:"الإسكندرية",dahab:"دهب",marsa:"مرسى علم","el-gouna":"الجونة",taba:"طابا",luxor:"الأقصر",aswan:"أسوان",safaga:"سفاجا","el-quseir":"القصير",nuweiba:"نويبع","soma-bay":"سوما باي",other:"مدينة أخرى"},
-    cats:{realestate:"عقارات",rent:"إيجار",transport:"مواصلات",services:"خدمات",beauty:"موضة وجمال",clothes:"ملابس",kids:"أطفال",home:"المنزل",jobs:"وظائف",animals:"حيوانات",hobby:"هوايات",sport:"رياضة",electronics:"إلكترونيات",food:"بقالة",business:"أعمال",money:"مال",alcohol:"كحول",furniture:"أثاث",household:"منزلية",repair:"تجديد",smoking:"تدخين",tours:"جولات",excursions:"رحلات",medicine:"طب",education:"تعليم",other:"أخرى"}}
+    cats:{property:"عقارات",transport:"مواصلات",services:"خدمات",beauty:"موضة وجمال",clothes:"ملابس",kids:"أطفال",home:"المنزل",jobs:"وظائف",animals:"حيوانات",hobby:"هوايات",sport:"رياضة",electronics:"إلكترونيات",food:"بقالة",business:"أعمال",money:"مال",alcohol:"كحول",furniture:"أثاث",household:"منزلية",repair:"تجديد",smoking:"تدخين",tours:"جولات",excursions:"رحلات",medicine:"صيدلية",education:"تعليم",restaurant:"مطاعم وكافيهات",rental:"تأجير",diving:"غوص",construction:"مواد البناء",transfer:"نقل",shipping:"شحن",other:"أخرى"}}
 };
 const t=k=>{const keys=k.split(".");let v=T[lang];for(const x of keys)v=v?.[x];return v||k;};
 
@@ -858,7 +1057,7 @@ function applyLang(){
   document.getElementById("my-listings-lbl").textContent=t("my_listings");
   const bkLbl=document.getElementById("stat-bookmarks-lbl");if(bkLbl)bkLbl.textContent=t("bookmarks");
   const orLbl=document.getElementById("stat-orders-lbl");if(orLbl)orLbl.textContent=t("orders_lbl");
-  const ctLbl=document.getElementById("chats-page-title");if(ctLbl)ctLbl.textContent=t("chats_title");
+  const ctLbl=document.getElementById("chats-page-title");if(ctLbl){/*keep*/}
   const vsLbl=document.getElementById("verified-seller-title");if(vsLbl)vsLbl.textContent=t("verified_seller");
   const chatInp=document.getElementById("chat-input");if(chatInp)chatInp.placeholder=t("chat_placeholder");
   document.getElementById("s-deals-l").textContent=t("s_deals");
@@ -892,19 +1091,128 @@ function updatePriceLabel(){
 
 function goPage(page){
   currentPage=page;
-  ["market","auction","profile"].forEach(p=>{
+  ["market","auction","profile","partners"].forEach(p=>{
     document.getElementById(`page-${p}`).classList.toggle("active",p===page);
     document.getElementById(`nav-${p}`).classList.toggle("active",p===page);
   });
   // FAB only on market
   document.getElementById("fab-btn").classList.toggle("hidden", page!=="market");
   if(page==="profile")loadProfile();
+  if(page==="market")loadListings();
+  if(page==="partners")loadPartners();
   if(page==="auction"){
     loadChats();
     // remove unread pulse
     const lbl=document.getElementById("nav-lbl-auction");
     if(lbl)lbl.innerHTML="Чаты";
   }
+}
+
+const PARTNERS_DATA=[
+  {name:"Империя Туризма 24",cat:"leisure",city:"Марса Алам · Хургада · Шарм",desc:"Экскурсии без посредников напрямую от организатора",link:"https://imperiya-turizma24.com/",emoji:"🏛",top:true,tg:"https://t.me/imperiyaturizma_24",wa:"https://api.whatsapp.com/send/?phone=201090311467&text&type=phone_number&app_absent=0",viber:"viber://chat?number=%2B201090311467"},
+];
+let _partnersCat="all";
+function loadPartners(){
+  try{
+    _partnersCat="all";
+    document.querySelectorAll(".ptab").forEach(function(t){t.classList.remove("active");});
+    const first=document.querySelector(".ptab");
+    if(first)first.classList.add("active");
+    renderPartners();
+    initPartnersBanner();
+  }catch(e){
+    const list=document.getElementById("partners-list");
+    if(list)list.innerHTML="<div style='color:red;padding:20px;'>Ошибка: "+e.message+"</div>";
+  }
+}
+function initPartnersBanner(){
+  const area=document.getElementById("partners-banner-area");
+  const dots=document.getElementById("partners-banner-dots");
+  if(!area)return;
+  const slides=area.querySelectorAll(".banner-slide");
+  if(slides.length<=1)return;
+  let cur=0;
+  function goSlide(n){
+    slides[cur].classList.remove("active");
+    if(dots)dots.querySelectorAll(".bdot")[cur].classList.remove("active");
+    cur=(n+slides.length)%slides.length;
+    slides[cur].classList.add("active");
+    if(dots)dots.querySelectorAll(".bdot")[cur].classList.add("active");
+  }
+  if(window._partnersBannerTimer)clearInterval(window._partnersBannerTimer);
+  window._partnersBannerTimer=setInterval(function(){goSlide(cur+1);},3500);
+  let sx=0,moved=false;
+  area.ontouchstart=function(e){sx=e.touches[0].clientX;moved=false;};
+  area.ontouchmove=function(e){if(Math.abs(e.touches[0].clientX-sx)>8)moved=true;};
+  area.ontouchend=function(e){
+    var dx=e.changedTouches[0].clientX-sx;
+    if(moved&&Math.abs(dx)>40){
+      clearInterval(window._partnersBannerTimer);
+      goSlide(dx<0?cur+1:cur-1);
+      window._partnersBannerTimer=setInterval(function(){goSlide(cur+1);},3500);
+    }
+  };
+}
+function filterPartners(cat,el){
+  _partnersCat=cat;
+  document.querySelectorAll(".ptab").forEach(t=>t.classList.remove("active"));
+  el.classList.add("active");
+  renderPartners();
+}
+function renderPartners(){
+  const list=document.getElementById("partners-list");
+  if(!list)return;
+  const filtered=_partnersCat==="all"?PARTNERS_DATA:PARTNERS_DATA.filter(function(p){return p.cat===_partnersCat;});
+  let html="";
+  if(filtered.length===0){
+    html="<div style='text-align:center;padding:40px;color:var(--muted);font-size:14px;'>Пока нет партнёров в этой категории</div>";
+  } else {
+    filtered.forEach(function(p){
+      var catLabel={housing:"Жильё",tours:"Туры",leisure:"Отдых",market:"Маркет"}[p.cat]||"";
+      var topBadge=p.top?"<div style='position:absolute;top:10px;right:10px;background:var(--accent);color:#000;font-size:9px;font-weight:900;padding:2px 8px;border-radius:10px;'>ТОП</div>":"";
+      var tgBtn=p.tg?"<div onclick=\"vib();event.stopPropagation();if(tg)tg.openTelegramLink('"+p.tg+"');else window.open('"+p.tg+"','_blank');\" style='flex:1;background:#229ED9;color:#fff;font-size:11px;font-weight:700;padding:8px 0;border-radius:10px;text-align:center;cursor:pointer;'>TG</div>":"";
+      var waBtn=p.wa?"<div onclick=\"vib();event.stopPropagation();window.open('"+p.wa+"','_blank');\" style='flex:1;background:#25D366;color:#fff;font-size:11px;font-weight:700;padding:8px 0;border-radius:10px;text-align:center;cursor:pointer;'>WA</div>":"";
+      var viberBtn=p.viber?"<div onclick=\"vib();event.stopPropagation();window.open('"+p.viber+"','_blank');\" style='flex:1;background:#7360f2;color:#fff;font-size:11px;font-weight:700;padding:8px 0;border-radius:10px;text-align:center;cursor:pointer;'>Viber</div>":"";
+      html+="<div class='partner-card"+(p.top?" top":"")+"' style='position:relative;flex-direction:column;align-items:stretch;' onclick=\"vib();window.open('"+p.link+"','_blank');\">"
+        +"<div style='display:flex;align-items:center;gap:12px;'>"
+        +"<div style='width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#e87722,#c8541a);display:flex;align-items:center;justify-content:center;flex-shrink:0;'><svg width='32' height='32' viewBox='0 0 100 80' xmlns='http://www.w3.org/2000/svg'><polygon points='50,5 85,65 15,65' fill='#fff' opacity='0.9'/><polygon points='50,5 72,65 28,65' fill='#ffe0b2' opacity='0.7'/><polygon points='30,30 55,65 5,65' fill='#fff' opacity='0.8'/><circle cx='50' cy='18' r='10' fill='#ffd54f' opacity='0.95'/><line x1='44' y1='14' x2='40' y2='8' stroke='#ffd54f' stroke-width='2.5' stroke-linecap='round'/><line x1='56' y1='14' x2='60' y2='8' stroke='#ffd54f' stroke-width='2.5' stroke-linecap='round'/><line x1='50' y1='12' x2='50' y2='6' stroke='#ffd54f' stroke-width='2.5' stroke-linecap='round'/></svg></div>"
+        +"<div style='min-width:0;flex:1;'>"
+        +"<div style='font-size:15px;font-weight:800;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;'>"+p.name+"</div>"
+        +"<div style='font-size:11px;color:var(--accent);font-weight:600;'>"+catLabel+(p.city?" · "+p.city:"")+"</div>"
+        +(p.desc?"<div style='font-size:10px;color:var(--muted);margin-top:1px;'>"+p.desc+"</div>":"")
+        +"</div>"
+        +"</div>"
+        +"<div style='display:flex;gap:6px;margin-top:10px;'>"+tgBtn+waBtn+viberBtn+"</div>"
+        +topBadge
+        +"</div>";
+    });
+  }
+  list.innerHTML=html;
+}
+
+function startChatsPolling(){
+  stopChatsPolling();
+  _chatsPollingTimer=setInterval(()=>{
+    checkUnreadBadge();
+  },5000);
+}
+async function checkUnreadBadge(){
+  const uid=tgUser?.id||0;
+  if(!uid)return;
+  try{
+    const dialogs=await fetch(API+"/api/dialogs/"+uid+"?_="+Date.now()).then(r=>r.json()).catch(()=>[]);
+    const hasUnread=dialogs.some(d=>!d.is_read&&d.receiver_id===uid);
+    const lbl=document.getElementById("nav-lbl-auction");
+    if(!lbl)return;
+    if(hasUnread&&!document.getElementById("chat-pulse")){
+      lbl.innerHTML="Чаты <span id='chat-pulse' style='display:inline-block;width:7px;height:7px;background:#2ecc71;border-radius:50%;vertical-align:middle;margin-left:2px;animation:pulse-dot 1.2s ease-in-out infinite;'></span>";
+    } else if(!hasUnread){
+      lbl.innerHTML="Чаты";
+    }
+  }catch(e){}
+}
+function stopChatsPolling(){
+  if(_chatsPollingTimer){clearInterval(_chatsPollingTimer);_chatsPollingTimer=null;}
 }
 
 async function loadChats(){
@@ -959,7 +1267,9 @@ async function loadChats(){
         const listingTitle=d.listing_title||"";
         const unread=!d.is_read&&d.receiver_id===uid;
         const card=document.createElement("div");
-        card.style.cssText="background:var(--card);border:1px solid "+(unread?"#0088cc":"var(--border)")+";border-radius:14px;padding:14px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:12px;";
+        card.style.cssText=unread
+          ?"background:linear-gradient(135deg,rgba(46,204,113,.10),rgba(46,204,113,.03));border:1.5px solid #2ecc71;border-radius:14px;padding:14px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:12px;box-shadow:0 0 14px rgba(46,204,113,.2);position:relative;overflow:hidden;"
+          :"background:var(--card);border:1.5px solid #555;border-radius:14px;padding:14px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:12px;";
         const colors=["#e74c3c","#e67e22","#2ecc71","#1abc9c","#3498db","#9b59b6","#e91e63","#00bcd4"];
         const color=colors[(d.partner_id||0)%colors.length];
         const letter=partnerName.replace("@","")[0]?.toUpperCase()||"?";
@@ -973,9 +1283,9 @@ async function loadChats(){
           +"<div style='font-size:11px;color:var(--muted)'>"+new Date(d.created_at).toLocaleDateString([],{day:"numeric",month:"short"})+"</div>"
           +"</div>"
           +(listingTitle?"<div style='font-size:11px;color:var(--accent);margin-bottom:2px'>"+esc(listingTitle)+"</div>":"")
-          +"<div style='font-size:13px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>"+esc(d.text)+"</div>"
+          +"<div style='font-size:13px;color:"+(unread?"#fff":"var(--muted)")+";font-weight:"+(unread?"600":"400")+";white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>"+esc(d.text)+"</div>"
           +"</div>"
-          +(unread?"<div style='width:8px;height:8px;border-radius:50%;background:#0088cc;flex-shrink:0'></div>":"");
+          +(unread?"<div style='position:absolute;inset:0;background:linear-gradient(105deg,transparent 60%,rgba(46,204,113,.08) 80%,transparent 100%);pointer-events:none;'></div><div style='width:10px;height:10px;border-radius:50%;background:#2ecc71;flex-shrink:0;box-shadow:0 0 8px rgba(46,204,113,.8);animation:pulse-dot 1.2s ease-in-out infinite;'></div>":"");
         card.addEventListener("click",()=>{vib();openChatById(d.partner_id,partnerName,d.listing_id||0,listingTitle);});
         wrap.appendChild(card);
       });
@@ -993,6 +1303,8 @@ function openChatById(partnerId, partnerName, listingId, listingTitle){
   document.getElementById("chat-messages").innerHTML=`<div style="text-align:center;color:var(--muted);font-size:13px;padding:20px;">Загрузка...</div>`;
   document.getElementById("chat-modal").classList.add("open");
   loadChatMessages();
+  if(_chatMsgTimer)clearInterval(_chatMsgTimer);
+  _chatMsgTimer=setInterval(loadChatMessages,4000);
 }
 
 async function respondOffer(offerId,action){
@@ -1003,7 +1315,7 @@ async function respondOffer(offerId,action){
   }catch(e){}
 }
 
-/* PRICE — 2 states: asc / desc, toggle */
+/* PRICE */
 function cyclePrice(){
   vib();
   priceSort=priceSort===3?1:priceSort===1?2:3;
@@ -1013,9 +1325,17 @@ function cyclePrice(){
   if(priceSort===3){lbl.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';}
   else if(priceSort===1){lbl.textContent="$ ↑";}
   else{lbl.textContent="$ ↓";}
-  updateResetBtn();
-  renderListings(filterData());
-  saveFilters();
+  updateResetBtn();renderListings(filterData());saveFilters();
+}
+
+function cycleCondition(){
+  conditionFilter=(conditionFilter+1)%3;
+  const btn=document.getElementById("filter-cond-btn");
+  const lbl=document.getElementById("filter-cond-lbl");
+  if(conditionFilter===0){lbl.textContent="Состояние";btn.classList.remove("active");}
+  else if(conditionFilter===1){lbl.innerHTML='<span style="color:#2ecc71;margin-right:3px;">✅</span>Новое';btn.classList.add("active");}
+  else{lbl.innerHTML='🔧 Б/У';btn.classList.add("active");}
+  updateResetBtn();renderListings(filterData());
 }
 
 /* DROPDOWNS */
@@ -1082,23 +1402,71 @@ function togglePendingCat(k){
 }
 function applyCat(){
   selectedCats=new Set(pendingCats);
-  updateCatLabel();closeAllDD();updateResetBtn();renderListings(filterData());saveFilters();
+  updateCatLabel();closeAllDD();updateResetBtn();updateDealFilter();renderListings(filterData());saveFilters();
+}
+function renderCatChips(){
+  const box=document.getElementById("cat-chips");if(!box)return;
+  const counts={};
+  (allListings||[]).forEach(l=>{counts[l.category]=(counts[l.category]||0)+1;});
+  const keys=Object.keys(counts).filter(k=>CAT_EMOJI[k]).sort((a,b)=>counts[b]-counts[a]);
+  if(keys.length<2){box.style.display="none";return;}
+  const allLbl={ru:"Все",en:"All",ar:"الكل"}[lang]||"Все";
+  const noneSel=selectedCats.size===0;
+  let html=`<div class="cat-chip${noneSel?" active":""}" onclick="quickCat('')">${allLbl} <span class="cnt">${allListings.length}</span></div>`;
+  keys.forEach(k=>{
+    const on=selectedCats.size===1&&selectedCats.has(k);
+    html+=`<div class="cat-chip${on?" active":""}" onclick="quickCat('${k}')">${CAT_EMOJI[k]} ${t(`cats.${k}`)} <span class="cnt">${counts[k]}</span></div>`;
+  });
+  box.innerHTML=html;box.style.display="flex";
+}
+function quickCat(k){
+  vib();
+  selectedCats=k?new Set([k]):new Set();
+  pendingCats=new Set(selectedCats);
+  updateCatLabel();updateResetBtn();updateDealFilter();
+  renderListings(filterData());saveFilters();
 }
 function resetFilters(){
   vib();
-  selectedCities.clear();selectedCats.clear();priceSort=3;
+  selectedCities.clear();selectedCats.clear();priceSort=3;conditionFilter=0;
   pendingCities.clear();pendingCats.clear();
   document.getElementById("filter-price").classList.add("active");
   const lbl=document.getElementById("filter-price-lbl");
   lbl.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
+  const cl=document.getElementById("filter-cond-lbl");if(cl)cl.textContent="Состояние";
+  const cb=document.getElementById("filter-cond-btn");if(cb)cb.classList.remove("active");
   updateCityLabel();updateCatLabel();
-  updateResetBtn();
-  renderListings(filterData());
-  saveFilters();
+  updateResetBtn();updateDealFilter();
+  renderListings(filterData());saveFilters();
 }
 function updateResetBtn(){
-  const hasFilters=selectedCities.size>0||selectedCats.size>0||(priceSort!==3&&priceSort!==0);
-  document.getElementById("filter-reset").style.display=hasFilters?"inline-flex":"none";
+  const hasFilters=selectedCities.size>0||selectedCats.size>0||(priceSort!==3&&priceSort!==0)||conditionFilter!==0;
+  const btn=document.getElementById("filter-reset");
+  if(btn)btn.style.display=hasFilters?"flex":"none";
+}
+
+// Deal filter for property
+let selectedDeal = "rent"; // default: rent
+function setDeal(v){
+  selectedDeal = v;
+  ["rent","sale"].forEach(k=>{
+    const btn = document.getElementById("deal-btn-"+k);
+    if(!btn) return;
+    if(k===v){
+      btn.style.background="var(--accent)";btn.style.color="#000";btn.style.fontWeight="800";
+    } else {
+      btn.style.background="var(--card2)";btn.style.color="var(--muted)";btn.style.fontWeight="600";
+    }
+  });
+  renderListings(filterData());
+}
+function updateDealFilter(){
+  const wrap=document.getElementById("filter-deal-btn");
+  if(!wrap)return;
+  const show=[...selectedCats].length===1&&selectedCats.has("property");
+  wrap.style.display=show?"flex":"none";
+  if(show) setDeal("rent");
+  else selectedDeal="rent";
 }
 
 function filterData(){
@@ -1106,6 +1474,9 @@ function filterData(){
   let data=allListings.filter(l=>{
     if(selectedCities.size>0&&!selectedCities.has(l.city))return false;
     if(selectedCats.size>0&&!selectedCats.has(l.category))return false;
+    if(selectedDeal&&l.category==="property"&&l.prop_deal&&l.prop_deal!==selectedDeal)return false;
+    if(conditionFilter===1&&l.condition!=="new")return false;
+    if(conditionFilter===2&&l.condition!=="used")return false;
     if(q&&!l.title.toLowerCase().includes(q)&&!(l.description||"").toLowerCase().includes(q))return false;
     return true;
   });
@@ -1125,24 +1496,36 @@ function priceStr(l){
   return `$${l.price}`;
 }
 function cityName(c){return t(`cities.${c}`)||c;}
-function isMine(l){return tgUser&&l.user_id===tgUser.id;}
+function isMine(l){return tgUser&&String(l.user_id)===String(tgUser.id);}
 function getPhotos(l){return[l.photo_path,l.photo_path2,l.photo_path3,l.photo_path4,l.photo_path5,l.photo_path6,l.photo_path7,l.photo_path8].filter(Boolean);}
 function dateStr(d){if(!d)return"";const dt=new Date(d);const day=dt.getDate();const mon=["янв","фев","мар","апр","май","июн","июл","авг","сен","окт","ноя","дек"][dt.getMonth()];return`${day} ${mon}`;}
 
 /* CARD with swipeable photos */
 function renderListings(data){
   const grid=document.getElementById("listings-grid");
-  if(!data.length){grid.innerHTML=`<div class="empty"><div class="empty-icon">🏪</div><div>${t("empty")}</div></div>`;return;}
+  try{
+    renderCatChips();
+    const rc=document.getElementById("res-count");
+    if(rc){
+      const filtersOn=selectedCities.size>0||selectedCats.size>0||conditionFilter!==0||(document.getElementById("search-input")||{value:""}).value.trim()!=="";
+      rc.style.display=(filtersOn&&allListings.length)?"block":"none";
+      rc.textContent=({ru:"Найдено: ",en:"Found: ",ar:"تم العثور: "}[lang]||"Found: ")+data.length;
+    }
+  }catch(e){}
+  if(!data.length){
+    const _cta={ru:"Опубликовать объявление",en:"Post a listing",ar:"انشر إعلانًا"}[lang]||"Post a listing";
+    const _hint={ru:"Будьте первым — это бесплатно и займёт минуту",en:"Be the first — it's free and takes a minute",ar:"كن الأول — مجاني ويستغرق دقيقة"}[lang]||"";
+    grid.innerHTML=`<div class="empty"><div class="empty-icon">🏪</div><div>${t("empty")}</div><div style="opacity:.6;font-size:13px;margin-top:8px">${_hint}</div><button onclick="vib();openAddModal()" style="margin-top:18px;background:var(--accent);color:#000;border:0;border-radius:14px;padding:12px 22px;font-weight:800;font-size:14px;cursor:pointer">+ ${_cta}</button></div>`;return;}
   grid.innerHTML=data.map(l=>{
     const photos=getPhotos(l);
     const imgHtml=photos.length
       ?photos.map((p,i)=>`<img src="${p}" class="${i===0?"active":""}" loading="lazy" draggable="false">`).join("")
       :`<div class="no-img">${CAT_EMOJI[l.category]||"📦"}</div>`;
     const dots=photos.length>1?`<div class="card-idots">${photos.map((_,i)=>`<div class="card-idot${i===0?" active":""}"></div>`).join("")}</div>`:"";
-    return`<div class="card${isMine(l)?" mine":""}${l.is_legendary?" legendary":""}${l.is_promoted&&!l.is_legendary?" promoted-card":""}" data-id="${l.id}" data-photos="${photos.length}">
-      <div class="card-imgs" data-id="${l.id}" data-idx="0">${imgHtml}${dots}</div>
-      ${l.is_promoted?`<div class="promoted-badge">⭐ ЗОЛОТОЕ</div>`:""}
-      <div class="card-badge">${l.is_legendary?"⚡ ЛЕГЕНДАРНОЕ":l.is_promoted?"":t(`cats.${l.category}`)}</div>
+    return`<div class="card${isMine(l)?" mine":""}${l.is_legendary?" legendary":""}${l.is_promoted&&!l.is_legendary?" promoted-card":""}" data-id="${l.id}">
+      <div class="card-imgs" data-id="${l.id}" data-idx="0" data-photos="${photos.length}">${imgHtml}${dots}</div>
+      ${l.is_promoted&&!l.is_legendary?`<div class="promoted-badge">⭐ ЗОЛОТОЕ</div>`:""}
+      ${l.is_legendary?`<div class="card-badge">⚡ ЛЕГЕНДАРНОЕ</div>`:!l.is_promoted?`<div class="card-badge">${t(`cats.${l.category}`)}</div>`:`<div class="card-badge" style="display:none;"></div>`}
       <div class="card-body" onclick="vib();openDetail(${l.id})">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px;">
           <div class="card-title" style="flex:1;">${esc(l.title)}</div>
@@ -1152,7 +1535,7 @@ function renderListings(data){
         <div class="card-city" style="display:flex;align-items:center;">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px;opacity:.7;flex-shrink:0"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
           <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${cityName(l.city)}</span>
-          <span style="opacity:.4;font-size:10px;margin-right:4px;flex-shrink:0;">${dateStr(l.created_at)}</span>
+          ${isMine(l)?`<span style="opacity:.55;font-size:10px;margin-right:4px;flex-shrink:0;">👁 ${l.views||0}</span>`:`<span style="opacity:.4;font-size:10px;margin-right:4px;flex-shrink:0;">${dateStr(l.created_at)}</span>`}
           <span class="fav-btn" data-id="${l.id}" onclick="event.stopPropagation();vib();toggleFav(${l.id})" style="flex-shrink:0;padding:2px 0 2px 4px;cursor:pointer;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="${isFav(l.id)?'#e0245e':'none'}" stroke="${isFav(l.id)?'#e0245e':'rgba(255,255,255,0.4)'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
           </span>
@@ -1260,7 +1643,9 @@ async function loadListings(){
 }
 
 /* DETAIL */
+let currentDetailListingId=0;
 async function openDetail(id){
+  currentDetailListingId=id;
   try{
     const viewerId=tgUser?.id||0;
     const res=await fetch(`${API}/api/listings/${id}?viewer_id=${viewerId}`);const l=await res.json();
@@ -1271,19 +1656,30 @@ async function openDetail(id){
     document.getElementById("detail-title").innerHTML=esc(l.title)+verBadge;
     document.getElementById("detail-desc").textContent=l.description||"";
     const phoneMeta=l.phone?`<span class="detail-chip">📞 ${l.phone}</span>`:"";
-    const condMeta=l.condition?`<span class="detail-chip">${l.condition==="new"?"✨ Новое":"🔧 Б/У"}</span>`:"";
-    // views and expiry — only for owner
-    let ownerMeta="";
-    if(isMine(l)){
-      const views=l.views||0;
-      let daysLeft="";
-      if(l.expires_at){
-        const diff=Math.ceil((new Date(l.expires_at)-new Date())/86400000);
-        daysLeft=`<span class="detail-chip">⏳ ${diff>0?diff+" дн.":"истёк"}</span>`;
-      }
-      ownerMeta=`<span class="detail-chip">👁 ${views} просм.</span>${daysLeft}`;
+    const condMeta=l.condition&&l.category!=="property"?`<span class="detail-chip">${l.condition==="new"?"✨ Новое":"🔧 Б/У"}</span>`:"";
+    const propTypeMap={apartment:"🏢 Квартира",studio:"🛏 Студия",house:"🏡 Дом",villa:"🏖️ Вилла",townhouse:"🏘️ Таунхаус",compound:"🏰 Компаунд"};
+    const propMatMap={brick:"🧱 Кирпич",panel:"Панель",monolith:"Монолит",wood:"Дерево",log:"Деревянный сруб",stone:"Камень",cassette:"Кассетный",other_mat:"Другой материал"};
+    const propCondMap={newbuild:"🏗 Новостройка",renovated:"✨ Реновировано",finished:"✅ Завершён",good:"👍 Хорошее",average:"📊 Среднее",new_finish:"🎨 Новая отделка",sanitary:"🚿 Санитарный ремонт",needs_sanitary:"🔧 Требуется санитарный ремонт",needs_update:"🔄 Нуждается в обновлении",needs_major:"⚠️ Капитальный ремонт"};
+    const propMeta=l.category==="property"?[
+      l.prop_deal?`<span class="detail-chip">${l.prop_deal==="sale"?"🔑 Продажа":"🏠 Аренда "+(l.prop_rent_period==="monthly"?"· помесячно":"· посуточно")}</span>`:"",
+      l.prop_type&&propTypeMap[l.prop_type]?`<span class="detail-chip">${propTypeMap[l.prop_type]}</span>`:"",
+      l.prop_area?`<span class="detail-chip">📐 ${l.prop_area} м²</span>`:"",
+      l.prop_rooms?`<span class="detail-chip">🚪 ${l.prop_rooms} комн.</span>`:"",
+      l.prop_floor?`<span class="detail-chip">🏢 ${l.prop_floor} эт.</span>`:"",
+      l.prop_year?`<span class="detail-chip">📅 ${l.prop_year} г.</span>`:"",
+      l.prop_material&&propMatMap[l.prop_material]?`<span class="detail-chip">🧱 ${propMatMap[l.prop_material]}</span>`:"",
+      l.prop_condition&&propCondMap[l.prop_condition]?`<span class="detail-chip">${propCondMap[l.prop_condition]}</span>`:"",
+      l.prop_district?`<span class="detail-chip">📍 ${l.prop_district}</span>`:"",
+    ].join(""):""
+    // views always visible; expiry only for owner
+    const views=l.views||0;
+    let daysLeft="";
+    if(isMine(l)&&l.expires_at){
+      const diff=Math.ceil((new Date(l.expires_at)-new Date())/86400000);
+      daysLeft=`<span class="detail-chip">⏳ ${diff>0?diff+" дн.":"истёк"}</span>`;
     }
-    document.getElementById("detail-meta").innerHTML=`<span class="detail-chip">${CAT_EMOJI[l.category]||"📦"} ${t(`cats.${l.category}`)}</span><span class="detail-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:3px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${cityName(l.city)}</span>${condMeta}${phoneMeta}${ownerMeta}`;
+    const ownerMeta=`<span class="detail-chip">👁 ${views}</span>${daysLeft}`;
+    document.getElementById("detail-meta").innerHTML=`<span class="detail-chip">${CAT_EMOJI[l.category]||"📦"} ${t(`cats.${l.category}`)}</span><span class="detail-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:3px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${cityName(l.city)}</span>${condMeta}${propMeta}${phoneMeta}${ownerMeta}`;
     const mine=isMine(l);
     if(mine){
       const buyRow=((!l.is_promoted)||(!l.is_legendary))?
@@ -1304,7 +1700,8 @@ async function openDetail(id){
       const contactHtml=`<button class="contact-btn" onclick="vib();openChat(${l.user_id},'${_su}',${l.id},'${_lt}')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 0 2 2z"/></svg>Написать</button>
         <button class="edit-btn" style="margin-bottom:0;margin-top:8px;" onclick="vib();openOfferModal(${l.id},'${esc(l.title)}')">💰 Предложить цену</button>
         <button class="edit-btn" style="margin-bottom:0;margin-top:8px;border-color:#0088cc;color:#0088cc;background:rgba(0,136,204,.08);" onclick="vib();shareListing(${l.id},'${esc(l.title)}')"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Поделиться</button>
-        <button class="edit-btn" style="margin-bottom:0;margin-top:8px;border-color:#e74c3c;color:#e74c3c;background:rgba(231,76,60,.06);" onclick="vib();reportListing(${l.id})"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#e74c3c;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:inline;vertical-align:middle;margin-right:6px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Пожаловаться</button>`;
+        <button class="edit-btn" style="margin-bottom:0;margin-top:8px;border-color:#e74c3c;color:#e74c3c;background:rgba(231,76,60,.06);" onclick="vib();reportListing(${l.id})"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#e74c3c;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:inline;vertical-align:middle;margin-right:6px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Пожаловаться</button>
+        <button class="edit-btn" style="margin-bottom:0;margin-top:12px;border-color:#555;color:#aaa;background:rgba(255,255,255,.04);" onclick="vib();closeModal('detail-modal')">✕ Закрыть</button>`;
       document.getElementById("action-btns").innerHTML=contactHtml;
     }
     const recs=allListings.filter(x=>x.id!==id&&(x.category===l.category||x.city===l.city)).slice(0,8);
@@ -1320,6 +1717,29 @@ function shareListing(id, title){
   if(tg) tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
   else if(navigator.share) navigator.share({title:text,url});
   else{navigator.clipboard?.writeText(url);showToast("🔗 Ссылка скопирована");}
+}
+
+function initDetailListingSwipe(){
+  const modal=document.getElementById("detail-modal");
+  if(!modal||modal._swipeInit)return;
+  modal._swipeInit=true;
+  let dsx=0,dsy=0,dmoved=false;
+  modal.addEventListener("touchstart",e=>{dsx=e.touches[0].clientX;dsy=e.touches[0].clientY;dmoved=false;},{passive:true});
+  modal.addEventListener("touchmove",e=>{const dx=Math.abs(e.touches[0].clientX-dsx);const dy=Math.abs(e.touches[0].clientY-dsy);if(dx>dy&&dx>12)dmoved=true;},{passive:true});
+  modal.addEventListener("touchend",e=>{
+    if(!dmoved)return;
+    const dx=e.changedTouches[0].clientX-dsx;
+    if(Math.abs(dx)<60)return;
+    if(e.target.closest(".detail-imgs"))return;
+    const visible=filterData();
+    const idx=visible.findIndex(l=>l.id===currentDetailListingId);
+    if(idx===-1)return;
+    const nextIdx=dx<0?idx+1:idx-1;
+    if(nextIdx<0||nextIdx>=visible.length){showToast(dx<0?"Последнее":"Первое");return;}
+    vib();
+    currentDetailListingId=visible[nextIdx].id;
+    openDetail(currentDetailListingId);
+  });
 }
 let chatPartnerId=0, chatListingId=0, chatPartnerUsername="";
 
@@ -1550,12 +1970,21 @@ async function loadProfile(){
     const av=document.getElementById("prof-avatar");
     if(tgUser.photo_url)av.innerHTML=`<img src="${tgUser.photo_url}" alt="">`;
     else av.textContent=(name[0]||"?").toUpperCase();
-    document.getElementById("prof-name").textContent=name||"—";
+    // сразу показываем имя с галочкой из кеша
+    const nameEl=document.getElementById("prof-name");
+    nameEl.textContent=name||"—";
+    if(_cachedVerified){
+      const b=document.createElement("span");b.id="verified-badge";
+      b.style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#0088cc;border-radius:50%;font-size:12px;font-weight:900;color:#fff;flex-shrink:0;";
+      b.textContent="✓";
+      nameEl.appendChild(b);
+    }
     document.getElementById("prof-handle").textContent=tgUser.username?`@${tgUser.username}`:`ID: ${tgUser.id}`;
     // check verification
     try{
       const vr=await fetch(`${API}/api/users/${tgUser.id}/verified?_=${Date.now()}`);
       const vd=await vr.json();
+      _cachedVerified=!!vd.verified;
       const oldBadge=document.getElementById("verified-badge");
       if(oldBadge)oldBadge.remove();
       const oldExpiry=document.getElementById("verify-expiry");
@@ -1571,6 +2000,7 @@ async function loadProfile(){
           const until=vd.until?new Date(vd.until).toLocaleDateString("ru",{day:"numeric",month:"long",year:"numeric"}):"";
           vbtn.style.background="linear-gradient(135deg,rgba(0,136,204,.25),rgba(0,136,204,.1))";
           document.getElementById("verify-btn-title").textContent="✓ Верифицирован";
+          const subEl=document.getElementById("verify-btn-sub");if(subEl)subEl.textContent="Синяя галочка активна";
           if(until){
             const exp=document.createElement("div");exp.id="verify-expiry";
             exp.style="font-size:11px;color:#0099dd;margin-top:1px;";
@@ -1582,7 +2012,6 @@ async function loadProfile(){
     }catch(e){}
   }
   const uid=tgUser?.id||0;
-  const myActive=allListings.filter(l=>l.user_id===uid&&l.is_active!==0);
   // load stats in parallel
   if(uid){
     Promise.all([
@@ -1595,10 +2024,50 @@ async function loadProfile(){
     });
   }
   const list=document.getElementById("my-listings-list");
+  let myActive=[];
+  try{
+    if(uid){
+      const res=await fetch(`${API}/api/listings/my/${uid}?_=${Date.now()}`);
+      myActive=await res.json();
+    }
+  }catch(e){myActive=allListings.filter(l=>tgUser&&l.user_id===tgUser.id&&l.is_active!==0&&l.is_active!==2);}
   if(!myActive.length){list.innerHTML=`<div class="no-ads">${t("no_listings")}</div>`;return;}
-  list.innerHTML=myActive.map(l=>`<div class="my-row"><div class="my-thumb" onclick="openDetail(${l.id})">${getPhotos(l)[0]?`<img src="${getPhotos(l)[0]}">`:`<span>${CAT_EMOJI[l.category]||"📦"}</span>`}</div><div class="my-info" onclick="openDetail(${l.id})"><div class="my-title">${esc(l.title)}</div><div class="my-price">${priceStr(l)}</div></div><div class="del-btn" onclick="vib();deleteListing(${l.id})"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></div></div>`).join("");
+  list.innerHTML=myActive.map(l=>{
+    const paused=l.is_active===3;
+    return`<div class="my-row${paused?" paused":""}">
+      <div class="my-thumb" onclick="openDetail(${l.id})">${getPhotos(l)[0]?`<img src="${getPhotos(l)[0]}">`:`<span>${CAT_EMOJI[l.category]||"📦"}</span>`}</div>
+      <div class="my-info" onclick="openDetail(${l.id})">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <div class="my-title" style="flex:1;">${esc(l.title)}</div>
+          ${paused?`<span class="paused-badge">НА СТОПЕ</span>`:""}
+        </div>
+        <div class="my-price">${priceStr(l)}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:4px;">
+        <div style="padding:6px;cursor:pointer;" onclick="vib();togglePauseListing(${l.id},${paused},this)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${paused?"#2ecc71":"#f0a500"}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            ${paused?`<polygon points="5 3 19 12 5 21 5 3"/>`:`<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>`}
+          </svg>
+        </div>
+        <div class="del-btn" onclick="vib();deleteListing(${l.id})"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg></div>
+      </div>
+    </div>`;
+  }).join("");
 }
-function shareProfile(){if(navigator.share)navigator.share({title:"Egypt Bazar",url:"https://bazaregypt.store"});else if(tg)tg.openTelegramLink("https://t.me/share/url?url=https://bazaregypt.store");}
+function shareProfile(){const botUrl="https://t.me/egypt_bazar_bot";if(tg)tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(botUrl)}&text=${encodeURIComponent("🌴 Egypt Bazar — барахолка для русскоязычных в Египте")}`);else if(navigator.share)navigator.share({title:"Egypt Bazar",url:botUrl});}
+
+async function togglePauseListing(id, currentlyPaused, btn){
+  try{
+    const fd=new FormData();
+    fd.append("user_id",tgUser?.id||0);
+    const res=await fetch(`${API}/api/listings/${id}/pause`,{method:"POST",body:fd});
+    const d=await res.json();
+    if(d.ok){
+      showToast(d.is_active===3?"⏸ Объявление на паузе":"▶️ Объявление снова активно");
+      await loadProfile();
+    }
+  }catch(e){showToast("❌ Ошибка");}
+}
 
 async function openDeals(){
   if(!tgUser){showToast("Войдите через Telegram");return;}
@@ -1684,9 +2153,8 @@ async function payVerifyCard(){
   const fd=new FormData();fd.append("user_id",tgUser.id);
   await fetch(`${API}/api/verify/pay_card`,{method:"POST",body:fd});
   closeModal("verify-modal");
-  if(tg)tg.openLink("https://t.me/tribute/app?startapp=diuS");
-  else window.open("https://t.me/tribute/app?startapp=diuS","_blank");
-  showToast("💳 Ссылка на оплату отправлена!");
+  if(tg)tg.openLink("https://web.tribute.tg/p/uqh");
+  else window.open("https://web.tribute.tg/p/uqh","_blank");
 }
 
 async function deleteListing(id){if(!confirm(t("del_confirm")))return;try{await fetch(`${API}/api/listings/${id}?user_id=${tgUser?.id||0}`,{method:"DELETE"});await loadListings();loadProfile();showToast("🗑 Удалено");}catch(e){showToast("❌ Ошибка");}}
@@ -1696,16 +2164,28 @@ function openAddModal(){
   buildCatSelect();
   const modal=document.getElementById("add-modal");
   modal.classList.add("open");
-  // Scroll modal content to top
   setTimeout(()=>{const m=modal.querySelector(".modal");if(m)m.scrollTop=0;},50);
   document.getElementById("fab-btn").classList.add("hidden");
-  const sel=document.getElementById("inp-city");
-  const other=document.getElementById("inp-city-other");
-  sel.onchange=()=>{other.style.display=sel.value==="other"?"":"none";};
+  // restore draft
+  loadDraft();
+  // auto-save on any input change
+  ["inp-title","inp-desc","inp-price","inp-phone"].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&!el._draftBound){el.addEventListener("input",saveDraft);el._draftBound=true;}
+  });
+  ["inp-cat","inp-city","inp-currency","inp-condition"].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&!el._draftBound){el.addEventListener("change",saveDraft);el._draftBound=true;}
+  });
 }
 function closeModal(id){
   document.getElementById(id).classList.remove("open");
   if(id==="add-modal"||id==="detail-modal")document.getElementById("fab-btn").classList.toggle("hidden",currentPage!=="market");
+  if(id==="chat-modal"){if(_chatMsgTimer){clearInterval(_chatMsgTimer);_chatMsgTimer=null;}loadChats();}
+  if(id==="pay-modal"){
+    document.getElementById("fab-btn").classList.toggle("hidden",currentPage!=="market");
+    loadListings();loadProfile();
+  }
 }
 ["add-modal","detail-modal","deals-modal","edit-modal","pay-modal","orders-modal","offer-modal","fav-modal","verify-modal","chat-modal"].forEach(id=>{const el=document.getElementById(id);if(el)el.addEventListener("click",e=>{if(e.target===e.currentTarget)closeModal(id);});});
 
@@ -1733,7 +2213,116 @@ function addPhotosMulti(input){
 }
 function addPhoto(input,idx){const file=input.files[0];if(!file)return;photoFiles[idx]=file;}
 function updateSlots(){}
-function buildCatSelect(){const sel=document.getElementById("inp-cat");sel.innerHTML="";CAT_KEYS.forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=`${CAT_EMOJI[k]} ${t(`cats.${k}`)}`;sel.appendChild(o);});}
+function buildCatSelect(){
+  const inp=document.getElementById("inp-cat");
+  if(inp)inp.value="";
+  const disp=document.getElementById("cat-display-text");
+  if(disp){disp.textContent="Выберите раздел";disp.style.color="var(--muted)";}
+  const search=document.getElementById("cat-picker-search");
+  if(search)search.value="";
+  filterCatPicker();
+}
+function toggleCatPicker(){
+  const p=document.getElementById("cat-picker");
+  const isOpen=p.style.display!=="none";
+  p.style.display=isOpen?"none":"";
+  if(!isOpen){
+    document.getElementById("cat-picker-search").value="";
+    filterCatPicker();
+    setTimeout(()=>document.getElementById("cat-picker-search").focus(),100);
+  }
+}
+function filterCatPicker(){
+  const q=(document.getElementById("cat-picker-search")?.value||"").toLowerCase().trim();
+  const list=document.getElementById("cat-picker-list");
+  list.innerHTML="";
+  CAT_KEYS.forEach(k=>{
+    const label=t(`cats.${k}`)||k;
+    if(q&&!label.toLowerCase().includes(q))return;
+    const div=document.createElement("div");
+    div.style="padding:9px 10px;border-radius:8px;cursor:pointer;font-size:14px;color:#fff;display:flex;align-items:center;gap:8px;";
+    div.innerHTML=`<span style="font-size:16px;">${CAT_EMOJI[k]||"📦"}</span><span>${label}</span>`;
+    div.onmouseenter=()=>div.style.background="var(--card2)";
+    div.onmouseleave=()=>div.style.background="";
+    div.onclick=()=>{
+      document.getElementById("inp-cat").value=k;
+      document.getElementById("cat-display-text").textContent=`${CAT_EMOJI[k]||"📦"} ${label}`;
+      document.getElementById("cat-display-text").style.color="#fff";
+      document.getElementById("cat-picker").style.display="none";
+      togglePropertyFields();
+      saveDraft();
+    };
+    list.appendChild(div);
+  });
+}
+// закрыть пикер при клике вне
+document.addEventListener("click",e=>{
+  const picker=document.getElementById("cat-picker");
+  const display=document.getElementById("cat-display");
+  if(picker&&display&&!picker.contains(e.target)&&!display.contains(e.target)){
+    picker.style.display="none";
+  }
+});
+
+const DISTRICTS={
+  sharm:["Акаба","Верхний Хадаба","Гебель Аль-Ахдар","Корниш","Наама Бей","Набк","Рас Умм Сид","Сохо Сквер","Тиран","Хадаба","Шарм Эль Майя","Шейх Зайед","Другой район"],
+  hurghada:["Арабский квартал","Вилладж Роуд","Дахар","Мамша","Новый Хургада","Сахль Хашиш","Серена","Хурмет","Эль Ахья","Эль Каусар","Эль Хай","Другой район"],
+  cairo:["6 Октября","Гелиополис","Докки","Замалек","Катамея","Маади","Мохандесин","Насер Сити","Новый Каир","Шубра","Другой район"],
+  alexandria:["Бахари","Глим","Мандара","Монтаза","Рамле","Сиди Бишр","Смуха","Стэнли","Другой район"],
+  dahab:["Азура","Лагуна","Масбат","Медина","Другой район"],
+  marsa:["Порт","Центр","Другой район"],
+  "el-gouna":["Абу Тиг Марина","Центр","Другой район"],
+  luxor:["Восточный берег","Западный берег","Другой район"],
+  aswan:["Центр","Другой район"],
+  taba:["Центр","Другой район"],
+  nuweiba:["Центр","Другой район"],
+  safaga:["Центр","Другой район"],
+  "el-quseir":["Центр","Другой район"],
+  "soma-bay":["Центр","Другой район"],
+};
+
+function updateDistricts(){
+  const city=document.getElementById("inp-city").value;
+  const distRow=document.getElementById("district-row");
+  const distSel=document.getElementById("inp-district");
+  const cityOtherEl=document.getElementById("inp-city-other");
+  if(cityOtherEl)cityOtherEl.style.display=city==="other"?"":"none";
+  const dists=DISTRICTS[city];
+  if(distRow&&distSel){
+    if(dists&&dists.length){
+      distRow.style.display="";
+      distSel.innerHTML="<option value=''>— Выберите район —</option>";
+      dists.forEach(d=>{const o=document.createElement("option");o.value=d;o.textContent=d;distSel.appendChild(o);});
+    } else {
+      distRow.style.display="none";
+      distSel.innerHTML="";
+    }
+  }
+  saveDraft();
+}
+
+let _propDeal="sale",_rentPeriod="monthly";
+function togglePropertyFields(){
+  const cat=document.getElementById("inp-cat").value;
+  const pf=document.getElementById("property-fields");
+  if(pf)pf.style.display=cat==="property"?"block":"none";
+}
+function selectPropDeal(v){
+  _propDeal=v;
+  ["sale","rent"].forEach(tp=>{
+    const el=document.getElementById("prop-deal-"+tp);
+    if(el){el.style.borderColor=tp===v?"var(--accent)":"var(--border)";el.style.background=tp===v?"rgba(240,165,0,.1)":"";}
+  });
+  const rpr=document.getElementById("rent-period-row");
+  if(rpr)rpr.style.display=v==="rent"?"block":"none";
+}
+function selectRentPeriod(v){
+  _rentPeriod=v;
+  ["monthly","daily"].forEach(tp=>{
+    const el=document.getElementById("prop-rent-"+tp);
+    if(el){el.style.borderColor=tp===v?"var(--accent)":"var(--border)";el.style.background=tp===v?"rgba(240,165,0,.1)":"";}
+  });
+}
 
 /* PROMOTE */
 function togglePromo(){vib();promoEnabled=!promoEnabled;document.getElementById("promo-toggle").classList.toggle("on",promoEnabled);document.getElementById("promo-lbl").textContent=promoEnabled?"Баннер · 1000⭐ · 30 дней":"Не продвигать";document.getElementById("promo-opts").style.display=promoEnabled?"":"none";}
@@ -1767,7 +2356,6 @@ function validateForm(){
   if(!title)missing.push("Заголовок");
   if(!desc)missing.push("Описание");
   if(!cat)missing.push("Категория");
-  if(!city)missing.push("Город");
   if(missing.length){showToast("⚠️ Заполните: "+missing.join(", "));return false;}
   return true;
 }
@@ -1778,18 +2366,35 @@ async function submitListing(){
   const desc=document.getElementById("inp-desc").value.trim();
   const uid=tgUser?.id||0;
   const btn=document.getElementById("submit-btn");btn.disabled=true;
+  if(!uid){showToast("❌ Откройте через Telegram");btn.disabled=false;return;}
   const fd=new FormData();
   const cityVal=document.getElementById("inp-city").value;
   const cityOther=document.getElementById("inp-city-other").value.trim();
-  const finalCity=cityVal==="other"?(cityOther||"other"):cityVal;
+  const finalCity=cityVal==="other"?(cityOther||"other"):(cityVal||"other");
+  const districtVal=document.getElementById("inp-district")?.value||"";
+  const catVal=document.getElementById("inp-cat").value;
+  if(!catVal){showToast("❌ Выберите категорию");btn.disabled=false;return;}
   fd.append("user_id",uid);fd.append("title",title);
   fd.append("description",desc);
   fd.append("price",document.getElementById("inp-price").value||0);
-  fd.append("currency",document.getElementById("inp-currency").value||"USD");fd.append("category",document.getElementById("inp-cat").value);
+  fd.append("currency",document.getElementById("inp-currency").value||"USD");fd.append("category",catVal);
   fd.append("city",finalCity);fd.append("is_promoted",0);
+  if(districtVal)fd.append("prop_district",districtVal);
   fd.append("condition",document.getElementById("inp-condition").value||"new");
   if(tgUser?.username)fd.append("seller_username",tgUser.username);
   fd.append("phone",document.getElementById("inp-phone").value||"");
+  // поля недвижимости
+  if(document.getElementById("inp-cat").value==="property"){
+    fd.append("prop_deal",_propDeal);
+    fd.append("prop_rent_period",_propDeal==="rent"?_rentPeriod:"");
+    fd.append("prop_type",document.getElementById("prop-type").value||"");
+    fd.append("prop_area",document.getElementById("prop-area").value||"");
+    fd.append("prop_rooms",document.getElementById("prop-rooms").value||"");
+    fd.append("prop_floor",document.getElementById("prop-floor").value||"");
+    fd.append("prop_year",document.getElementById("prop-year").value||"");
+    fd.append("prop_material",document.getElementById("prop-material").value||"");
+    fd.append("prop_condition",document.getElementById("prop-condition").value||"");
+  }
   photoFiles.filter(Boolean).forEach((f,i)=>{
     const keys=["photo","photo_2","photo_3","photo_4","photo_5","photo_6","photo_7","photo_8"];
     fd.append(keys[i],f);
@@ -1799,24 +2404,48 @@ async function submitListing(){
     if(res.ok){
       const data=await res.json();
       currentListingId=data.id;
-      closeModal("add-modal");
+      // save form data before reset (for optimistic render)
+      const _newTitle=document.getElementById("inp-title").value.trim();
+      const _newDesc=document.getElementById("inp-desc").value.trim();
+      const _newPrice=parseFloat(document.getElementById("inp-price").value)||0;
+      const _newCurrency=document.getElementById("inp-currency")?.value||"USD";
+      const _newCat=document.getElementById("inp-cat").value;
+      const _newCity=document.getElementById("inp-city").value;
+      const _newCond=document.getElementById("inp-condition")?.value||"new";
+      clearDraft();
       resetForm();
+      // закрываем форму
+      document.getElementById("add-modal").classList.remove("open");
+      document.getElementById("fab-btn").classList.toggle("hidden", currentPage!=="market");
       showToast("✅ Объявление опубликовано!");
-      // Force reload listings
-      try{
-        const r=await fetch(`${API}/api/listings?_=${Date.now()}`);
-        allListings=await r.json();
-        initBanners();
-        renderListings(filterData());
-        window.scrollTo({top:0,behavior:"smooth"});
-      }catch(ex){}
+      // clear filters so new listing is visible
+      selectedCities.clear(); selectedCats.clear();
+      if(typeof pendingCities!=="undefined"){pendingCities.clear();pendingCats.clear();}
+      updateCityLabel(); updateCatLabel();
+      document.getElementById("search-input").value="";
+      // optimistic: add listing immediately without waiting for server
+      const _optimistic={id:data.id,user_id:tgUser?.id||0,title:_newTitle,description:_newDesc,price:_newPrice,currency:_newCurrency,category:_newCat,city:_newCity,condition:_newCond,is_promoted:0,is_legendary:0,is_active:1,seller_verified:false,views:0,created_at:new Date().toISOString(),seller_username:tgUser?.username||""};
+      allListings=[_optimistic,...allListings];
+      renderListings(filterData());
+      window.scrollTo({top:0,behavior:"smooth"});
+      // then refresh from server (replaces optimistic with real data incl. photos)
       setTimeout(async()=>{
         try{
-          const r=await fetch(`${API}/api/listings?_=${Date.now()}`);
+          const r=await fetch(`${API}/api/listings?_=${Date.now()}`,{cache:"no-store"});
+          allListings=await r.json();
+          initBanners();
+          renderListings(filterData());
+          loadProfile();
+        }catch(ex){}
+      },800);
+      setTimeout(async()=>{
+        try{
+          const r=await fetch(`${API}/api/listings?_=${Date.now()}`,{cache:"no-store"});
           allListings=await r.json();
           renderListings(filterData());
+          loadProfile();
         }catch(ex){}
-      },1500);
+      },2500);
     } else {
       const err=await res.json().catch(()=>({}));
       showToast("❌ "+(err.detail||res.status));
@@ -1854,9 +2483,10 @@ async function payPromoCard(){
   if(!currentListingId)return;
   const pfd=new FormData();pfd.append("user_id",tgUser?.id||0);
   await fetch(`${API}/api/listings/${currentListingId}/pay_card`,{method:"POST",body:pfd});
+  savePendingPromo(currentListingId,"gold");
   closeModal("pay-modal");
-  if(tg)tg.openLink("https://t.me/tribute/app?startapp=diuS");
-  else window.open("https://t.me/tribute/app?startapp=diuS","_blank");
+  if(tg)tg.openLink("https://web.tribute.tg/p/ujw");
+  else window.open("https://web.tribute.tg/p/ujw","_blank");
   showToast("💳 Ссылка отправлена в бот!");
 }
 
@@ -1889,31 +2519,109 @@ async function payLegCard(){
   if(!currentListingId)return;
   const pfd=new FormData();pfd.append("user_id",tgUser?.id||0);
   await fetch(`${API}/api/listings/${currentListingId}/pay_card`,{method:"POST",body:pfd});
+  savePendingPromo(currentListingId,"legendary");
   closeModal("pay-modal");
-  if(tg)tg.openLink("https://t.me/tribute/app?startapp=diuS");
-  else window.open("https://t.me/tribute/app?startapp=diuS","_blank");
+  if(tg)tg.openLink("https://web.tribute.tg/p/uqf");
+  else window.open("https://web.tribute.tg/p/uqf","_blank");
   showToast("💳 Ссылка отправлена в бот!");
 }
 function resetForm(){
-  ["inp-title","inp-desc","inp-price","inp-phone"].forEach(id=>document.getElementById(id).value="");
+  ["inp-title","inp-desc","inp-price","inp-phone"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
   photoFiles=[null,null,null,null,null,null,null,null];
-  document.getElementById("photo-thumbs").innerHTML="";
-  // Reset file input so same file can be selected again next time
+  const thumbs=document.getElementById("photo-thumbs");if(thumbs)thumbs.innerHTML="";
   const slotInput=document.querySelector("#slot-multi input");
   if(slotInput)slotInput.value="";
   const lbl=document.getElementById("photo-slot-lbl");
   if(lbl)lbl.textContent="Выбрать фото (до 8)";
   promoEnabled=false;legendaryEnabled=false;
-  document.getElementById("promo-toggle").classList.remove("on");
-  document.getElementById("promo-lbl").textContent="Не продвигать";
-  document.getElementById("promo-opts").style.display="none";
-  document.getElementById("legend-toggle").classList.remove("on");
-  document.getElementById("legend-lbl").textContent="Не активировать";
-  document.getElementById("legend-opts").style.display="none";
   selectCondition("new");
+  // сброс категории и города
+  const catSel=document.getElementById("inp-cat");if(catSel)catSel.value="";
+  const catDisp=document.getElementById("cat-display-text");if(catDisp){catDisp.textContent="Выберите раздел";catDisp.style.color="var(--muted)";}
+  const catPicker=document.getElementById("cat-picker");if(catPicker)catPicker.style.display="none";
+  const citySel=document.getElementById("inp-city");if(citySel)citySel.value="";
+  const distRow=document.getElementById("district-row");if(distRow)distRow.style.display="none";
+  const distSel=document.getElementById("inp-district");if(distSel)distSel.value="";
+  // сброс полей недвижимости
+  const pf=document.getElementById("property-fields");if(pf)pf.style.display="none";
+  ["prop-type","prop-area","prop-rooms","prop-floor","prop-year","prop-material","prop-condition"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
+  selectPropDeal("sale");
+  clearDraft();
+}
+// ── DRAFT SAVING ──────────────────────────────────────────────────────────────
+function _draftKey(){return`eb_draft_${tgUser?.id||'anon'}`;}
+function saveDraft(explicit=false){
+  try{
+    const city=document.getElementById("inp-city").value;
+    const cityOther=document.getElementById("inp-city-other")?.value||"";
+    const d={
+      title:document.getElementById("inp-title").value,
+      desc:document.getElementById("inp-desc").value,
+      price:document.getElementById("inp-price").value,
+      currency:document.getElementById("inp-currency")?.value||"USD",
+      cat:document.getElementById("inp-cat").value,
+      city,cityOther,
+      district:document.getElementById("inp-district")?.value||"",
+      phone:document.getElementById("inp-phone").value,
+      condition:document.getElementById("inp-condition")?.value||"new",_saved:explicit
+    };
+    // сохраняем если хоть что-то заполнено
+    if(d.title||d.desc||d.price||d.phone||d.cat||d.city)localStorage.setItem(_draftKey(),JSON.stringify(d));
+  }catch(e){}
+}
+function loadDraft(){
+  try{
+    const s=localStorage.getItem(_draftKey());
+    if(!s)return;
+    const d=JSON.parse(s);
+    if(d.title)document.getElementById("inp-title").value=d.title;
+    if(d.desc)document.getElementById("inp-desc").value=d.desc;
+    if(d.price)document.getElementById("inp-price").value=d.price;
+    const cur=document.getElementById("inp-currency");if(cur&&d.currency)cur.value=d.currency;
+    if(d.cat&&d._saved){
+      document.getElementById("inp-cat").value=d.cat;
+      const disp=document.getElementById("cat-display-text");
+      if(disp){disp.textContent=`${CAT_EMOJI[d.cat]||"📦"} ${t(`cats.${d.cat}`)}`;disp.style.color="#fff";}
+      togglePropertyFields();
+    }
+    if(d.city&&d._saved){
+      document.getElementById("inp-city").value=d.city;
+      const oth=document.getElementById("inp-city-other");
+      if(oth&&d.city==="other"){oth.style.display="";if(d.cityOther)oth.value=d.cityOther;}
+      updateDistricts();
+      if(d.district){
+        const distSel=document.getElementById("inp-district");
+        if(distSel)distSel.value=d.district;
+      }
+    }
+    if(d.phone)document.getElementById("inp-phone").value=d.phone;
+    if(d.condition)selectCondition(d.condition);
+    if(d.title||d.cat||d.city)showToast("📝 Черновик восстановлен");
+  }catch(e){}
+}
+function clearDraft(){localStorage.removeItem(_draftKey());}
+// ── PENDING PROMO COMEBACK ─────────────────────────────────────────────────────
+function savePendingPromo(listingId,type){
+  localStorage.setItem('eb_pending_promo',JSON.stringify({listingId,type,ts:Date.now()}));
+}
+function checkPendingPromo(){
+  try{
+    const s=localStorage.getItem('eb_pending_promo');
+    if(!s)return;
+    const p=JSON.parse(s);
+    if(Date.now()-p.ts>3600000){localStorage.removeItem('eb_pending_promo');return;}
+    localStorage.removeItem('eb_pending_promo');
+    currentListingId=p.listingId;
+    setTimeout(()=>{
+      document.getElementById("pay-modal").classList.add("open");
+      showToast("💳 Возобновите оплату продвижения");
+    },1200);
+  }catch(e){}
 }
 
 function showToast(msg){const el=document.getElementById("toast");el.textContent=msg;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2800);}
+function toggleEmojiPicker(){const p=document.getElementById("emoji-picker-panel");p.style.display=p.style.display==="none"?"flex":"none";}
+function insertEmoji(e){const inp=document.getElementById("chat-input");if(!inp)return;const s=inp.selectionStart,en=inp.selectionEnd;inp.value=inp.value.slice(0,s)+e+inp.value.slice(en);inp.selectionStart=inp.selectionEnd=s+e.length;inp.focus();}
 
 // ── ORDERS ────────────────────────────────────────────────────────────────────
 async function openOrders(){
@@ -1982,8 +2690,18 @@ async function submitOffer(){
   try{
     const res=await fetch(`${API}/api/offers`,{method:"POST",body:fd});
     if(res.ok){
+      const data=await res.json();
       closeModal("offer-modal");
       showToast("✅ Предложение отправлено продавцу!");
+      // send message so dialog appears in Чаты with unread dot
+      const mfd=new FormData();
+      mfd.append("sender_id",tgUser.id);
+      mfd.append("receiver_id",data.seller_id);
+      mfd.append("listing_id",data.listing_id);
+      mfd.append("text",`💰 Предлагаю цену: ${amount} ${currency}`);
+      if(tgUser.username)mfd.append("sender_username",tgUser.username);
+      if(data.seller_username)mfd.append("receiver_username",data.seller_username);
+      await fetch(`${API}/api/messages`,{method:"POST",body:mfd}).catch(()=>{});
     }else showToast("❌ Ошибка");
   }catch(e){showToast("❌ "+e.message);}
 }
@@ -2056,7 +2774,8 @@ function loadFilters(){
 loadFilters();
 updateFavCount();
 
-applyLang();loadListings();
+applyLang();loadListings();checkPendingPromo();
+initDetailListingSwipe();
 
 // scroll-to-top button
 window.addEventListener('scroll',function(){
@@ -2075,7 +2794,7 @@ setTimeout(async()=>{
     const hasUnread=dialogs.some(d=>!d.is_read&&d.receiver_id===uid);
     const lbl=document.getElementById("nav-lbl-auction");
     if(lbl&&hasUnread){
-      lbl.innerHTML="Чаты <span id='chat-pulse' style='display:inline-block;width:7px;height:7px;background:#e74c3c;border-radius:50%;vertical-align:middle;margin-left:2px;animation:pulse-dot 1.2s ease-in-out infinite;'></span>";
+      lbl.innerHTML="Чаты <span id='chat-pulse' style='display:inline-block;width:7px;height:7px;background:#2ecc71;border-radius:50%;vertical-align:middle;margin-left:2px;animation:pulse-dot 1.2s ease-in-out infinite;'></span>";
     }
   }catch(e){}
 },1000);
@@ -2090,7 +2809,11 @@ setTimeout(async()=>{
       <div style="font-size:12px;color:var(--muted);margin-top:2px;" id="chat-subtitle"></div>
     </div>
     <div id="chat-messages" style="flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-height:200px;max-height:50vh;"></div>
+    <div id="emoji-picker-panel" style="display:none;padding:8px 12px;border-top:1px solid var(--border);flex-wrap:wrap;gap:4px;flex-shrink:0;max-height:120px;overflow-y:auto;background:var(--card);">
+      <span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('😀')">😀</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('😂')">😂</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('😍')">😍</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('🥰')">🥰</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('😎')">😎</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('🤔')">🤔</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('😅')">😅</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('😭')">😭</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('🤣')">🤣</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('😊')">😊</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('🙏')">🙏</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('👍')">👍</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('👎')">👎</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('❤️')">❤️</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('🔥')">🔥</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('💯')">💯</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('✅')">✅</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('❌')">❌</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('💰')">💰</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('🎉')">🎉</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('👋')">👋</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('🤝')">🤝</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('📞')">📞</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('📍')">📍</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('⭐')">⭐</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('💎')">💎</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('🏠')">🏠</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('🚗')">🚗</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('👀')">👀</span><span style="font-size:22px;cursor:pointer;" onclick="insertEmoji('😏')">😏</span>
+    </div>
     <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;align-items:flex-end;flex-shrink:0;">
+      <button onclick="vib();toggleEmojiPicker()" style="width:42px;height:42px;border-radius:12px;background:var(--card2);border:1.5px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:20px;">😊</button>
       <textarea id="chat-input" placeholder="Сообщение..." style="flex:1;background:var(--card2);border:1.5px solid var(--border);border-radius:12px;padding:10px 12px;color:#fff;font-size:14px;outline:none;resize:none;height:42px;max-height:100px;font-family:inherit;line-height:1.4;" oninput="this.style.height='42px';this.style.height=Math.min(this.scrollHeight,100)+'px'" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMsg();}"></textarea>
       <button onclick="vib();sendChatMsg()" style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent2),var(--accent));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>

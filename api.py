@@ -1,8 +1,9 @@
-from fastapi import FastAPI, HTTPException, UploadFile, File, Form
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-import os, shutil, uuid
+import os, shutil, uuid, hmac, hashlib, time, json
+from urllib.parse import parse_qsl
 from dotenv import load_dotenv
 load_dotenv()
 from database import get_db, init_db
@@ -15,8 +16,45 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-CATEGORIES = ["realestate","rent","transport","services","beauty","clothes","kids","home","furniture","household","repair","jobs","animals","hobby","sport","electronics","food","business","money","alcohol","smoking","tours","excursions","medicine","education","other"]
+CATEGORIES = ["property","transport","services","beauty","clothes","kids","home","furniture","household","repair","jobs","animals","hobby","sport","electronics","food","business","money","alcohol","smoking","tours","excursions","medicine","education","restaurant","rental","diving","construction","transfer","shipping","other"]
 CITIES = ["sharm","hurghada","cairo","alexandria","dahab","marsa","el-gouna","taba","luxor","aswan","safaga","el-quseir","nuweiba","soma-bay","other"]
+
+# -- AUTH ---------------------------------------------------------------------
+ADMIN_TG_ID = int(os.getenv("ADMIN_ID", "0") or 0) or 7308147004
+
+def check_admin_key(key) -> bool:
+    expected = os.getenv("ADMIN_KEY", "")
+    return bool(expected) and hmac.compare_digest(str(key or ""), expected)
+
+def tg_auth_user(request: Request):
+    """Telegram user id from the signed Mini App initData (header X-Tg-Init-Data), or None."""
+    init = request.headers.get("X-Tg-Init-Data", "")
+    token = os.getenv("BOT_TOKEN", "")
+    if not init or not token:
+        return None
+    try:
+        data = dict(parse_qsl(init, keep_blank_values=True))
+        got = data.pop("hash", None)
+        if not got:
+            return None
+        check = "\n".join(f"{k}={v}" for k, v in sorted(data.items()))
+        secret = hmac.new(b"WebAppData", token.encode(), hashlib.sha256).digest()
+        calc = hmac.new(secret, check.encode(), hashlib.sha256).hexdigest()
+        if not hmac.compare_digest(calc, got):
+            return None
+        if time.time() - int(data.get("auth_date", "0")) > 7 * 86400:
+            return None
+        return int(json.loads(data["user"])["id"])
+    except Exception:
+        return None
+
+def require_user(request: Request, claimed_id):
+    """403 unless the request is signed by Telegram for exactly this user id."""
+    if os.getenv("TG_AUTH", "1") == "0":
+        return
+    uid = tg_auth_user(request)
+    if uid is None or claimed_id is None or int(claimed_id) != uid:
+        raise HTTPException(403, "Unauthorized")
 
 def validate_city(city: str) -> bool:
     return city in CITIES or (0 < len(city) <= 60)
@@ -28,7 +66,8 @@ def startup(): init_db()
 def index(): return FileResponse("static/index.html")
 
 @app.post("/api/users")
-def upsert_user(telegram_id: int = Form(...), username: str = Form(None), first_name: str = Form(None)):
+def upsert_user(request: Request, telegram_id: int = Form(...), username: str = Form(None), first_name: str = Form(None)):
+    require_user(request, telegram_id)
     conn = get_db(); c = conn.cursor()
     c.execute("INSERT INTO users (telegram_id,username,first_name) VALUES (?,?,?) ON CONFLICT(telegram_id) DO UPDATE SET username=excluded.username,first_name=excluded.first_name",(telegram_id,username,first_name))
     conn.commit(); conn.close(); return {"ok":True}
@@ -55,7 +94,8 @@ def get_listings(category: str=None, city: str=None, search: str=None):
 
 # IMPORTANT: sold route must be before /{listing_id} to avoid conflict
 @app.get("/api/listings/sold/{user_id}")
-def get_sold(user_id: int):
+def get_sold(request: Request, user_id: int):
+    require_user(request, user_id)
     conn=get_db(); c=conn.cursor()
     rows=c.execute("SELECT * FROM listings WHERE user_id=? AND is_active=2 ORDER BY created_at DESC",(user_id,)).fetchall()
     conn.close(); return [dict(r) for r in rows]
@@ -89,6 +129,7 @@ def save_photo(photo):
 
 @app.post("/api/listings")
 async def create_listing(
+    request: Request,
     user_id: int=Form(...), title: str=Form(...), description: str=Form(None),
     price: float=Form(None), currency: str=Form("USD"),
     category: str=Form(...), city: str=Form(...),
@@ -96,6 +137,16 @@ async def create_listing(
     seller_username: str=Form(None),
     phone: str=Form(None),
     condition: str=Form("new"),
+    prop_deal: str=Form(None),
+    prop_rent_period: str=Form(None),
+    prop_type: str=Form(None),
+    prop_area: str=Form(None),
+    prop_rooms: str=Form(None),
+    prop_floor: str=Form(None),
+    prop_year: str=Form(None),
+    prop_material: str=Form(None),
+    prop_condition: str=Form(None),
+    prop_district: str=Form(None),
     photo: UploadFile=File(None),
     photo_2: UploadFile=File(None),
     photo_3: UploadFile=File(None),
@@ -105,18 +156,20 @@ async def create_listing(
     photo_7: UploadFile=File(None),
     photo_8: UploadFile=File(None),
 ):
+    require_user(request, user_id)
     if category not in CATEGORIES: raise HTTPException(400,"Invalid category")
     if not validate_city(city): raise HTTPException(400,"Invalid city")
     p1=save_photo(photo); p2=save_photo(photo_2); p3=save_photo(photo_3); p4=save_photo(photo_4)
     p5=save_photo(photo_5); p6=save_photo(photo_6); p7=save_photo(photo_7); p8=save_photo(photo_8)
     conn=get_db(); c=conn.cursor()
-    c.execute("INSERT INTO listings (user_id,title,description,price,currency,category,city,photo_path,photo_path2,photo_path3,photo_path4,photo_path5,photo_path6,photo_path7,photo_path8,is_promoted,seller_username,phone,condition) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-              (user_id,title,description,price,currency,category,city,p1,p2,p3,p4,p5,p6,p7,p8,is_promoted,seller_username,phone,condition))
+    c.execute("INSERT INTO listings (user_id,title,description,price,currency,category,city,photo_path,photo_path2,photo_path3,photo_path4,photo_path5,photo_path6,photo_path7,photo_path8,is_promoted,seller_username,phone,condition,prop_deal,prop_rent_period,prop_type,prop_area,prop_rooms,prop_floor,prop_year,prop_material,prop_condition,prop_district) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+              (user_id,title,description,price,currency,category,city,p1,p2,p3,p4,p5,p6,p7,p8,is_promoted,seller_username,phone,condition,prop_deal,prop_rent_period,prop_type,prop_area,prop_rooms,prop_floor,prop_year,prop_material,prop_condition,prop_district))
     conn.commit(); lid=c.lastrowid; conn.close()
     return {"ok":True,"id":lid}
 
 @app.put("/api/listings/{listing_id}")
 async def edit_listing(
+    request: Request,
     listing_id: int,
     user_id: int=Form(...), title: str=Form(...), description: str=Form(None),
     price: float=Form(None), currency: str=Form("USD"),
@@ -127,6 +180,7 @@ async def edit_listing(
     photo_3: UploadFile=File(None),
     photo_4: UploadFile=File(None),
 ):
+    require_user(request, user_id)
     if category not in CATEGORIES: raise HTTPException(400,"Invalid category")
     if not validate_city(city): raise HTTPException(400,"Invalid city")
     conn=get_db(); c=conn.cursor()
@@ -143,7 +197,8 @@ async def edit_listing(
     return {"ok":True}
 
 @app.post("/api/listings/{listing_id}/sold")
-def mark_sold(listing_id: int, user_id: int):
+def mark_sold(request: Request, listing_id: int, user_id: int):
+    require_user(request, user_id)
     conn=get_db(); c=conn.cursor()
     row=c.execute("SELECT user_id FROM listings WHERE id=?",(listing_id,)).fetchone()
     if not row: raise HTTPException(404)
@@ -151,8 +206,29 @@ def mark_sold(listing_id: int, user_id: int):
     c.execute("UPDATE listings SET is_active=2 WHERE id=?",(listing_id,))
     conn.commit(); conn.close(); return {"ok":True}
 
+@app.post("/api/listings/{listing_id}/pause")
+def pause_listing(request: Request, listing_id: int, user_id: int = Form(...)):
+    require_user(request, user_id)
+    conn=get_db(); c=conn.cursor()
+    row=c.execute("SELECT user_id, is_active FROM listings WHERE id=?",(listing_id,)).fetchone()
+    if not row: raise HTTPException(404)
+    if row["user_id"]!=user_id: raise HTTPException(403)
+    # toggle: 1 (active) <-> 3 (paused)
+    new_state = 3 if row["is_active"]==1 else 1
+    c.execute("UPDATE listings SET is_active=? WHERE id=?",(new_state,listing_id))
+    conn.commit(); conn.close()
+    return {"ok":True,"is_active":new_state}
+
+@app.get("/api/listings/my/{user_id}")
+def get_my_listings(request: Request, user_id: int):
+    require_user(request, user_id)
+    conn=get_db(); c=conn.cursor()
+    rows=c.execute("SELECT * FROM listings WHERE user_id=? AND is_active IN (1,3) ORDER BY created_at DESC",(user_id,)).fetchall()
+    conn.close(); return [dict(r) for r in rows]
+
 @app.post("/api/listings/{listing_id}/activate_promo")
-def activate_promo(listing_id: int):
+def activate_promo(listing_id: int, admin_key: str = Form(...)):
+    if not check_admin_key(admin_key): raise HTTPException(403, "Forbidden")
     from datetime import datetime, timedelta
     conn=get_db(); c=conn.cursor()
     row=c.execute("SELECT id FROM listings WHERE id=?",(listing_id,)).fetchone()
@@ -162,19 +238,21 @@ def activate_promo(listing_id: int):
     conn.commit(); conn.close(); return {"ok":True}
 
 @app.post("/api/listings/{listing_id}/pay_legendary")
-async def pay_legendary(listing_id: int, user_id: int = Form(...)):
+async def pay_legendary(request: Request, listing_id: int, user_id: int = Form(...)):
     import httpx, logging
+    require_user(request, user_id)
     from datetime import datetime, timedelta
     conn=get_db(); c=conn.cursor()
-    row=c.execute("SELECT title FROM listings WHERE id=?",(listing_id,)).fetchone()
+    row=c.execute("SELECT user_id, title FROM listings WHERE id=?",(listing_id,)).fetchone()
     if not row: conn.close(); raise HTTPException(404)
     # Admin gets instant free activation
-    if user_id == 7308147004:
+    if user_id == ADMIN_TG_ID:
         legendary_until=(datetime.now()+timedelta(days=30)).strftime("%Y-%m-%d %H:%M:%S")
         c.execute("UPDATE listings SET is_legendary=1, is_active=1, legendary_until=? WHERE id=?",(legendary_until,listing_id))
         conn.commit(); conn.close()
         return {"ok":True,"free":True}
     conn.close()
+    if row["user_id"] != user_id: raise HTTPException(403, "Not your listing")
     token=os.getenv("BOT_TOKEN","")
     if not token: raise HTTPException(500,"BOT_TOKEN not set")
     title=(row["title"] or "")[:40]
@@ -196,7 +274,8 @@ async def pay_legendary(listing_id: int, user_id: int = Form(...)):
         raise HTTPException(500,str(e))
 
 @app.post("/api/listings/{listing_id}/activate_legendary")
-def activate_legendary(listing_id: int):
+def activate_legendary(listing_id: int, admin_key: str = Form(...)):
+    if not check_admin_key(admin_key): raise HTTPException(403, "Forbidden")
     from datetime import datetime, timedelta
     conn=get_db(); c=conn.cursor()
     legendary_until=(datetime.now()+timedelta(days=30)).strftime("%Y-%m-%d %H:%M:%S")
@@ -204,7 +283,8 @@ def activate_legendary(listing_id: int):
     conn.commit(); conn.close(); return {"ok":True}
 
 @app.delete("/api/listings/{listing_id}")
-def delete_listing(listing_id: int, user_id: int):
+def delete_listing(request: Request, listing_id: int, user_id: int):
+    require_user(request, user_id)
     conn=get_db(); c=conn.cursor()
     row=c.execute("SELECT user_id FROM listings WHERE id=?",(listing_id,)).fetchone()
     if not row: raise HTTPException(404)
@@ -213,19 +293,21 @@ def delete_listing(listing_id: int, user_id: int):
     conn.commit(); conn.close(); return {"ok":True}
 
 @app.post("/api/listings/{listing_id}/pay_stars")
-async def pay_stars(listing_id: int, user_id: int = Form(...)):
+async def pay_stars(request: Request, listing_id: int, user_id: int = Form(...)):
     import httpx, logging
+    require_user(request, user_id)
     from datetime import datetime, timedelta
     conn=get_db(); c=conn.cursor()
     row=c.execute("SELECT user_id, title FROM listings WHERE id=?",(listing_id,)).fetchone()
     if not row: conn.close(); raise HTTPException(404)
     # Admin gets instant free activation
-    if user_id == 7308147004:
+    if user_id == ADMIN_TG_ID:
         promoted_until=(datetime.now()+timedelta(days=30)).strftime("%Y-%m-%d %H:%M:%S")
         c.execute("UPDATE listings SET is_promoted=1, is_active=1, promoted_until=? WHERE id=?",(promoted_until,listing_id))
         conn.commit(); conn.close()
         return {"ok":True,"free":True}
     conn.close()
+    if row["user_id"] != user_id: raise HTTPException(403, "Not your listing")
     token = os.getenv("BOT_TOKEN","")
     if not token: raise HTTPException(500,"BOT_TOKEN not set")
     title = (row["title"] or "")[:40]
@@ -262,8 +344,9 @@ async def egp_rate():
         return {"rate": 50}
 
 @app.post("/api/listings/{listing_id}/pay_card")
-async def pay_card(listing_id: int, user_id: int = Form(...)):
+async def pay_card(request: Request, listing_id: int, user_id: int = Form(...)):
     import httpx
+    require_user(request, user_id)
     conn=get_db(); c=conn.cursor()
     row=c.execute("SELECT user_id, title FROM listings WHERE id=?",(listing_id,)).fetchone()
     if not row: raise HTTPException(404)
@@ -287,6 +370,7 @@ async def pay_card(listing_id: int, user_id: int = Form(...)):
 
 @app.post("/api/offers")
 async def create_offer(
+    request: Request,
     listing_id: int = Form(...),
     buyer_id: int = Form(...),
     buyer_username: str = Form(None),
@@ -294,6 +378,7 @@ async def create_offer(
     currency: str = Form("USD"),
 ):
     import httpx, logging
+    require_user(request, buyer_id)
     conn=get_db(); c=conn.cursor()
     row=c.execute("SELECT user_id, title FROM listings WHERE id=? AND is_active=1",(listing_id,)).fetchone()
     if not row: raise HTTPException(404,"Listing not found")
@@ -301,36 +386,32 @@ async def create_offer(
     c.execute("""INSERT INTO offers (listing_id, listing_title, seller_id, buyer_id, buyer_username, amount, currency)
                  VALUES (?,?,?,?,?,?,?)""",
               (listing_id, row["title"], row["user_id"], buyer_id, buyer_username, amount, currency))
-    conn.commit(); offer_id = c.lastrowid; conn.close()
+    conn.commit(); offer_id = c.lastrowid
+    # fetch seller username
+    seller_row = c.execute("SELECT username FROM users WHERE telegram_id=?", (row["user_id"],)).fetchone()
+    seller_username = seller_row["username"] if seller_row else None
+    conn.close()
 
     # Notify seller in bot
     token = os.getenv("BOT_TOKEN","")
     if token:
         try:
-            buyer_label = f"@{buyer_username}" if buyer_username else f"#{buyer_id}"
-            kb = {
-                "inline_keyboard": [[
-                    {"text": "✅ Принять", "callback_data": f"offer_accept_{offer_id}"},
-                    {"text": "❌ Отклонить", "callback_data": f"offer_decline_{offer_id}"}
-                ]]
-            }
+            bot_url = f"https://t.me/{os.getenv('BOT_USERNAME','egypt_bazar_bot')}"
+            kb = {"inline_keyboard":[[{"text":"📲 Открыть Egypt Bazar","url":bot_url}]]}
             async with httpx.AsyncClient(timeout=10) as client:
                 await client.post(f"https://api.telegram.org/bot{token}/sendMessage", json={
                     "chat_id": row["user_id"],
-                    "text": f"💰 <b>Новое предложение цены!</b>\n\n"
-                            f"Объявление: «{row['title']}»\n"
-                            f"Покупатель: {buyer_label}\n"
-                            f"Предлагает: <b>{amount} {currency}</b>",
-                    "parse_mode": "HTML",
+                    "text": f"💰 Вам пришло ценовое предложение!",
                     "reply_markup": kb
                 })
         except Exception as e:
             logging.warning(f"Offer notify error: {e}")
 
-    return {"ok": True, "id": offer_id}
+    return {"ok": True, "id": offer_id, "seller_id": row["user_id"], "seller_username": seller_username, "listing_id": listing_id, "listing_title": row["title"]}
 
 @app.get("/api/offers/{user_id}")
-def get_offers(user_id: int):
+def get_offers(request: Request, user_id: int):
+    require_user(request, user_id)
     conn=get_db(); c=conn.cursor()
     rows=c.execute("""SELECT o.*, l.title as listing_title_cur FROM offers o
                       LEFT JOIN listings l ON o.listing_id=l.id
@@ -338,11 +419,12 @@ def get_offers(user_id: int):
     conn.close(); return [dict(r) for r in rows]
 
 @app.post("/api/offers/{offer_id}/respond")
-async def respond_offer(offer_id: int, action: str = Form(...)):
+async def respond_offer(request: Request, offer_id: int, action: str = Form(...)):
     import httpx, logging
     conn=get_db(); c=conn.cursor()
     row=c.execute("SELECT * FROM offers WHERE id=?",(offer_id,)).fetchone()
     if not row: raise HTTPException(404)
+    require_user(request, row["seller_id"])
     status="accepted" if action=="accept" else "declined"
     c.execute("UPDATE offers SET status=? WHERE id=?",(status,offer_id))
     conn.commit(); conn.close()
@@ -350,22 +432,25 @@ async def respond_offer(offer_id: int, action: str = Form(...)):
     token=os.getenv("BOT_TOKEN","")
     if token:
         try:
-            msg = (f"✅ <b>Ваше предложение принято!</b>\n\nПродавец принял цену <b>{row['amount']} {row['currency']}</b> по объявлению «{row['listing_title']}».\nСвяжитесь с продавцом."
+            bot_url = f"https://t.me/{os.getenv('BOT_USERNAME','egypt_bazar_bot')}"
+            kb = {"inline_keyboard":[[{"text":"📲 Открыть Egypt Bazar","url":bot_url}]]}
+            msg = ("✅ Ваше ценовое предложение принято!"
                    if action=="accept" else
-                   f"❌ <b>Предложение отклонено</b>\n\nПродавец отклонил цену <b>{row['amount']} {row['currency']}</b> по объявлению «{row['listing_title']}».")
+                   "❌ Ваше ценовое предложение отклонено.")
             async with httpx.AsyncClient(timeout=5) as client:
                 await client.post(f"https://api.telegram.org/bot{token}/sendMessage",json={
-                    "chat_id":row["buyer_id"],"text":msg,"parse_mode":"HTML"})
+                    "chat_id":row["buyer_id"],"text":msg,"reply_markup":kb})
         except Exception as e:
             logging.warning(f"respond_offer notify: {e}")
     return {"ok":True}
 
 @app.post("/api/verify/pay_stars")
-async def verify_pay_stars(user_id: int = Form(...)):
+async def verify_pay_stars(request: Request, user_id: int = Form(...)):
     import httpx, logging
+    require_user(request, user_id)
     token=os.getenv("BOT_TOKEN","")
     if not token: raise HTTPException(500,"BOT_TOKEN not set")
-    amount = 1 if user_id == 7308147004 else 700
+    amount = 1 if user_id == ADMIN_TG_ID else 700
     try:
         async with httpx.AsyncClient(timeout=10) as client:
             resp=await client.post(f"https://api.telegram.org/bot{token}/createInvoiceLink",json={
@@ -383,8 +468,9 @@ async def verify_pay_stars(user_id: int = Form(...)):
         raise HTTPException(500,str(e))
 
 @app.post("/api/verify/pay_card")
-async def verify_pay_card(user_id: int = Form(...)):
+async def verify_pay_card(request: Request, user_id: int = Form(...)):
     import httpx
+    require_user(request, user_id)
     token=os.getenv("BOT_TOKEN","")
     admin_id=int(os.getenv("ADMIN_ID","0"))
     if token and admin_id:
@@ -410,7 +496,7 @@ def check_verified(user_id: int):
 
 @app.post("/api/admin/verify/{user_id}")
 def admin_verify(user_id: int, months: int = Form(1), admin_key: str = Form(...)):
-    if admin_key != os.getenv("ADMIN_KEY", "egypt_admin_2024"):
+    if not check_admin_key(admin_key):
         raise HTTPException(403, "Forbidden")
     from datetime import datetime, timedelta
     conn=get_db(); c=conn.cursor()
@@ -421,7 +507,7 @@ def admin_verify(user_id: int, months: int = Form(1), admin_key: str = Form(...)
 
 @app.post("/api/admin/unverify/{user_id}")
 def admin_unverify(user_id: int, admin_key: str = Form(...)):
-    if admin_key != os.getenv("ADMIN_KEY", "egypt_admin_2024"):
+    if not check_admin_key(admin_key):
         raise HTTPException(403, "Forbidden")
     conn=get_db(); c=conn.cursor()
     c.execute("UPDATE users SET is_verified=0, verified_until=NULL WHERE telegram_id=?",(user_id,))
@@ -430,6 +516,7 @@ def admin_unverify(user_id: int, admin_key: str = Form(...)):
 
 @app.post("/api/messages")
 async def send_message(
+    request: Request,
     sender_id: int = Form(...),
     receiver_id: int = Form(...),
     listing_id: int = Form(None),
@@ -438,6 +525,7 @@ async def send_message(
     receiver_username: str = Form(None),
 ):
     import httpx, logging
+    require_user(request, sender_id)
     conn=get_db(); c=conn.cursor()
     c.execute("""CREATE TABLE IF NOT EXISTS messages (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -459,22 +547,61 @@ async def send_message(
     token=os.getenv("BOT_TOKEN","")
     if token:
         try:
-            from_label=f"@{sender_username}" if sender_username else f"#{sender_id}"
-            listing_row=c.execute("SELECT title FROM listings WHERE id=?",(listing_id,)).fetchone() if listing_id else None
-            listing_info=f"\nОбъявление: «{listing_row['title']}»" if listing_row else ""
+            bot_url = f"https://t.me/{os.getenv('BOT_USERNAME','egypt_bazar_bot')}"
+            kb = {"inline_keyboard":[[{"text":"📲 Открыть Egypt Bazar","url":bot_url}]]}
             async with httpx.AsyncClient(timeout=5) as client:
                 await client.post(f"https://api.telegram.org/bot{token}/sendMessage",json={
                     "chat_id": receiver_id,
-                    "text": f"💬 <b>Новое сообщение от {from_label}</b>{listing_info}\n\n{text}\n\n<i>Ответить можно в Egypt Bazar → Чаты</i>",
-                    "parse_mode": "HTML"
+                    "text": "✉️ Вам пришло сообщение!",
+                    "reply_markup": kb
                 })
         except Exception as e:
             logging.warning(f"Message notify: {e}")
     conn.close()
     return {"ok": True}
 
+# ID системного пользователя "Администрация"
+ADMIN_BOT_ID = 9999999999  # уже существует в БД как Egypt Bazar
+
+@app.post("/api/broadcast")
+async def broadcast_message(
+    text: str = Form(...),
+    admin_key: str = Form(...),
+):
+    import httpx, logging
+    if not check_admin_key(admin_key):
+        raise HTTPException(403, "Forbidden")
+    conn = get_db(); c = conn.cursor()
+    # убедимся что системный юзер существует с правильным именем
+    c.execute("INSERT OR REPLACE INTO users (telegram_id, username, first_name) VALUES (?,?,?)",
+              (ADMIN_BOT_ID, "egypt_bazar_admin", "Администрация"))
+    # берём всех пользователей кроме системного
+    users = c.execute("SELECT telegram_id FROM users WHERE telegram_id != ?", (ADMIN_BOT_ID,)).fetchall()
+    ok = 0
+    for u in users:
+        uid = u["telegram_id"]
+        c.execute("INSERT INTO messages (sender_id, receiver_id, listing_id, text, sender_username) VALUES (?,?,?,?,?)",
+                  (ADMIN_BOT_ID, uid, None, text, "Администрация"))
+        ok += 1
+        # уведомление в бот
+        token = os.getenv("BOT_TOKEN", "")
+        if token:
+            try:
+                bot_url = f"https://t.me/{os.getenv('BOT_USERNAME','egypt_bazar_bot')}"
+                kb = {"inline_keyboard":[[{"text":"📲 Открыть Egypt Bazar","url":bot_url}]]}
+                async with httpx.AsyncClient(timeout=3) as client:
+                    await client.post(f"https://api.telegram.org/bot{token}/sendMessage", json={
+                        "chat_id": uid,
+                        "text": "📢 Новое сообщение от Администрации!",
+                        "reply_markup": kb
+                    })
+            except: pass
+    conn.commit(); conn.close()
+    return {"ok": True, "sent": ok}
+
 @app.get("/api/messages/{user1}/{user2}")
-def get_messages(user1: int, user2: int, listing_id: int = None):
+def get_messages(request: Request, user1: int, user2: int, listing_id: int = None):
+    require_user(request, user1)
     conn=get_db(); c=conn.cursor()
     try:
         if listing_id:
@@ -497,7 +624,8 @@ def get_messages(user1: int, user2: int, listing_id: int = None):
     return [dict(r) for r in rows]
 
 @app.get("/api/dialogs/{user_id}")
-def get_dialogs(user_id: int):
+def get_dialogs(request: Request, user_id: int):
+    require_user(request, user_id)
     conn=get_db(); c=conn.cursor()
     try:
         rows=c.execute("""SELECT m.*,
@@ -524,8 +652,9 @@ def get_dialogs(user_id: int):
     return [dict(r) for r in rows]
 
 @app.post("/api/reports")
-async def create_report(listing_id: int = Form(...), reporter_id: int = Form(None), reason: str = Form(None)):
+async def create_report(request: Request, listing_id: int = Form(...), reporter_id: int = Form(None), reason: str = Form(None)):
     import logging
+    require_user(request, reporter_id)
     conn=get_db(); c=conn.cursor()
     # ensure reports table exists
     c.execute("""CREATE TABLE IF NOT EXISTS reports (
