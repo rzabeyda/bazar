@@ -368,6 +368,11 @@ button,input,select,textarea{font-family:inherit;}
 .pr-inputs input{flex:1;min-width:0;width:100%;background:#16161b;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:11px 12px;color:#fff;font-size:15px;outline:none;}
 .pr-inputs input:focus{border-color:rgba(255,255,255,.55);}
 .pr-clear{width:100%;margin-top:4px;padding:10px;background:transparent;border:none;color:#9a9aa5;font-weight:700;font-size:13px;cursor:pointer;}
+/* filter rows: row 1 = price / city / section, row 2 = condition / photo / verified */
+#filter-price-range-btn{flex:1;justify-content:center;min-width:0;}
+.extra-filters .filter-btn{flex:1;justify-content:center;white-space:nowrap;}
+.filters-row .filter-btn{min-width:0;overflow:hidden;}
+.filters-row .filter-label,#filter-price-range-lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
 /* promotion / ads switched off for now */
 .promote-box,#pay-modal,.banner-wrap,[onclick*="buyPromo"],[onclick*="buyLegendary"]{display:none!important;}
 @keyframes cardIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
@@ -424,6 +429,8 @@ button,input,select,textarea{font-family:inherit;}
     </div>
   </div>
   <div class="filters-row">
+    <!-- PRICE -->
+    <div class="filter-btn" id="filter-price-range-btn" onclick="togglePriceDD(event)"><span id="filter-price-range-lbl">Цена</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></div>
     <!-- CITY -->
     <div class="filter-btn" id="filter-city-btn" onclick="toggleDD(event,'city-dd')">
       <span class="filter-label" id="filter-city-lbl">Город</span>
@@ -434,13 +441,11 @@ button,input,select,textarea{font-family:inherit;}
       <span class="filter-label" id="filter-cat-lbl">Раздел</span>
       <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
-    <!-- CONDITION -->
+  </div>
+  <div class="extra-filters" id="extra-filters">
     <div class="filter-btn" id="filter-cond-btn" onclick="vib();cycleCondition()" style="flex-shrink:0;">
       <span id="filter-cond-lbl">Состояние</span>
     </div>
-  </div>
-  <div class="extra-filters" id="extra-filters">
-    <div class="filter-btn" id="filter-price-range-btn" onclick="togglePriceDD(event)"><span id="filter-price-range-lbl">Цена</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></div>
     <div class="filter-btn" id="filter-photo-btn" onclick="vib();toggleExtra('photo')"><span id="filter-photo-lbl">С фото</span></div>
     <div class="filter-btn" id="filter-verified-btn" onclick="vib();toggleExtra('verified')"><span id="filter-verified-lbl">Проверенные</span></div>
   </div>
