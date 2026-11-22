@@ -86,6 +86,20 @@ def init_db():
         reporter_id INTEGER,
         reason TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
+    # likes / dislikes on listings (one vote per user per listing)
+    c.execute("""CREATE TABLE IF NOT EXISTS reactions (
+        listing_id INTEGER NOT NULL,
+        user_id INTEGER NOT NULL,
+        value INTEGER NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (listing_id, user_id))""")
+    # seller rating: 1..5 stars, one rating per rater per seller
+    c.execute("""CREATE TABLE IF NOT EXISTS seller_ratings (
+        seller_id INTEGER NOT NULL,
+        rater_id INTEGER NOT NULL,
+        stars INTEGER NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (seller_id, rater_id))""")
     conn.commit(); conn.close(); print("DB initialized")
 
 if __name__=="__main__": init_db()

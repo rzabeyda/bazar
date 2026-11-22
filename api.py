@@ -76,7 +76,9 @@ def upsert_user(request: Request, telegram_id: int = Form(...), username: str = 
 @app.get("/api/listings")
 def get_listings(category: str=None, city: str=None, search: str=None):
     conn = get_db(); c = conn.cursor()
-    q = """SELECT l.*, u.is_verified, u.verified_until
+    q = """SELECT l.*, u.is_verified, u.verified_until,
+           (SELECT COUNT(*) FROM reactions r WHERE r.listing_id=l.id AND r.value=1) AS likes,
+           (SELECT COUNT(*) FROM reactions r WHERE r.listing_id=l.id AND r.value=-1) AS dislikes
            FROM listings l LEFT JOIN users u ON l.user_id=u.telegram_id
            WHERE l.is_active=1"""; params=[]
     if category and category in CATEGORIES: q+=" AND l.category=?"; params.append(category)
@@ -92,6 +94,73 @@ def get_listings(category: str=None, city: str=None, search: str=None):
         d["seller_verified"] = bool(r["is_verified"] and (not r["verified_until"] or r["verified_until"] > now))
         result.append(d)
     return result
+
+
+# -- LIKES / DISLIKES ----------------------------------------------------------
+@app.post("/api/listings/{listing_id}/react")
+def react_listing(request: Request, listing_id: int, user_id: int = Form(...), value: int = Form(...)):
+    require_user(request, user_id)
+    if value not in (-1, 0, 1): raise HTTPException(400, "Invalid value")
+    conn = get_db(); c = conn.cursor()
+    row = c.execute("SELECT user_id FROM listings WHERE id=?", (listing_id,)).fetchone()
+    if not row: conn.close(); raise HTTPException(404)
+    if row["user_id"] == user_id: conn.close(); raise HTTPException(403, "Cannot rate your own listing")
+    if value == 0:
+        c.execute("DELETE FROM reactions WHERE listing_id=? AND user_id=?", (listing_id, user_id))
+    else:
+        c.execute("""INSERT INTO reactions (listing_id,user_id,value) VALUES (?,?,?)
+                     ON CONFLICT(listing_id,user_id) DO UPDATE SET value=excluded.value, created_at=CURRENT_TIMESTAMP""",
+                  (listing_id, user_id, value))
+    conn.commit()
+    r = c.execute("SELECT COALESCE(SUM(value=1),0) AS l, COALESCE(SUM(value=-1),0) AS d FROM reactions WHERE listing_id=?", (listing_id,)).fetchone()
+    conn.close()
+    return {"ok": True, "likes": r["l"], "dislikes": r["d"], "my": value}
+
+@app.get("/api/reactions/my/{user_id}")
+def my_reactions(request: Request, user_id: int):
+    require_user(request, user_id)
+    conn = get_db()
+    rows = conn.execute("SELECT listing_id, value FROM reactions WHERE user_id=?", (user_id,)).fetchall()
+    conn.close()
+    return {str(r["listing_id"]): r["value"] for r in rows}
+
+
+# -- SELLER RATING (1..5 stars) --------------------------------------------------
+def _seller_stats(c, seller_id):
+    r = c.execute("SELECT COALESCE(AVG(stars),0) AS a, COUNT(*) AS n FROM seller_ratings WHERE seller_id=?", (seller_id,)).fetchone()
+    return round(r["a"], 1), r["n"]
+
+@app.get("/api/sellers/{seller_id}/rating")
+def seller_rating(request: Request, seller_id: int):
+    conn = get_db(); c = conn.cursor()
+    avg, n = _seller_stats(c, seller_id)
+    my = 0
+    uid = tg_auth_user(request)
+    if uid:
+        row = c.execute("SELECT stars FROM seller_ratings WHERE seller_id=? AND rater_id=?", (seller_id, uid)).fetchone()
+        my = row["stars"] if row else 0
+    conn.close()
+    return {"avg": avg, "count": n, "my": my}
+
+@app.post("/api/sellers/{seller_id}/rate")
+def rate_seller(request: Request, seller_id: int, user_id: int = Form(...), stars: int = Form(...)):
+    require_user(request, user_id)
+    if not 1 <= stars <= 5: raise HTTPException(400, "Stars must be 1..5")
+    if seller_id == user_id: raise HTTPException(403, "Cannot rate yourself")
+    conn = get_db(); c = conn.cursor()
+    if not c.execute("SELECT 1 FROM users WHERE telegram_id=?", (seller_id,)).fetchone():
+        conn.close(); raise HTTPException(404, "Seller not found")
+    talked = c.execute("""SELECT 1 FROM messages WHERE (sender_id=? AND receiver_id=?) OR (sender_id=? AND receiver_id=?) LIMIT 1""",
+                       (user_id, seller_id, seller_id, user_id)).fetchone()
+    if not talked:
+        conn.close(); raise HTTPException(403, "Chat with the seller first")
+    c.execute("""INSERT INTO seller_ratings (seller_id,rater_id,stars) VALUES (?,?,?)
+                 ON CONFLICT(seller_id,rater_id) DO UPDATE SET stars=excluded.stars, created_at=CURRENT_TIMESTAMP""",
+              (seller_id, user_id, stars))
+    conn.commit()
+    avg, n = _seller_stats(c, seller_id)
+    conn.close()
+    return {"ok": True, "avg": avg, "count": n, "my": stars}
 
 # IMPORTANT: sold route must be before /{listing_id} to avoid conflict
 @app.get("/api/listings/sold/{user_id}")
@@ -114,6 +183,8 @@ def get_listing(listing_id: int, viewer_id: int = None):
     seller = c.execute("SELECT is_verified, verified_until FROM users WHERE telegram_id=?",(row["user_id"],)).fetchone()
     conn.close()
     d = dict(row)
+    _c = get_db(); _r = _c.execute("SELECT COALESCE(SUM(value=1),0) AS l, COALESCE(SUM(value=-1),0) AS d FROM reactions WHERE listing_id=?", (listing_id,)).fetchone(); _c.close()
+    d["likes"], d["dislikes"] = _r["l"], _r["d"]
     if seller:
         now = __import__("datetime").datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         d["seller_verified"] = bool(seller["is_verified"] and (not seller["verified_until"] or seller["verified_until"] > now))

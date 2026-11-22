@@ -415,6 +415,35 @@ button,input,select,textarea{font-family:inherit;}
 .popt-icon{display:none;}
 body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn{opacity:0!important;pointer-events:none!important;}
 .fab svg{width:14px;height:14px;}
+/* likes / dislikes */
+.react-row{display:flex;gap:6px;margin-top:8px;}
+.react-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 9px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:#9a9aa5;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;}
+.react-btn:active{transform:scale(.94);}
+.react-btn svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+.react-btn b{font-weight:700;}
+.react-btn i{font-style:normal;font-weight:600;}
+.react-btn.on{background:#fff;color:#000;border-color:#fff;}
+.react-btn.off{opacity:.55;cursor:default;}
+.react-row.big{margin:0 0 12px;gap:8px;}
+.react-row.big .react-btn{flex:1;justify-content:center;padding:12px 8px;font-size:13px;border-radius:14px;}
+.react-row.big svg{width:16px;height:16px;}
+/* seller rating */
+.sr-box{background:#0f0f13;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:12px 14px;margin-bottom:12px;}
+.sr-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;}
+.sr-title{font-size:12px;font-weight:800;color:#9a9aa5;text-transform:uppercase;letter-spacing:.6px;}
+.sr-sum{font-size:13px;color:#cfcfd6;font-weight:600;}
+.sr-sum b{color:#fff;font-weight:900;}
+.sr-stars{display:flex;gap:6px;}
+.sr-star{flex:1;display:flex;justify-content:center;padding:6px 0;border-radius:12px;background:#16161b;border:1px solid rgba(255,255,255,.08);cursor:pointer;color:#5c5c66;transition:all .15s;}
+.sr-star svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round;}
+.sr-star.on{color:#D9A520;}
+.sr-star.on svg{fill:currentColor;}
+.sr-star.mine{border-color:rgba(255,255,255,.5);}
+.sr-star.off{cursor:default;}
+.sr-hint{font-size:11.5px;color:#7d7d88;margin-top:7px;text-align:center;}
+#action-btns{flex-wrap:wrap;}
+#action-btns>.react-row.big,#action-btns>.sr-box{flex:0 0 100%;width:100%;box-sizing:border-box;}
+.react-row.big .react-btn i{white-space:nowrap;}
 /* banner (ads) */
 .banner-wrap{padding:10px 16px 0;}
 .banner-area{height:64px;border-radius:18px;border:1px solid rgba(255,255,255,.12);box-shadow:none;background:#0f0f13;}
@@ -480,6 +509,8 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
     </div>
   </div>
   <div class="filters-row">
+    <!-- SORT -->
+    <div class="filter-btn" id="filter-sort-btn" onclick="toggleSortDD(event)"><span id="filter-sort-lbl">Новые</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></div>
     <!-- CAT -->
     <div class="filter-btn" id="filter-cat-btn" onclick="toggleDD(event,'cat-dd')">
       <span class="filter-label" id="filter-cat-lbl">Раздел</span>
@@ -490,8 +521,6 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
       <span class="filter-label" id="filter-city-lbl">Город</span>
       <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
-    <!-- SORT -->
-    <div class="filter-btn" id="filter-sort-btn" onclick="toggleSortDD(event)"><span id="filter-sort-lbl">Новые</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></div>
   </div>
   <div class="extra-filters" id="extra-filters">
     <!-- PRICE -->
@@ -1102,7 +1131,7 @@ let lang="ru";
 // multi-select filters
 let selectedCities=new Set(); // empty = all
 let selectedCats=new Set();   // empty = all
-let priceSort=3;
+let priceSort=1;
 let conditionFilter=0;
 let priceMin=null,priceMax=null,priceCur="USD",onlyVerified=false;
 // pending selections (before apply)
@@ -1131,6 +1160,7 @@ function openTgChat(){const u="https://t.me/rzabeyda";if(tg&&tg.openTelegramLink
 const CITY_KEYS=["hurghada","sharm","marsa","dahab","cairo","luxor","alexandria","other"];
 const CAT_KEYS=["visas","moto","events","alcohol","medicine","business","household","diving","money","kids","home","other","animals","smoking","furniture","beauty","property","education","clothes","food","rental","jobs","repair","restaurant","sport","construction","transport","shipping","transfer","tours","services","hobby","excursions","electronics"];
 const EYE_ICO='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;opacity:.7"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+const vBadge=sz=>`<svg viewBox="0 0 24 24" width="${sz}" height="${sz}" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:block;flex-shrink:0"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>`;
 const PH_ICON_OLD='<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.3"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="9" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg>';
 const PH_ICON='';
 const CAT_EMOJI={property:"🏠",transport:"🚗",services:"🔧",beauty:"💄",clothes:"👗",kids:"🧸",home:"🌿",jobs:"💼",animals:"🐱",hobby:"🎨",sport:"⚽",electronics:"📱",food:"🛒",business:"📈",money:"💰",alcohol:"🍾",furniture:"🛋",household:"🏺",repair:"🪚",smoking:"🚬",tours:"🏖️",excursions:"🗺️",medicine:"💊",education:"📚",restaurant:"🍽️",rental:"🤝",diving:"🤿",construction:"🏗️",transfer:"🚕",shipping:"✈️",other:"📦"};
@@ -1621,10 +1651,10 @@ const SORT_T={
   ar:{title:"ترتيب",3:"الأحدث",4:"الأقدم",1:"الأرخص",2:"الأغلى",f3:"الأحدث أولاً",f4:"الأقدم أولاً",f1:"الأرخص أولاً",f2:"الأغلى أولاً"}
 };
 function st(k){return (SORT_T[lang]||SORT_T.ru)[k];}
-function sortMode(){return [1,2,3,4].includes(priceSort)?priceSort:3;}
+function sortMode(){return [1,2,3,4].includes(priceSort)?priceSort:1;}
 function updateSortLabel(){
   const l=document.getElementById("filter-sort-lbl");if(l)l.textContent=st(sortMode());
-  const b=document.getElementById("filter-sort-btn");if(b)b.classList.toggle("active",sortMode()!==3);
+  const b=document.getElementById("filter-sort-btn");if(b)b.classList.toggle("active",sortMode()!==1);
   const t0=document.getElementById("sort-title");if(t0)t0.textContent=st("title");
 }
 function buildSortDD(){
@@ -1651,7 +1681,7 @@ function setSort(k){
 }
 function resetFilters(){
   vib();
-  selectedCities.clear();selectedCats.clear();priceSort=3;conditionFilter=0;priceMin=null;priceMax=null;onlyVerified=false;
+  selectedCities.clear();selectedCats.clear();priceSort=1;conditionFilter=0;priceMin=null;priceMax=null;onlyVerified=false;
   pendingCities.clear();pendingCats.clear();
   document.getElementById("filter-price").classList.add("active");
   const lbl=document.getElementById("filter-price-lbl");
@@ -1663,7 +1693,7 @@ function resetFilters(){
   renderListings(filterData());saveFilters();
 }
 function updateResetBtn(){
-  const hasFilters=selectedCities.size>0||selectedCats.size>0||(priceSort!==3&&priceSort!==0)||conditionFilter!==0||priceMin!=null||priceMax!=null||onlyVerified;
+  const hasFilters=selectedCities.size>0||selectedCats.size>0||priceSort!==1||conditionFilter!==0||priceMin!=null||priceMax!=null||onlyVerified;
   const btn=document.getElementById("filter-reset");
   if(btn)btn.style.display=hasFilters?"flex":"none";
 }
@@ -1710,8 +1740,8 @@ function filterData(){
     if(q&&!l.title.toLowerCase().includes(q)&&!(l.description||"").toLowerCase().includes(q))return false;
     return true;
   });
-  if(priceSort===1)data=[...data].sort((a,b)=>(b.is_legendary||0)-(a.is_legendary||0)||(a.price||0)-(b.price||0));
-  else if(priceSort===2)data=[...data].sort((a,b)=>(b.is_legendary||0)-(a.is_legendary||0)||(b.price||0)-(a.price||0));
+  if(priceSort===1)data=[...data].sort((a,b)=>(b.is_legendary||0)-(a.is_legendary||0)||((priceUSD(a)??1e15)-(priceUSD(b)??1e15)));
+  else if(priceSort===2)data=[...data].sort((a,b)=>(b.is_legendary||0)-(a.is_legendary||0)||((priceUSD(b)??-1)-(priceUSD(a)??-1)));
   else if(priceSort===4)data=[...data].sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
   else if(priceSort===3)data=[...data].sort((a,b)=>(b.is_legendary||0)-(a.is_legendary||0)||(b.is_promoted||0)-(a.is_promoted||0)||new Date(b.created_at)-new Date(a.created_at));
   return data;
@@ -1759,7 +1789,7 @@ function renderListings(data){
       <div class="card-body" onclick="vib();openDetail(${l.id})">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px;">
           <div class="card-title" style="flex:1;">${esc(l.title)}</div>
-          ${l.seller_verified?`<span style="display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;background:#0088cc;border-radius:50%;font-size:9px;color:#fff;font-weight:900;flex-shrink:0;margin-top:2px;">✓</span>`:""}
+          ${l.seller_verified?`<span style="display:inline-flex;flex-shrink:0;margin-top:1px;">${vBadge(16)}</span>`:""}
         </div>
         <div class="card-price">${priceStr(l)}</div>
         <div class="card-city" style="display:flex;align-items:center;">
@@ -1770,6 +1800,7 @@ function renderListings(data){
             <svg width="14" height="14" viewBox="0 0 24 24" fill="${isFav(l.id)?'#e0245e':'none'}" stroke="${isFav(l.id)?'#e0245e':'rgba(255,255,255,0.4)'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
           </span>
         </div>
+        ${reactHtml(l,false)}
       </div>
     </div>`;
   }).join("");
@@ -1869,8 +1900,102 @@ function rotateBanner(dir){
   if(bannerTimer){clearInterval(bannerTimer);bannerTimer=setInterval(()=>rotateBanner(1),3000);}
 }
 
+const THUMB_UP='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>';
+const THUMB_DOWN='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"/></svg>';
+const REACT_T={
+  ru:{like:"Нравится",dislike:"Не нравится",own:"Нельзя оценивать своё объявление",login:"Откройте через Telegram"},
+  en:{like:"Like",dislike:"Dislike",own:"You can't rate your own listing",login:"Open via Telegram"},
+  ar:{like:"أعجبني",dislike:"لم يعجبني",own:"لا يمكنك تقييم إعلانك",login:"افتح عبر تيليجرام"}
+};
+function rt(k){return (REACT_T[lang]||REACT_T.ru)[k];}
+let myReacts={};
+function reactHtml(l,big){
+  const my=myReacts[l.id]||0, own=isMine(l);
+  const mk=(v,svg,n,lbl)=>`<span class="react-btn${my===v?" on":""}${own?" off":""}" data-v="${v}" onclick="event.stopPropagation();reactTo(${l.id},${v})">${svg}<b>${n||0}</b>${big?`<i>${lbl}</i>`:""}</span>`;
+  return `<div class="react-row${big?" big":""}" data-id="${l.id}">${mk(1,THUMB_UP,l.likes,rt("like"))}${mk(-1,THUMB_DOWN,l.dislikes,rt("dislike"))}</div>`;
+}
+function updateReactUI(id,likes,dislikes,my){
+  document.querySelectorAll(`.react-row[data-id="${id}"]`).forEach(row=>{
+    const u=row.querySelector('[data-v="1"] b'),d=row.querySelector('[data-v="-1"] b');
+    if(u)u.textContent=likes;if(d)d.textContent=dislikes;
+    row.querySelectorAll(".react-btn").forEach(b=>b.classList.toggle("on",String(my)===b.dataset.v));
+  });
+}
+async function loadMyReacts(){
+  if(!tgUser||!tgUser.id)return;
+  try{const r=await fetch(`${API}/api/reactions/my/${tgUser.id}?_=${Date.now()}`);if(r.ok)myReacts=await r.json();}catch(e){}
+}
+async function reactTo(id,v){
+  vib();
+  if(!tgUser||!tgUser.id){showToast(rt("login"));return;}
+  const item=allListings.find(x=>x.id===id);
+  if(item&&isMine(item)){showToast(rt("own"));return;}
+  const prev=myReacts[id]||0, next=prev===v?0:v;
+  const oldRow=document.querySelector(`.react-row[data-id="${id}"]`);
+  updateReactUI(id,oldRow?.querySelector('[data-v="1"] b')?.textContent||0,oldRow?.querySelector('[data-v="-1"] b')?.textContent||0,next);
+  try{
+    const fd=new FormData();fd.append("user_id",tgUser.id);fd.append("value",next);
+    const r=await fetch(`${API}/api/listings/${id}/react`,{method:"POST",body:fd});
+    if(!r.ok){
+      updateReactUI(id,oldRow?.querySelector('[data-v="1"] b')?.textContent||0,oldRow?.querySelector('[data-v="-1"] b')?.textContent||0,prev);
+      showToast(r.status===403?rt("own"):"❌ "+r.status);return;
+    }
+    const d=await r.json();
+    myReacts[id]=d.my;if(!d.my)delete myReacts[id];
+    if(item){item.likes=d.likes;item.dislikes=d.dislikes;}
+    updateReactUI(id,d.likes,d.dislikes,d.my);
+  }catch(e){updateReactUI(id,0,0,prev);}
+}
+const SR_T={
+  ru:{title:"Рейтинг продавца",none:"Пока нет оценок",cnt:["оценка","оценки","оценок"],hint:"Нажмите на звезду, чтобы оценить",mine:"Ваша оценка",own:"Это вы",chat:"Сначала напишите продавцу",login:"Откройте через Telegram"},
+  en:{title:"Seller rating",none:"No ratings yet",cnt:["rating","ratings","ratings"],hint:"Tap a star to rate",mine:"Your rating",own:"This is you",chat:"Message the seller first",login:"Open via Telegram"},
+  ar:{title:"تقييم البائع",none:"لا توجد تقييمات بعد",cnt:["تقييم","تقييمات","تقييمات"],hint:"اضغط على نجمة للتقييم",mine:"تقييمك",own:"هذا أنت",chat:"راسل البائع أولاً",login:"افتح عبر تيليجرام"}
+};
+function srt(k){return (SR_T[lang]||SR_T.ru)[k];}
+function srCount(n){
+  const w=srt("cnt");
+  if(lang!=="ru")return n+" "+(n===1?w[0]:w[1]);
+  const m10=n%10,m100=n%100;
+  return n+" "+(m10===1&&m100!==11?w[0]:(m10>=2&&m10<=4&&(m100<12||m100>14))?w[1]:w[2]);
+}
+const STAR_SVG='<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+function sellerRatingBox(sellerId){
+  return `<div class="sr-box" id="sr-box-${sellerId}" data-seller="${sellerId}"><div class="sr-top"><span class="sr-title">${srt("title")}</span><span class="sr-sum"></span></div><div class="sr-stars"></div><div class="sr-hint"></div></div>`;
+}
+function paintSellerRating(sellerId,d){
+  const box=document.getElementById("sr-box-"+sellerId);if(!box)return;
+  const own=tgUser&&String(tgUser.id)===String(sellerId);
+  box.querySelector(".sr-sum").innerHTML=d.count?`<b>${d.avg.toFixed(1)}</b> · ${srCount(d.count)}`:srt("none");
+  const filled=d.my||Math.round(d.avg);
+  box.querySelector(".sr-stars").innerHTML=[1,2,3,4,5].map(i=>`<span class="sr-star${i<=filled?" on":""}${d.my&&i<=d.my?" mine":""}${own?" off":""}" onclick="rateSeller(${sellerId},${i})">${STAR_SVG}</span>`).join("");
+  box.querySelector(".sr-hint").textContent=own?srt("own"):d.my?srt("mine")+": "+d.my:srt("hint");
+}
+async function loadSellerRating(sellerId){
+  try{const r=await fetch(`${API}/api/sellers/${sellerId}/rating?_=${Date.now()}`);if(r.ok)paintSellerRating(sellerId,await r.json());}catch(e){}
+}
+async function rateSeller(sellerId,stars){
+  vib();
+  if(!tgUser||!tgUser.id){showToast(srt("login"));return;}
+  if(String(tgUser.id)===String(sellerId)){showToast(srt("own"));return;}
+  try{
+    const fd=new FormData();fd.append("user_id",tgUser.id);fd.append("stars",stars);
+    const r=await fetch(`${API}/api/sellers/${sellerId}/rate`,{method:"POST",body:fd});
+    if(r.status===403){showToast(srt("chat"));return;}
+    if(!r.ok){showToast("❌ "+r.status);return;}
+    paintSellerRating(sellerId,await r.json());
+  }catch(e){}
+}
+async function loadProfileRating(){
+  if(!tgUser||!tgUser.id)return;
+  try{
+    const r=await fetch(`${API}/api/sellers/${tgUser.id}/rating?_=${Date.now()}`);
+    if(!r.ok)return;const d=await r.json();
+    const el=document.getElementById("prof-handle");
+    if(el&&d.count&&!el.dataset.rated){el.dataset.rated="1";el.textContent+="  ·  "+d.avg.toFixed(1)+" ★ ("+d.count+")";}
+  }catch(e){}
+}
 async function loadListings(){
-  try{const res=await fetch(`${API}/api/listings?_=${Date.now()}`);allListings=await res.json();initBanners();renderListings(filterData());}
+  try{const res=await fetch(`${API}/api/listings?_=${Date.now()}`);allListings=await res.json();await loadMyReacts();initBanners();renderListings(filterData());}
   catch(e){document.getElementById("listings-grid").innerHTML=`<div class="empty"><div>Ошибка соединения</div></div>`;}
 }
 
@@ -1884,7 +2009,7 @@ async function openDetail(id){
     detailPhotos=getPhotos(l);detailPhotoIdx=0;currentDetailMine=isMine(l);renderDetailImgs();
     document.getElementById("detail-price").textContent=priceStr(l);
     // title with verified badge
-    const verBadge=l.seller_verified?`<span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;background:#0088cc;border-radius:50%;margin-left:6px;font-size:11px;vertical-align:middle;flex-shrink:0;">✓</span>`:"";
+    const verBadge=l.seller_verified?`<span style="display:inline-flex;margin-left:6px;vertical-align:middle;">${vBadge(18)}</span>`:"";
     document.getElementById("detail-title").innerHTML=esc(l.title)+verBadge;
     document.getElementById("detail-desc").textContent=l.description||"";
     const phoneMeta=l.phone?`<span class="detail-chip">${l.phone}</span>`:"";
@@ -1936,6 +2061,7 @@ async function openDetail(id){
         <button class="edit-btn" style="margin-bottom:0;margin-top:12px;border-color:#555;color:#aaa;background:rgba(255,255,255,.04);" onclick="vib();closeModal('detail-modal')">✕ Закрыть</button>`;
       document.getElementById("action-btns").innerHTML=contactHtml;
     }
+    document.getElementById("action-btns").insertAdjacentHTML("afterbegin",reactHtml(l,true)+sellerRatingBox(l.user_id));loadSellerRating(l.user_id);
     const recs=allListings.filter(x=>x.id!==id&&(x.category===l.category||x.city===l.city)).slice(0,8);
     document.getElementById("recs-lbl").textContent=recs.length?t("recs"):"";
     document.getElementById("recs-list").innerHTML=recs.map(r=>`<div class="rec-card" onclick="vib();closeModal('detail-modal');setTimeout(()=>openDetail(${r.id}),220)"><div class="rec-img">${getPhotos(r)[0]?`<img src="${getPhotos(r)[0]}" loading="lazy">`:`<span>${PH_ICON}</span>`}</div><div class="rec-body"><div class="rec-ttl">${esc(r.title)}</div><div class="rec-prc">${priceStr(r)}</div></div></div>`).join("");
@@ -2207,11 +2333,11 @@ async function loadProfile(){
     nameEl.textContent=name||"—";
     if(_cachedVerified){
       const b=document.createElement("span");b.id="verified-badge";
-      b.style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#0088cc;border-radius:50%;font-size:12px;font-weight:900;color:#fff;flex-shrink:0;";
-      b.textContent="✓";
+      b.style="display:inline-flex;align-items:center;flex-shrink:0;";
+      b.innerHTML=vBadge(19);
       nameEl.appendChild(b);
     }
-    document.getElementById("prof-handle").textContent=tgUser.username?`@${tgUser.username}`:`ID: ${tgUser.id}`;
+    document.getElementById("prof-handle").dataset.rated="";document.getElementById("prof-handle").textContent=tgUser.username?`@${tgUser.username}`:`ID: ${tgUser.id}`; loadProfileRating();
     // check verification
     try{
       const vr=await fetch(`${API}/api/users/${tgUser.id}/verified?_=${Date.now()}`);
@@ -2223,15 +2349,15 @@ async function loadProfile(){
       if(oldExpiry)oldExpiry.remove();
       if(vd.verified){
         const b=document.createElement("span");b.id="verified-badge";
-        b.style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;background:#0088cc;border-radius:50%;font-size:12px;font-weight:900;color:#fff;flex-shrink:0;";
-        b.textContent="✓";
+        b.style="display:inline-flex;align-items:center;flex-shrink:0;";
+        b.innerHTML=vBadge(19);
         const nameEl=document.getElementById("prof-name");
         if(nameEl)nameEl.appendChild(b);
         const vbtn=document.getElementById("verify-profile-btn");
         if(vbtn){
           const until=vd.until?new Date(vd.until).toLocaleDateString("ru",{day:"numeric",month:"long",year:"numeric"}):"";
-          vbtn.style.background="linear-gradient(135deg,rgba(0,136,204,.25),rgba(0,136,204,.1))";
-          document.getElementById("verify-btn-title").textContent="✓ Верифицирован";
+          
+          document.getElementById("verify-btn-title").textContent="Верифицирован";
           const subEl=document.getElementById("verify-btn-sub");if(subEl)subEl.textContent="Синяя галочка активна";
           if(until){
             const exp=document.createElement("div");exp.id="verify-expiry";
@@ -2263,7 +2389,9 @@ async function loadProfile(){
       myActive=await res.json();
     }
   }catch(e){myActive=allListings.filter(l=>tgUser&&l.user_id===tgUser.id&&l.is_active!==0&&l.is_active!==2);}
-  if(!myActive.length){list.innerHTML=`<div class="no-ads">${t("no_listings")}</div>`;return;}
+  const _mlbl=document.getElementById("my-listings-lbl");
+  if(_mlbl)_mlbl.style.display=myActive.length?"":"none";
+  if(!myActive.length){list.innerHTML="";return;}
   list.innerHTML=myActive.map(l=>{
     const paused=l.is_active===3;
     return`<div class="my-row${paused?" paused":""}">
@@ -2992,13 +3120,13 @@ function openFavourites(){
 function saveFilters(){
   localStorage.setItem("eb_cities",JSON.stringify([...selectedCities]));
   localStorage.setItem("eb_cats",JSON.stringify([...selectedCats]));
-  localStorage.setItem("eb_price",priceSort);
+  localStorage.setItem("eb_sort",priceSort);
 }
 function loadFilters(){
   try{
     const c=JSON.parse(localStorage.getItem("eb_cities")||"[]");
     const ct=JSON.parse(localStorage.getItem("eb_cats")||"[]");
-    const p=localStorage.getItem("eb_price");
+    const p=localStorage.getItem("eb_sort");
     selectedCities=new Set(c.map(k=>["el-gouna","safaga","soma-bay"].includes(k)?"hurghada":["taba","aswan","nuweiba","el-quseir"].includes(k)?"other":k).filter(k=>CITY_KEYS.includes(k)));
     selectedCats=new Set(ct);
     if(p!==null)priceSort=parseInt(p);
