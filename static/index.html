@@ -369,11 +369,11 @@ button,input,select,textarea{font-family:inherit;}
 .pr-inputs input:focus{border-color:rgba(255,255,255,.55);}
 .pr-clear{width:100%;margin-top:4px;padding:10px;background:transparent;border:none;color:#9a9aa5;font-weight:700;font-size:13px;cursor:pointer;}
 /* filter rows: row 1 = price / city / section, row 2 = condition / photo / verified */
-#filter-price-range-btn{flex:1;justify-content:center;min-width:0;}
+#filter-sort-btn{flex:1;justify-content:center;min-width:0;}
 .extra-filters .filter-btn{flex:1;justify-content:center;white-space:nowrap;}
 .filters-row .filter-btn{min-width:0;overflow:hidden;}
 .filters-row .filter-label,#filter-price-range-lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
-#filter-price{flex:0 0 auto!important;}
+#filter-price{display:none!important;}
 /* promotion / ads switched off for now */
 .promote-box,#pay-modal,.banner-wrap,[onclick*="buyPromo"],[onclick*="buyLegendary"]{display:none!important;}
 @keyframes cardIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
@@ -427,8 +427,8 @@ button,input,select,textarea{font-family:inherit;}
     </div>
   </div>
   <div class="filters-row">
-    <!-- PRICE -->
-    <div class="filter-btn" id="filter-price-range-btn" onclick="togglePriceDD(event)"><span id="filter-price-range-lbl">Цена</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></div>
+    <!-- SORT -->
+    <div class="filter-btn" id="filter-sort-btn" onclick="toggleSortDD(event)"><span id="filter-sort-lbl">Новые</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></div>
     <!-- CITY -->
     <div class="filter-btn" id="filter-city-btn" onclick="toggleDD(event,'city-dd')">
       <span class="filter-label" id="filter-city-lbl">Город</span>
@@ -441,6 +441,8 @@ button,input,select,textarea{font-family:inherit;}
     </div>
   </div>
   <div class="extra-filters" id="extra-filters">
+    <!-- PRICE -->
+    <div class="filter-btn" id="filter-price-range-btn" onclick="togglePriceDD(event)"><span id="filter-price-range-lbl">Цена</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></div>
     <!-- SORT -->
     <div class="filter-btn active" id="filter-price" onclick="vib();cyclePrice()" style="flex-shrink:0;padding:10px 12px;">
         <span id="filter-price-lbl" style="font-size:13px;font-weight:700;display:flex;align-items:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
@@ -632,6 +634,7 @@ button,input,select,textarea{font-family:inherit;}
   <button class="dd-apply" onclick="applyPrice()">Применить</button>
   <button class="pr-clear" id="pr-clear" onclick="clearPrice()">Сбросить</button>
 </div>
+<div class="dropdown" id="sort-dd" style="width:236px"><div class="pr-title" id="sort-title">Сортировка</div><div id="sort-dd-list"></div></div>
 <div class="dd-overlay" id="dd-overlay" onclick="closeAllDD()"></div>
 
 <!-- ADD MODAL -->
@@ -1562,6 +1565,7 @@ function updateExtraLabels(){
   if(mn)mn.placeholder=xt("from");if(mx)mx.placeholder=xt("to");
   const on=(id,v)=>{const el=document.getElementById(id);if(el)el.classList.toggle("active",!!v);};
   on("filter-price-range-btn",has);on("filter-photo-btn",onlyPhoto);on("filter-verified-btn",onlyVerified);
+  updateSortLabel();
 }
 function setPriceCur(c){
   vib();priceCur=c;
@@ -1598,6 +1602,40 @@ function clearPrice(){
 function toggleExtra(k){
   if(k==="photo")onlyPhoto=!onlyPhoto;else onlyVerified=!onlyVerified;
   updateExtraLabels();updateResetBtn();renderListings(filterData());
+}
+const SORT_T={
+  ru:{title:"Сортировка",3:"Новые",4:"Старые",1:"Дешевле",2:"Дороже",f3:"Сначала новые",f4:"Сначала старые",f1:"Сначала дешёвые",f2:"Сначала дорогие"},
+  en:{title:"Sort by",3:"Newest",4:"Oldest",1:"Cheapest",2:"Priciest",f3:"Newest first",f4:"Oldest first",f1:"Cheapest first",f2:"Priciest first"},
+  ar:{title:"ترتيب",3:"الأحدث",4:"الأقدم",1:"الأرخص",2:"الأغلى",f3:"الأحدث أولاً",f4:"الأقدم أولاً",f1:"الأرخص أولاً",f2:"الأغلى أولاً"}
+};
+function st(k){return (SORT_T[lang]||SORT_T.ru)[k];}
+function sortMode(){return [1,2,3,4].includes(priceSort)?priceSort:3;}
+function updateSortLabel(){
+  const l=document.getElementById("filter-sort-lbl");if(l)l.textContent=st(sortMode());
+  const b=document.getElementById("filter-sort-btn");if(b)b.classList.toggle("active",sortMode()!==3);
+  const t0=document.getElementById("sort-title");if(t0)t0.textContent=st("title");
+}
+function buildSortDD(){
+  const list=document.getElementById("sort-dd-list");if(!list)return;
+  list.innerHTML=[3,4,1,2].map(k=>`<div class="dd-item${sortMode()===k?" selected":""}" onclick="setSort(${k})"><span>${st("f"+k)}</span><svg class="dd-chk" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>`).join("");
+}
+function toggleSortDD(e){
+  vib();e.stopPropagation();
+  const dd=document.getElementById("sort-dd");
+  const rect=e.currentTarget.getBoundingClientRect();
+  const isOpen=dd.classList.contains("open");
+  closeAllDD();
+  if(!isOpen){
+    buildSortDD();
+    dd.style.top=(rect.bottom+6)+"px";
+    dd.style.left=Math.max(8,Math.min(rect.left,window.innerWidth-244))+"px";
+    dd.classList.add("open");
+    document.getElementById("dd-overlay").classList.add("open");
+  }
+}
+function setSort(k){
+  vib();priceSort=k;
+  closeAllDD();updateSortLabel();updateResetBtn();renderListings(filterData());saveFilters();
 }
 function resetFilters(){
   vib();
@@ -1663,6 +1701,7 @@ function filterData(){
   });
   if(priceSort===1)data=[...data].sort((a,b)=>(b.is_legendary||0)-(a.is_legendary||0)||(a.price||0)-(b.price||0));
   else if(priceSort===2)data=[...data].sort((a,b)=>(b.is_legendary||0)-(a.is_legendary||0)||(b.price||0)-(a.price||0));
+  else if(priceSort===4)data=[...data].sort((a,b)=>new Date(a.created_at)-new Date(b.created_at));
   else if(priceSort===3)data=[...data].sort((a,b)=>(b.is_legendary||0)-(a.is_legendary||0)||(b.is_promoted||0)-(a.is_promoted||0)||new Date(b.created_at)-new Date(a.created_at));
   return data;
 }
