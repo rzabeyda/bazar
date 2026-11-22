@@ -319,7 +319,7 @@ button,input,select,textarea{font-family:inherit;}
 .nav-item.active{color:#fff;background:#000;border-color:rgba(255,255,255,.75);box-shadow:var(--glow);}
 .nav-icon svg{width:23px;height:23px;stroke-width:1.7;}
 .nav-item.active .nav-icon svg{stroke-width:2.1;transform:none;}
-.fab{bottom:92px;right:18px;width:54px;height:54px;background:linear-gradient(135deg,#ffffff,#d9d9df);color:#000;box-shadow:0 8px 22px rgba(255,255,255,.22);}
+.fab{bottom:92px;right:18px;width:38px;height:38px;background:linear-gradient(135deg,#ffffff,#d9d9df);color:#000;box-shadow:0 8px 22px rgba(255,255,255,.22);}
 #scroll-top-btn{bottom:92px!important;}
 /* profile */
 .profile-page{padding:14px 14px 120px;}
@@ -333,8 +333,28 @@ button,input,select,textarea{font-family:inherit;}
 .profile-stats .stat-box{background:#16161b!important;border:1px solid rgba(255,255,255,.10)!important;border-radius:16px;padding:14px 8px;}
 .profile-stats .stat-num{color:#fff!important;font-size:24px;}
 .profile-stats .stat-lbl{color:#9a9aa5!important;font-weight:700;opacity:1!important;}
-#verify-profile-btn{background:#0f0f13!important;border:1px solid rgba(255,255,255,.12)!important;border-radius:20px!important;}
-#verify-btn-sub{color:#9a9aa5!important;}
+#verify-profile-btn{display:flex;align-items:center;gap:11px;background:#0f0f13!important;border:1px solid rgba(255,255,255,.12)!important;border-radius:18px!important;padding:9px 12px!important;margin-bottom:10px!important;cursor:pointer;}
+.vf-card-ic{width:34px;height:34px;border-radius:11px;background:#16161b;border:1px solid rgba(255,255,255,.14);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;}
+.vf-card-ic svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.vf-card-t{font-size:14px;font-weight:800;color:#fff;line-height:1.2;}
+.vf-card-s{font-size:11.5px;color:#9a9aa5;margin-top:2px;font-weight:600;line-height:1.3;}
+.vf-card-ch{width:15px;height:15px;fill:none;stroke:#9a9aa5;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+#verify-expiry{color:#9a9aa5!important;}
+/* compact profile */
+.profile-card{padding:13px;margin-bottom:10px;border-radius:22px;}
+.avatar{width:48px;height:48px;font-size:19px;}
+.profile-name{font-size:17px;}
+.profile-handle{font-size:12px;margin-top:1px;}
+.share-btn{width:36px;height:36px;}
+.share-btn svg{width:16px;height:16px;}
+.profile-stats{gap:6px;margin-top:11px;}
+.profile-stats .stat-box{padding:8px 6px;border-radius:14px;}
+.profile-stats .stat-num{font-size:20px;}
+.profile-stats .stat-lbl{font-size:10.5px;margin-top:3px;}
+.add-btn{padding:13px;font-size:15px;margin-bottom:12px;border-radius:16px;}
+.section-title{margin:2px 4px 8px;}
+.my-row{padding:10px;margin-bottom:6px;border-radius:18px;}
+.my-thumb{width:46px;height:46px;border-radius:12px;}
 .add-btn{background:linear-gradient(135deg,#ffffff,#d9d9df);color:#000;border-radius:18px;padding:16px;font-size:16px;box-shadow:0 8px 22px rgba(255,255,255,.16);}
 .add-btn svg{stroke:#000;}
 .section-title{font-size:13px;font-weight:800;color:#9a9aa5;text-transform:uppercase;letter-spacing:.8px;margin:8px 4px 10px;}
@@ -394,6 +414,7 @@ button,input,select,textarea{font-family:inherit;}
 .vf-btn-p{opacity:.7;font-weight:700;}
 .popt-icon{display:none;}
 body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn{opacity:0!important;pointer-events:none!important;}
+.fab svg{width:14px;height:14px;}
 /* banner (ads) */
 .banner-wrap{padding:10px 16px 0;}
 .banner-area{height:64px;border-radius:18px;border:1px solid rgba(255,255,255,.12);box-shadow:none;background:#0f0f13;}
@@ -539,19 +560,14 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
         </div>
       </div>
     </div>
-    <div id="verify-profile-btn" onclick="vib();openVerifyModal()" style="display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,rgba(0,136,204,.18),rgba(0,136,204,.06));border:1.5px solid #0088cc;border-radius:16px;padding:14px 16px;margin-bottom:12px;cursor:pointer;position:relative;overflow:hidden;">
-      <div style="position:absolute;inset:0;background:linear-gradient(105deg,transparent 60%,rgba(0,136,204,.08) 80%,transparent 100%);pointer-events:none;"></div>
-      <div style="width:42px;height:42px;background:linear-gradient(135deg,#0088cc,#0055aa);border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(0,136,204,.4);">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-      </div>
+    <div id="verify-profile-btn" class="vf-card" onclick="vib();openVerifyModal()">
+      <div class="vf-card-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>
       <div style="flex:1;min-width:0;">
-        <div style="font-size:14px;font-weight:800;color:#fff;" id="verify-btn-title">Получить верификацию</div>
-        <div id="verify-btn-sub" style="font-size:11px;color:#0099dd;margin-top:3px;font-weight:600;line-height:1.6;">✓ Синяя галочка&nbsp;&nbsp;✓ Топ в поиске<br>✓ Доверие покупателей&nbsp;&nbsp;✓ Больше сделок</div>
+        <div class="vf-card-t" id="verify-btn-title">Получить верификацию</div>
+        <div class="vf-card-s" id="verify-btn-sub">Галочка, доверие, больше сделок</div>
       </div>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0088cc" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+      <svg class="vf-card-ch" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
     </div>
-
-
 
     <button class="add-btn" onclick="vib();openAddModal()">
       <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -1115,7 +1131,8 @@ function openTgChat(){const u="https://t.me/rzabeyda";if(tg&&tg.openTelegramLink
 const CITY_KEYS=["hurghada","sharm","marsa","dahab","cairo","luxor","alexandria","other"];
 const CAT_KEYS=["visas","moto","events","alcohol","medicine","business","household","diving","money","kids","home","other","animals","smoking","furniture","beauty","property","education","clothes","food","rental","jobs","repair","restaurant","sport","construction","transport","shipping","transfer","tours","services","hobby","excursions","electronics"];
 const EYE_ICO='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;opacity:.7"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
-const PH_ICON='<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.3"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="9" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg>';
+const PH_ICON_OLD='<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.3"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="9" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg>';
+const PH_ICON='';
 const CAT_EMOJI={property:"🏠",transport:"🚗",services:"🔧",beauty:"💄",clothes:"👗",kids:"🧸",home:"🌿",jobs:"💼",animals:"🐱",hobby:"🎨",sport:"⚽",electronics:"📱",food:"🛒",business:"📈",money:"💰",alcohol:"🍾",furniture:"🛋",household:"🏺",repair:"🪚",smoking:"🚬",tours:"🏖️",excursions:"🗺️",medicine:"💊",education:"📚",restaurant:"🍽️",rental:"🤝",diving:"🤿",construction:"🏗️",transfer:"🚕",shipping:"✈️",other:"📦"};
 
 // ── CURRENCY ──────────────────────────────────────────────────────────────────
@@ -1728,8 +1745,7 @@ function renderListings(data){
   }catch(e){}
   if(!data.length){
     const _cta={ru:"Добавить объявление",en:"Add a listing",ar:"أضف إعلانًا"}[lang]||"Add a listing";
-    const _hint={ru:"Будьте первым — это бесплатно и займёт минуту",en:"Be the first — it's free and takes a minute",ar:"كن الأول — مجاني ويستغرق دقيقة"}[lang]||"";
-    grid.innerHTML=`<div class="empty"><div class="empty-icon">${PH_ICON}</div><div>${t("empty")}</div><div style="opacity:.6;font-size:13px;margin-top:8px">${_hint}</div><button onclick="vib();openAddModal()" style="margin-top:18px;background:var(--accent);color:#000;border:0;border-radius:14px;padding:12px 22px;font-weight:800;font-size:14px;cursor:pointer">+ ${_cta}</button></div>`;return;}
+    grid.innerHTML=`<div class="empty"><div>${t("empty")}</div><button onclick="vib();openAddModal()" style="margin-top:18px;background:var(--accent);color:#000;border:0;border-radius:14px;padding:12px 22px;font-weight:800;font-size:14px;cursor:pointer">+ ${_cta}</button></div>`;return;}
   grid.innerHTML=data.map(l=>{
     const photos=getPhotos(l);
     const imgHtml=photos.length
