@@ -120,8 +120,11 @@ def get_listing(listing_id: int, viewer_id: int = None):
         d["seller_verified"] = False
     return d
 
+def has_image(f) -> bool:
+    return bool(f and f.filename and (f.content_type or "").startswith("image/") and getattr(f, "size", 1) != 0)
+
 def save_photo(photo):
-    if not photo: return None
+    if not photo or not photo.filename: return None
     ext = os.path.splitext(photo.filename)[1] or ".jpg"
     fname = f"{uuid.uuid4()}{ext}"
     with open(os.path.join(UPLOAD_DIR,fname),"wb") as f: shutil.copyfileobj(photo.file,f)
@@ -159,6 +162,8 @@ async def create_listing(
     require_user(request, user_id)
     if category not in CATEGORIES: raise HTTPException(400,"Invalid category")
     if not validate_city(city): raise HTTPException(400,"Invalid city")
+    if not any(has_image(f) for f in (photo,photo_2,photo_3,photo_4,photo_5,photo_6,photo_7,photo_8)):
+        raise HTTPException(400,"At least one photo is required")
     p1=save_photo(photo); p2=save_photo(photo_2); p3=save_photo(photo_3); p4=save_photo(photo_4)
     p5=save_photo(photo_5); p6=save_photo(photo_6); p7=save_photo(photo_7); p8=save_photo(photo_8)
     conn=get_db(); c=conn.cursor()
