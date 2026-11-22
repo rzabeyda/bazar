@@ -73,7 +73,7 @@ async def cmd_unverify(message: types.Message):
 async def start(message: types.Message):
     keyboard = InlineKeyboardMarkup(inline_keyboard=[
         [
-            InlineKeyboardButton(text="🛒 Открыть Базар", web_app=WebAppInfo(url=WEBAPP_URL)),
+            InlineKeyboardButton(text="Открыть Базар", web_app=WebAppInfo(url=WEBAPP_URL)),
         ]
     ])
     # Save user + try to get avatar
@@ -123,23 +123,23 @@ async def start(message: types.Message):
         photo = types.FSInputFile("/root/bazar/static/icons/hey.png")
         await message.answer_photo(
             photo=photo,
-            caption="🌴 <b>Добро пожаловать в Egypt Bazar!</b>\n"
+            caption="<b>Добро пожаловать в Egypt Bazar!</b>\n"
                     "Покупай и продавай в Шарм-эль-Шейхе, Хургаде и других городах Египта.\n"
-                    "➕ Нажми <b>Открыть Базар</b> → кнопка «+» → опубликуй объявление за минуту. Это бесплатно.\n\n"
-                    "🌴 <b>Welcome to Egypt Bazar!</b>\n"
+                    "Нажми <b>Открыть Базар</b> → кнопка «+» → опубликуй объявление за минуту. Это бесплатно.\n\n"
+                    "<b>Welcome to Egypt Bazar!</b>\n"
                     "Buy and sell in Sharm el-Sheikh, Hurghada and other cities of Egypt.\n"
-                    "➕ Tap <b>Открыть Базар</b> → the «+» button → post a listing in a minute. It's free.",
+                    "Tap <b>Открыть Базар</b> → the «+» button → post a listing in a minute. It's free.",
             parse_mode="HTML", reply_markup=keyboard
         )
     except Exception as e:
         logging.warning(f"start photo error: {e}")
         await message.answer(
-            "🌴 <b>Добро пожаловать в Egypt Bazar!</b>\n"
+            "<b>Добро пожаловать в Egypt Bazar!</b>\n"
             "Покупай и продавай в Шарм-эль-Шейхе, Хургаде и других городах Египта.\n"
-            "➕ Нажми <b>Открыть Базар</b> → кнопка «+» → опубликуй объявление за минуту. Это бесплатно.\n\n"
-            "🌴 <b>Welcome to Egypt Bazar!</b>\n"
+            "Нажми <b>Открыть Базар</b> → кнопка «+» → опубликуй объявление за минуту. Это бесплатно.\n\n"
+            "<b>Welcome to Egypt Bazar!</b>\n"
             "Buy and sell in Sharm el-Sheikh, Hurghada and other cities of Egypt.\n"
-            "➕ Tap <b>Открыть Базар</b> → the «+» button → post a listing in a minute. It's free.",
+            "Tap <b>Открыть Базар</b> → the «+» button → post a listing in a minute. It's free.",
             parse_mode="HTML", reply_markup=keyboard
         )
 

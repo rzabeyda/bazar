@@ -239,6 +239,7 @@ def activate_promo(listing_id: int, admin_key: str = Form(...)):
 
 @app.post("/api/listings/{listing_id}/pay_legendary")
 async def pay_legendary(request: Request, listing_id: int, user_id: int = Form(...)):
+    raise HTTPException(410, "Promotion is temporarily disabled")
     import httpx, logging
     require_user(request, user_id)
     from datetime import datetime, timedelta
@@ -294,6 +295,7 @@ def delete_listing(request: Request, listing_id: int, user_id: int):
 
 @app.post("/api/listings/{listing_id}/pay_stars")
 async def pay_stars(request: Request, listing_id: int, user_id: int = Form(...)):
+    raise HTTPException(410, "Promotion is temporarily disabled")
     import httpx, logging
     require_user(request, user_id)
     from datetime import datetime, timedelta
@@ -345,6 +347,7 @@ async def egp_rate():
 
 @app.post("/api/listings/{listing_id}/pay_card")
 async def pay_card(request: Request, listing_id: int, user_id: int = Form(...)):
+    raise HTTPException(410, "Promotion is temporarily disabled")
     import httpx
     require_user(request, user_id)
     conn=get_db(); c=conn.cursor()
@@ -397,11 +400,11 @@ async def create_offer(
     if token:
         try:
             bot_url = f"https://t.me/{os.getenv('BOT_USERNAME','egypt_bazar_bot')}"
-            kb = {"inline_keyboard":[[{"text":"📲 Открыть Egypt Bazar","url":bot_url}]]}
+            kb = {"inline_keyboard":[[{"text":"Открыть Базар","url":bot_url}]]}
             async with httpx.AsyncClient(timeout=10) as client:
                 await client.post(f"https://api.telegram.org/bot{token}/sendMessage", json={
                     "chat_id": row["user_id"],
-                    "text": f"💰 Вам пришло ценовое предложение!",
+                    "text": f"Вам пришло ценовое предложение!",
                     "reply_markup": kb
                 })
         except Exception as e:
@@ -433,10 +436,10 @@ async def respond_offer(request: Request, offer_id: int, action: str = Form(...)
     if token:
         try:
             bot_url = f"https://t.me/{os.getenv('BOT_USERNAME','egypt_bazar_bot')}"
-            kb = {"inline_keyboard":[[{"text":"📲 Открыть Egypt Bazar","url":bot_url}]]}
-            msg = ("✅ Ваше ценовое предложение принято!"
+            kb = {"inline_keyboard":[[{"text":"Открыть Базар","url":bot_url}]]}
+            msg = ("Ваше ценовое предложение принято!"
                    if action=="accept" else
-                   "❌ Ваше ценовое предложение отклонено.")
+                   "Ваше ценовое предложение отклонено.")
             async with httpx.AsyncClient(timeout=5) as client:
                 await client.post(f"https://api.telegram.org/bot{token}/sendMessage",json={
                     "chat_id":row["buyer_id"],"text":msg,"reply_markup":kb})
@@ -548,11 +551,11 @@ async def send_message(
     if token:
         try:
             bot_url = f"https://t.me/{os.getenv('BOT_USERNAME','egypt_bazar_bot')}"
-            kb = {"inline_keyboard":[[{"text":"📲 Открыть Egypt Bazar","url":bot_url}]]}
+            kb = {"inline_keyboard":[[{"text":"Открыть Базар","url":bot_url}]]}
             async with httpx.AsyncClient(timeout=5) as client:
                 await client.post(f"https://api.telegram.org/bot{token}/sendMessage",json={
                     "chat_id": receiver_id,
-                    "text": "✉️ Вам пришло сообщение!",
+                    "text": "Вам пришло сообщение!",
                     "reply_markup": kb
                 })
         except Exception as e:
@@ -588,11 +591,11 @@ async def broadcast_message(
         if token:
             try:
                 bot_url = f"https://t.me/{os.getenv('BOT_USERNAME','egypt_bazar_bot')}"
-                kb = {"inline_keyboard":[[{"text":"📲 Открыть Egypt Bazar","url":bot_url}]]}
+                kb = {"inline_keyboard":[[{"text":"Открыть Базар","url":bot_url}]]}
                 async with httpx.AsyncClient(timeout=3) as client:
                     await client.post(f"https://api.telegram.org/bot{token}/sendMessage", json={
                         "chat_id": uid,
-                        "text": "📢 Новое сообщение от Администрации!",
+                        "text": "Новое сообщение от Администрации!",
                         "reply_markup": kb
                     })
             except: pass
