@@ -16,7 +16,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-CATEGORIES = ["property","transport","services","beauty","clothes","kids","home","furniture","household","repair","jobs","animals","hobby","sport","electronics","food","business","money","alcohol","smoking","tours","excursions","medicine","education","restaurant","rental","diving","construction","transfer","shipping","other"]
+CATEGORIES = ["visas","moto","events","property","transport","services","beauty","clothes","kids","home","furniture","household","repair","jobs","animals","hobby","sport","electronics","food","business","money","alcohol","smoking","tours","excursions","medicine","education","restaurant","rental","diving","construction","transfer","shipping","other"]
 CITIES = ["sharm","hurghada","cairo","alexandria","dahab","marsa","el-gouna","taba","luxor","aswan","safaga","el-quseir","nuweiba","soma-bay","other"]
 
 # -- AUTH ---------------------------------------------------------------------

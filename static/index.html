@@ -356,6 +356,18 @@ button,input,select,textarea{font-family:inherit;}
 .dd-chk{stroke:#fff;width:16px;height:16px;}
 .dd-search{background:#16161b;border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:10px 12px;margin-bottom:6px;}
 .dd-apply{margin-top:8px;padding:12px;border-radius:14px;font-weight:800;}
+/* price + extra filters */
+.extra-filters{display:flex;gap:8px;padding:0 16px 10px;overflow-x:auto;scrollbar-width:none;direction:ltr;}
+.extra-filters::-webkit-scrollbar{display:none;}
+.extra-filters .filter-btn{padding:9px 13px;}
+.pr-title{font-size:12px;font-weight:800;color:#9a9aa5;text-transform:uppercase;letter-spacing:.7px;padding:6px 8px 8px;}
+.pr-cur{display:flex;gap:6px;padding:0 6px 8px;}
+.pr-cur-opt{flex:1;text-align:center;padding:9px;border-radius:12px;background:#16161b;border:1px solid rgba(255,255,255,.1);font-weight:700;font-size:13px;color:#cfcfd6;cursor:pointer;}
+.pr-cur-opt.active{background:#fff;color:#000;border-color:#fff;}
+.pr-inputs{display:flex;align-items:center;gap:8px;padding:0 6px 4px;color:#9a9aa5;}
+.pr-inputs input{flex:1;min-width:0;width:100%;background:#16161b;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:11px 12px;color:#fff;font-size:15px;outline:none;}
+.pr-inputs input:focus{border-color:rgba(255,255,255,.55);}
+.pr-clear{width:100%;margin-top:4px;padding:10px;background:transparent;border:none;color:#9a9aa5;font-weight:700;font-size:13px;cursor:pointer;}
 /* promotion / ads switched off for now */
 .promote-box,#pay-modal,.banner-wrap,[onclick*="buyPromo"],[onclick*="buyLegendary"]{display:none!important;}
 @keyframes cardIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
@@ -426,6 +438,11 @@ button,input,select,textarea{font-family:inherit;}
     <div class="filter-btn" id="filter-cond-btn" onclick="vib();cycleCondition()" style="flex-shrink:0;">
       <span id="filter-cond-lbl">Состояние</span>
     </div>
+  </div>
+  <div class="extra-filters" id="extra-filters">
+    <div class="filter-btn" id="filter-price-range-btn" onclick="togglePriceDD(event)"><span id="filter-price-range-lbl">Цена</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></div>
+    <div class="filter-btn" id="filter-photo-btn" onclick="vib();toggleExtra('photo')"><span id="filter-photo-lbl">С фото</span></div>
+    <div class="filter-btn" id="filter-verified-btn" onclick="vib();toggleExtra('verified')"><span id="filter-verified-lbl">Проверенные</span></div>
   </div>
   <div class="cat-chips" id="cat-chips" style="display:none"></div>
   <div class="res-count" id="res-count" style="display:none"></div>
@@ -600,6 +617,13 @@ button,input,select,textarea{font-family:inherit;}
   <input class="dd-search" id="cat-search" type="text" placeholder="Поиск..." oninput="filterCatDD()">
   <div class="dd-scroll" id="cat-dd-list"></div>
   <button class="dd-apply" onclick="applyCat()">Применить</button>
+</div>
+<div class="dropdown" id="price-dd" style="width:256px">
+  <div class="pr-title" id="pr-title">Цена</div>
+  <div class="pr-cur"><div class="pr-cur-opt active" id="pr-cur-USD" onclick="setPriceCur('USD')">$</div><div class="pr-cur-opt" id="pr-cur-EGP" onclick="setPriceCur('EGP')">EGP</div></div>
+  <div class="pr-inputs"><input id="pr-min" type="number" inputmode="decimal" min="0" placeholder="от"><span>&ndash;</span><input id="pr-max" type="number" inputmode="decimal" min="0" placeholder="до"></div>
+  <button class="dd-apply" onclick="applyPrice()">Применить</button>
+  <button class="pr-clear" id="pr-clear" onclick="clearPrice()">Сбросить</button>
 </div>
 <div class="dd-overlay" id="dd-overlay" onclick="closeAllDD()"></div>
 
@@ -1059,6 +1083,7 @@ let selectedCities=new Set(); // empty = all
 let selectedCats=new Set();   // empty = all
 let priceSort=3;
 let conditionFilter=0;
+let priceMin=null,priceMax=null,priceCur="USD",onlyPhoto=false,onlyVerified=false;
 // pending selections (before apply)
 let pendingCities=new Set();
 let pendingCats=new Set();
@@ -1083,7 +1108,7 @@ function selectCondition(v){
 function openTgChat(){const u="https://t.me/rzabeyda";if(tg&&tg.openTelegramLink)tg.openTelegramLink(u);else window.open(u,"_blank");}
 
 const CITY_KEYS=["sharm","hurghada","cairo","alexandria","dahab","marsa","el-gouna","taba","luxor","aswan","safaga","el-quseir","nuweiba","soma-bay","other"];
-const CAT_KEYS=["alcohol","medicine","business","household","diving","money","kids","home","other","animals","smoking","furniture","beauty","property","education","clothes","food","rental","jobs","repair","restaurant","sport","construction","transport","shipping","transfer","tours","services","hobby","excursions","electronics"];
+const CAT_KEYS=["visas","moto","events","alcohol","medicine","business","household","diving","money","kids","home","other","animals","smoking","furniture","beauty","property","education","clothes","food","rental","jobs","repair","restaurant","sport","construction","transport","shipping","transfer","tours","services","hobby","excursions","electronics"];
 const EYE_ICO='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;opacity:.7"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
 const PH_ICON='<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.3"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="9" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg>';
 const CAT_EMOJI={property:"🏠",transport:"🚗",services:"🔧",beauty:"💄",clothes:"👗",kids:"🧸",home:"🌿",jobs:"💼",animals:"🐱",hobby:"🎨",sport:"⚽",electronics:"📱",food:"🛒",business:"📈",money:"💰",alcohol:"🍾",furniture:"🛋",household:"🏺",repair:"🪚",smoking:"🚬",tours:"🏖️",excursions:"🗺️",medicine:"💊",education:"📚",restaurant:"🍽️",rental:"🤝",diving:"🤿",construction:"🏗️",transfer:"🚕",shipping:"✈️",other:"📦"};
@@ -1106,13 +1131,13 @@ startChatsPolling();
 const T={
   ru:{search:"Поиск...",fp:"$",fc:"Город",fs:"Раздел",apply:"Применить",new_listing:"Новое объявление",lbl_photos:"Фото (до 8)",lbl_title:"Заголовок *",lbl_desc:"Описание *",lbl_price:"Цена (USD)",lbl_cat:"Категория *",lbl_city:"Город *",publish:"Опубликовать",contact:"Написать продавцу",edit:"Редактировать",empty:"Объявлений нет",free:"Бесплатно",nav_market:"Рынок",nav_auction:"Аукцион",nav_profile:"Профиль",auction_title:"Аукцион",auction_sub:"Здесь скоро появятся аукционы.",auction_badge:"Скоро",add_listing:"Добавить объявление",my_listings:"Мои объявления",no_listings:"Нет объявлений",recs:"Похожие",del_confirm:"Удалить объявление?",s_active:"Активных",s_total:"Всего",s_deals:"Сделки",promo_on:"Продвигается · $5 · 24ч",promo_off:"Не продвигать",all_cities:"Все города",all_cats:"Все разделы",deals_title:"История сделок",loading:"Загрузка...",no_msgs:"Нет сообщений",msgs_hint:"Когда покупатели напишут — диалоги появятся здесь",start_chat:"Начните общение!",load_err:"Ошибка загрузки",conn_err:"Ошибка соединения",chats_title:"Чаты",chat_placeholder:"Сообщение...",verified_seller:"Верифицированный продавец",dialogs_lbl:"Диалоги",offers_lbl:"Предложения цены",deleted:"Удалено",err:"Ошибка",bookmarks:"Закладки",orders_lbl:"Ордера",chats_nav:"Чаты",profile_nav:"Профиль",share_lbl:"Поделиться",condition_new:"Новое",condition_used:"Б/У",sold_btn:"Продано!",delete_btn:"Удалить",edit_btn:"Редактировать",contact_btn:"Написать",offer_btn:"Предложить цену",share_btn:"Поделиться",report_btn:"Пожаловаться",extend_btn:"Продлить на 30 дней",my_ads:"Мои объявления",
     cities:{sharm:"Шарм-эль-Шейх",hurghada:"Хургада",cairo:"Каир",alexandria:"Александрия",dahab:"Дахаб",marsa:"Марса-Алам","el-gouna":"Эль-Гуна",taba:"Таба",luxor:"Луксор",aswan:"Асуан",safaga:"Сафага","el-quseir":"Эль-Кусейр",nuweiba:"Нувейба","soma-bay":"Сома-Бей",other:"Другой город"},
-    cats:{property:"Недвижимость",transport:"Транспорт",services:"Услуги",beauty:"Мода и красота",clothes:"Одежда",kids:"Детские товары",home:"Дом и сад",jobs:"Работа",animals:"Животные",hobby:"Хобби",sport:"Спорт",electronics:"Электроника",food:"Продовольствие",business:"Бизнес",money:"Деньги и финансы",alcohol:"Алкоголь",furniture:"Мебель",household:"Бытовые товары",repair:"Ремонт",smoking:"Курение",tours:"Туры",excursions:"Экскурсии",medicine:"Аптека",education:"Обучение",restaurant:"Рестораны и кафе",rental:"Прокат",diving:"Дайвинг",construction:"Стройматериалы",transfer:"Трансфер",shipping:"Транспортировка",other:"Другое"}},
+    cats:{visas:"Визы и документы",moto:"Мото и лодки",events:"Мероприятия",property:"Недвижимость",transport:"Транспорт",services:"Услуги",beauty:"Мода и красота",clothes:"Одежда",kids:"Детские товары",home:"Дом и сад",jobs:"Работа",animals:"Животные",hobby:"Хобби",sport:"Спорт",electronics:"Электроника",food:"Продовольствие",business:"Бизнес",money:"Деньги и финансы",alcohol:"Алкоголь",furniture:"Мебель",household:"Бытовые товары",repair:"Ремонт",smoking:"Курение",tours:"Туры",excursions:"Экскурсии",medicine:"Аптека",education:"Обучение",restaurant:"Рестораны и кафе",rental:"Прокат",diving:"Дайвинг",construction:"Стройматериалы",transfer:"Трансфер",shipping:"Транспортировка",other:"Другое"}},
   en:{search:"Search...",fp:"$",fc:"City",fs:"Section",apply:"Apply",new_listing:"New Listing",lbl_photos:"Photos (up to 8)",lbl_title:"Title *",lbl_desc:"Description *",lbl_price:"Price (USD)",lbl_cat:"Category *",lbl_city:"City *",publish:"Publish",contact:"Contact seller",edit:"Edit",empty:"No listings",free:"Free",nav_market:"Market",nav_auction:"Auction",nav_profile:"Profile",auction_title:"Auction",auction_sub:"Auctions coming soon.",auction_badge:"Soon",add_listing:"Add listing",my_listings:"My listings",no_listings:"No listings yet",recs:"Similar",del_confirm:"Delete listing?",s_active:"Active",s_total:"Total",s_deals:"Deals",promo_on:"Promoted · $5 · 24h",promo_off:"Don't promote",all_cities:"All cities",all_cats:"All sections",deals_title:"Deal history",loading:"Loading...",no_msgs:"No messages",msgs_hint:"When buyers write to you — dialogs will appear here",start_chat:"Start chatting!",load_err:"Loading error",conn_err:"Connection error",chats_title:"Chats",chat_placeholder:"Message...",verified_seller:"Verified seller",dialogs_lbl:"Dialogs",offers_lbl:"Price offers",deleted:"Deleted",err:"Error",bookmarks:"Bookmarks",orders_lbl:"Orders",chats_nav:"Chats",profile_nav:"Profile",share_lbl:"Share",condition_new:"New",condition_used:"Used",sold_btn:"Sold!",delete_btn:"Delete",edit_btn:"Edit",contact_btn:"Message",offer_btn:"Make offer",share_btn:"Share",report_btn:"Report",extend_btn:"Extend 30 days",my_ads:"My listings",
     cities:{sharm:"Sharm",hurghada:"Hurghada",cairo:"Cairo",alexandria:"Alexandria",dahab:"Dahab",marsa:"Marsa Alam","el-gouna":"El Gouna",taba:"Taba",luxor:"Luxor",aswan:"Aswan",safaga:"Safaga","el-quseir":"El Quseir",nuweiba:"Nuweiba","soma-bay":"Soma Bay",other:"Other city"},
-    cats:{property:"Real Estate",transport:"Transport",services:"Services",beauty:"Fashion & Beauty",clothes:"Clothes",kids:"Kids",home:"Home & Garden",jobs:"Jobs",animals:"Animals",hobby:"Hobby",sport:"Sport",electronics:"Electronics",food:"Grocery",business:"Business",money:"Finance",alcohol:"Alcohol",furniture:"Furniture",household:"Household",repair:"Repair",smoking:"Smoking",tours:"Tours",excursions:"Excursions",medicine:"Pharmacy",education:"Education",restaurant:"Restaurants & Cafes",rental:"Rental",diving:"Diving",construction:"Construction",transfer:"Transfer",shipping:"Shipping",other:"Other"}},
+    cats:{visas:"Visas & Documents",moto:"Moto & Boats",events:"Events",property:"Real Estate",transport:"Transport",services:"Services",beauty:"Fashion & Beauty",clothes:"Clothes",kids:"Kids",home:"Home & Garden",jobs:"Jobs",animals:"Animals",hobby:"Hobby",sport:"Sport",electronics:"Electronics",food:"Grocery",business:"Business",money:"Finance",alcohol:"Alcohol",furniture:"Furniture",household:"Household",repair:"Repair",smoking:"Smoking",tours:"Tours",excursions:"Excursions",medicine:"Pharmacy",education:"Education",restaurant:"Restaurants & Cafes",rental:"Rental",diving:"Diving",construction:"Construction",transfer:"Transfer",shipping:"Shipping",other:"Other"}},
   ar:{search:"بحث...",fp:"$",fc:"المدينة",fs:"القسم",apply:"تطبيق",new_listing:"إعلان جديد",lbl_photos:"صور (حتى 8)",lbl_title:"العنوان *",lbl_desc:"الوصف *",lbl_price:"السعر (USD)",lbl_cat:"الفئة *",lbl_city:"المدينة *",publish:"نشر",contact:"تواصل",edit:"تعديل",empty:"لا إعلانات",free:"مجاني",nav_market:"السوق",nav_auction:"مزاد",nav_profile:"الملف",auction_title:"مزاد",auction_sub:"قريباً.",auction_badge:"قريباً",add_listing:"إضافة إعلان",my_listings:"إعلاناتي",no_listings:"لا إعلانات",recs:"مشابهة",del_confirm:"حذف؟",s_active:"نشط",s_total:"المجموع",s_deals:"صفقات",promo_on:"مميز · $5",promo_off:"بدون ترويج",all_cities:"كل المدن",all_cats:"كل الأقسام",deals_title:"سجل الصفقات",loading:"جار التحميل...",no_msgs:"لا رسائل",msgs_hint:"عندما يكتب المشترون — ستظهر المحادثات هنا",start_chat:"ابدأ المحادثة!",load_err:"خطأ في التحميل",conn_err:"خطأ في الاتصال",chats_title:"💬 الدردشات",chat_placeholder:"رسالة...",verified_seller:"بائع موثق",dialogs_lbl:"المحادثات",offers_lbl:"عروض الأسعار",deleted:"🗑 تم الحذف",err:"❌ خطأ",bookmarks:"المفضلة",orders_lbl:"الطلبات",chats_nav:"الدردشات",profile_nav:"الملف",share_lbl:"مشاركة",condition_new:"✨ جديد",condition_used:"🔧 مستعمل",sold_btn:"تم البيع!",delete_btn:"حذف",edit_btn:"تعديل",contact_btn:"تواصل",offer_btn:"💰 اقتراح سعر",share_btn:"مشاركة",report_btn:"إبلاغ",extend_btn:"✅ تمديد 30 يوم",my_ads:"إعلاناتي",
     cities:{sharm:"شرم الشيخ",hurghada:"الغردقة",cairo:"القاهرة",alexandria:"الإسكندرية",dahab:"دهب",marsa:"مرسى علم","el-gouna":"الجونة",taba:"طابا",luxor:"الأقصر",aswan:"أسوان",safaga:"سفاجا","el-quseir":"القصير",nuweiba:"نويبع","soma-bay":"سوما باي",other:"مدينة أخرى"},
-    cats:{property:"عقارات",transport:"مواصلات",services:"خدمات",beauty:"موضة وجمال",clothes:"ملابس",kids:"أطفال",home:"المنزل",jobs:"وظائف",animals:"حيوانات",hobby:"هوايات",sport:"رياضة",electronics:"إلكترونيات",food:"بقالة",business:"أعمال",money:"مال",alcohol:"كحول",furniture:"أثاث",household:"منزلية",repair:"تجديد",smoking:"تدخين",tours:"جولات",excursions:"رحلات",medicine:"صيدلية",education:"تعليم",restaurant:"مطاعم وكافيهات",rental:"تأجير",diving:"غوص",construction:"مواد البناء",transfer:"نقل",shipping:"شحن",other:"أخرى"}}
+    cats:{visas:"تأشيرات ومستندات",moto:"دراجات وقوارب",events:"فعاليات",property:"عقارات",transport:"مواصلات",services:"خدمات",beauty:"موضة وجمال",clothes:"ملابس",kids:"أطفال",home:"المنزل",jobs:"وظائف",animals:"حيوانات",hobby:"هوايات",sport:"رياضة",electronics:"إلكترونيات",food:"بقالة",business:"أعمال",money:"مال",alcohol:"كحول",furniture:"أثاث",household:"منزلية",repair:"تجديد",smoking:"تدخين",tours:"جولات",excursions:"رحلات",medicine:"صيدلية",education:"تعليم",restaurant:"مطاعم وكافيهات",rental:"تأجير",diving:"غوص",construction:"مواد البناء",transfer:"نقل",shipping:"شحن",other:"أخرى"}}
 };
 const t=k=>{const keys=k.split(".");let v=T[lang];for(const x of keys)v=v?.[x];return v||k;};
 
@@ -1148,7 +1173,7 @@ function applyLang(){
   document.getElementById("s-deals-l").textContent=t("s_deals");
   document.getElementById("deals-modal-title").textContent=t("deals_title");
   document.querySelectorAll(".dd-apply").forEach(b=>b.textContent=t("apply"));
-  buildCityDD();buildCatDD();buildCatSelect();
+  buildCityDD();buildCatDD();buildCatSelect();updateExtraLabels();
   renderListings(filterData());
   if(currentPage==="profile")loadProfile();
 }
@@ -1511,21 +1536,77 @@ function quickCat(k){
   updateCatLabel();updateResetBtn();updateDealFilter();
   renderListings(filterData());saveFilters();
 }
+const EXTRA_T={
+  ru:{price:"Цена",photo:"С фото",verified:"Проверенные",from:"от",to:"до",clear:"Сбросить"},
+  en:{price:"Price",photo:"With photo",verified:"Verified",from:"from",to:"to",clear:"Clear"},
+  ar:{price:"السعر",photo:"مع صورة",verified:"موثّق",from:"من",to:"إلى",clear:"مسح"}
+};
+function xt(k){return (EXTRA_T[lang]||EXTRA_T.ru)[k];}
+function priceUSD(l){if(!l.price||l.price<=0)return null;return l.currency==="EGP"?l.price/(egpRate||50):l.price;}
+function updateExtraLabels(){
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  const has=priceMin!=null||priceMax!=null;
+  let lbl=xt("price");
+  if(has){lbl=(priceMin!=null?priceMin:"")+"–"+(priceMax!=null?priceMax:"")+" "+(priceCur==="EGP"?"EGP":"$");}
+  set("filter-price-range-lbl",lbl);
+  set("filter-photo-lbl",xt("photo"));set("filter-verified-lbl",xt("verified"));
+  set("pr-title",xt("price"));set("pr-clear",xt("clear"));
+  const mn=document.getElementById("pr-min"),mx=document.getElementById("pr-max");
+  if(mn)mn.placeholder=xt("from");if(mx)mx.placeholder=xt("to");
+  const on=(id,v)=>{const el=document.getElementById(id);if(el)el.classList.toggle("active",!!v);};
+  on("filter-price-range-btn",has);on("filter-photo-btn",onlyPhoto);on("filter-verified-btn",onlyVerified);
+}
+function setPriceCur(c){
+  vib();priceCur=c;
+  ["USD","EGP"].forEach(x=>{const el=document.getElementById("pr-cur-"+x);if(el)el.classList.toggle("active",x===c);});
+}
+function togglePriceDD(e){
+  vib();e.stopPropagation();
+  const dd=document.getElementById("price-dd");
+  const rect=e.currentTarget.getBoundingClientRect();
+  const isOpen=dd.classList.contains("open");
+  closeAllDD();
+  if(!isOpen){
+    document.getElementById("pr-min").value=priceMin!=null?priceMin:"";
+    document.getElementById("pr-max").value=priceMax!=null?priceMax:"";
+    setPriceCur(priceCur);
+    dd.style.top=(rect.bottom+6)+"px";
+    dd.style.left=Math.max(8,Math.min(rect.left,window.innerWidth-264))+"px";
+    dd.classList.add("open");
+    document.getElementById("dd-overlay").classList.add("open");
+  }
+}
+function applyPrice(){
+  const a=parseFloat(document.getElementById("pr-min").value);
+  const b=parseFloat(document.getElementById("pr-max").value);
+  priceMin=isNaN(a)||a<0?null:a;priceMax=isNaN(b)||b<0?null:b;
+  if(priceMin!=null&&priceMax!=null&&priceMin>priceMax){const t0=priceMin;priceMin=priceMax;priceMax=t0;}
+  closeAllDD();updateExtraLabels();updateResetBtn();renderListings(filterData());
+}
+function clearPrice(){
+  priceMin=null;priceMax=null;
+  document.getElementById("pr-min").value="";document.getElementById("pr-max").value="";
+  closeAllDD();updateExtraLabels();updateResetBtn();renderListings(filterData());
+}
+function toggleExtra(k){
+  if(k==="photo")onlyPhoto=!onlyPhoto;else onlyVerified=!onlyVerified;
+  updateExtraLabels();updateResetBtn();renderListings(filterData());
+}
 function resetFilters(){
   vib();
-  selectedCities.clear();selectedCats.clear();priceSort=3;conditionFilter=0;
+  selectedCities.clear();selectedCats.clear();priceSort=3;conditionFilter=0;priceMin=null;priceMax=null;onlyPhoto=false;onlyVerified=false;
   pendingCities.clear();pendingCats.clear();
   document.getElementById("filter-price").classList.add("active");
   const lbl=document.getElementById("filter-price-lbl");
   lbl.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>';
   const cl=document.getElementById("filter-cond-lbl");if(cl)cl.textContent="Состояние";
   const cb=document.getElementById("filter-cond-btn");if(cb)cb.classList.remove("active");
-  updateCityLabel();updateCatLabel();
+  updateCityLabel();updateCatLabel();updateExtraLabels();
   updateResetBtn();updateDealFilter();
   renderListings(filterData());saveFilters();
 }
 function updateResetBtn(){
-  const hasFilters=selectedCities.size>0||selectedCats.size>0||(priceSort!==3&&priceSort!==0)||conditionFilter!==0;
+  const hasFilters=selectedCities.size>0||selectedCats.size>0||(priceSort!==3&&priceSort!==0)||conditionFilter!==0||priceMin!=null||priceMax!=null||onlyPhoto||onlyVerified;
   const btn=document.getElementById("filter-reset");
   if(btn)btn.style.display=hasFilters?"flex":"none";
 }
@@ -1562,6 +1643,14 @@ function filterData(){
     if(selectedDeal&&l.category==="property"&&l.prop_deal&&l.prop_deal!==selectedDeal)return false;
     if(conditionFilter===1&&l.condition!=="new")return false;
     if(conditionFilter===2&&l.condition!=="used")return false;
+    if(priceMin!=null||priceMax!=null){
+      const usd=priceUSD(l);if(usd==null)return false;
+      const cv=v=>priceCur==="EGP"?v/(egpRate||50):v;
+      if(priceMin!=null&&usd<cv(priceMin)-0.005)return false;
+      if(priceMax!=null&&usd>cv(priceMax)+0.005)return false;
+    }
+    if(onlyPhoto&&!getPhotos(l).length)return false;
+    if(onlyVerified&&!l.seller_verified)return false;
     if(q&&!l.title.toLowerCase().includes(q)&&!(l.description||"").toLowerCase().includes(q))return false;
     return true;
   });
@@ -1592,7 +1681,7 @@ function renderListings(data){
     renderCatChips();
     const rc=document.getElementById("res-count");
     if(rc){
-      const filtersOn=selectedCities.size>0||selectedCats.size>0||conditionFilter!==0||(document.getElementById("search-input")||{value:""}).value.trim()!=="";
+      const filtersOn=selectedCities.size>0||selectedCats.size>0||conditionFilter!==0||priceMin!=null||priceMax!=null||onlyPhoto||onlyVerified||(document.getElementById("search-input")||{value:""}).value.trim()!=="";
       rc.style.display=(filtersOn&&allListings.length)?"block":"none";
       rc.textContent=({ru:"Найдено: ",en:"Found: ",ar:"تم العثور: "}[lang]||"Found: ")+data.length;
     }
