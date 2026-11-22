@@ -704,16 +704,10 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
       <select class="form-select" id="inp-city" onchange="updateDistricts()">
         <option value="">— Не указан —</option>
         <option value="alexandria">Александрия</option>
-        <option value="aswan">Асуан</option>
-        <option value="dahab">Дахаб</option>
         <option value="cairo">Каир</option>
-        <option value="luxor">Луксор</option>
         <option value="marsa">Марса-Алам</option>
-        <option value="nuweiba">Нувейба</option>
-        <option value="taba">Таба</option>
         <option value="hurghada">Хургада</option>
         <option value="sharm">Шарм-эль-Шейх</option>
-        <option value="el-quseir">Эль-Кусейр</option>
         <option value="other">Другой город...</option>
       </select>
       <input class="form-input" id="inp-city-other" type="text" placeholder="Введите название города" style="display:none;margin-top:-8px;" maxlength="60">
@@ -1056,13 +1050,7 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
         <option value="hurghada">Хургада</option>
         <option value="cairo">Каир</option>
         <option value="alexandria">Александрия</option>
-        <option value="dahab">Дахаб</option>
         <option value="marsa">Марса-Алам</option>
-        <option value="taba">Таба</option>
-        <option value="nuweiba">Нувейба</option>
-        <option value="el-quseir">Эль-Кусейр</option>
-        <option value="luxor">Луксор</option>
-        <option value="aswan">Асуан</option>
         <option value="other">Другой город...</option>
       </select>
       <input class="form-input" id="edit-city-other" type="text" placeholder="Введите название города" style="display:none;margin-top:-8px;" maxlength="60">
@@ -1120,7 +1108,7 @@ function selectCondition(v){
 }
 function openTgChat(){const u="https://t.me/rzabeyda";if(tg&&tg.openTelegramLink)tg.openTelegramLink(u);else window.open(u,"_blank");}
 
-const CITY_KEYS=["sharm","hurghada","cairo","alexandria","dahab","marsa","taba","luxor","aswan","el-quseir","nuweiba","other"];
+const CITY_KEYS=["sharm","hurghada","marsa","cairo","alexandria","other"];
 const CAT_KEYS=["visas","moto","events","alcohol","medicine","business","household","diving","money","kids","home","other","animals","smoking","furniture","beauty","property","education","clothes","food","rental","jobs","repair","restaurant","sport","construction","transport","shipping","transfer","tours","services","hobby","excursions","electronics"];
 const EYE_ICO='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;opacity:.7"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
 const PH_ICON='<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.3"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="9" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg>';
@@ -1686,7 +1674,7 @@ function updateDealFilter(){
 function filterData(){
   const q=document.getElementById("search-input").value.toLowerCase();
   let data=allListings.filter(l=>{
-    if(selectedCities.size>0&&!selectedCities.has(l.city))return false;
+    if(selectedCities.size>0&&!selectedCities.has(l.city)&&!(selectedCities.has("other")&&!CITY_KEYS.includes(l.city)))return false;
     if(selectedCats.size>0&&!selectedCats.has(l.category))return false;
     if(selectedDeal&&l.category==="property"&&l.prop_deal&&l.prop_deal!==selectedDeal)return false;
     if(conditionFilter===1&&l.condition!=="new")return false;
@@ -2094,7 +2082,7 @@ async function openEditModal(id){
     const citySel=document.getElementById("edit-city");
     const cityOther=document.getElementById("edit-city-other");
     if(CITY_KEYS.includes(l.city)){citySel.value=l.city;cityOther.style.display="none";}
-    else{citySel.value="other";cityOther.style.display="";cityOther.value=l.city;}
+    else{citySel.value="other";cityOther.style.display="";cityOther.value=cityName(l.city);}
     citySel.onchange=()=>{cityOther.style.display=citySel.value==="other"?"":"none";};
     // existing photos
     const photos=getPhotos(l);
@@ -2991,7 +2979,7 @@ function loadFilters(){
     const c=JSON.parse(localStorage.getItem("eb_cities")||"[]");
     const ct=JSON.parse(localStorage.getItem("eb_cats")||"[]");
     const p=localStorage.getItem("eb_price");
-    selectedCities=new Set(c.map(k=>["el-gouna","safaga","soma-bay"].includes(k)?"hurghada":k).filter(k=>CITY_KEYS.includes(k)));
+    selectedCities=new Set(c.map(k=>["el-gouna","safaga","soma-bay"].includes(k)?"hurghada":["dahab","taba","luxor","aswan","nuweiba","el-quseir"].includes(k)?"other":k).filter(k=>CITY_KEYS.includes(k)));
     selectedCats=new Set(ct);
     if(p!==null)priceSort=parseInt(p);
     pendingCities=new Set(selectedCities);
