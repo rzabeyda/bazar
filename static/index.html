@@ -420,11 +420,11 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
   <div class="res-count" id="res-count" style="display:none"></div>
   <!-- DEAL ROW: only for property -->
   <div id="filter-deal-btn" style="display:none;gap:8px;padding:0 14px 10px;flex-shrink:0;">
-    <div class="filter-btn" id="deal-btn-rent" onclick="setDeal('rent')" style="background:var(--accent);color:#000;font-weight:800;flex:1;justify-content:center;">📅 Аренда</div>
-    <div class="filter-btn" id="deal-btn-sale" onclick="setDeal('sale')" style="background:var(--card2);color:var(--muted);font-weight:600;flex:1;justify-content:center;">💰 Продажа</div>
+    <div class="filter-btn" id="deal-btn-rent" onclick="setDeal('rent')" style="background:var(--accent);color:#000;font-weight:800;flex:1;justify-content:center;">Аренда</div>
+    <div class="filter-btn" id="deal-btn-sale" onclick="setDeal('sale')" style="background:var(--card2);color:var(--muted);font-weight:600;flex:1;justify-content:center;">Продажа</div>
   </div>
   <div class="listings" id="listings-grid">
-    <div class="empty"><div class="empty-icon">⏳</div><div id="empty-text">Загрузка...</div></div>
+    <div class="empty"><div id="empty-text">Загрузка...</div></div>
   </div>
 </div>
 
@@ -434,7 +434,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
     <div id="chats-page-title" style="margin-bottom:16px;"><div style="display:inline-block;border:2px solid #fff;border-radius:30px;padding:4px 16px;"><span style="font-size:13px;font-weight:900;color:#fff;letter-spacing:2px;">ЧАТЫ</span></div></div>
     <div id="messages-list">
       <div style="text-align:center;padding:60px 20px;">
-        <div style="font-size:52px;margin-bottom:14px;">💬</div>
+        
         <div style="font-size:16px;font-weight:700;color:#fff;margin-bottom:8px;">Нет сообщений</div>
         <div style="font-size:13px;color:var(--muted);line-height:1.5;">Когда вы получите предложения по цене — они появятся здесь</div>
       </div>
@@ -510,7 +510,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
             <div class="banner-city-tag">Экскурсии без посредников напрямую от организатора</div>
           </div>
           <div class="banner-row" style="margin-top:3px;">
-            <div class="banner-city-tag">📍 Марса Алам · Хургада · Шарм</div>
+            <div class="banner-city-tag">Марса Алам · Хургада · Шарм</div>
           </div>
         </div>
         <div class="banner-photo-empty" style="display:flex;align-items:center;justify-content:center;width:110px;flex-shrink:0;">
@@ -618,7 +618,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
         </div>
         <div id="cat-picker" style="display:none;position:absolute;top:100%;left:0;right:0;background:var(--card);border:1px solid var(--border);border-radius:12px;z-index:500;box-shadow:0 8px 30px rgba(0,0,0,.7);margin-top:4px;overflow:hidden;">
           <div style="padding:8px;">
-            <input id="cat-picker-search" class="form-input" placeholder="🔍 Поиск раздела..." style="margin-bottom:0;" oninput="filterCatPicker()" onclick="event.stopPropagation()">
+            <input id="cat-picker-search" class="form-input" placeholder="Поиск раздела..." style="margin-bottom:0;" oninput="filterCatPicker()" onclick="event.stopPropagation()">
           </div>
           <div id="cat-picker-list" style="max-height:220px;overflow-y:auto;padding:4px 8px 8px;"></div>
         </div>
@@ -673,25 +673,25 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
       <div id="property-fields" style="display:none;">
         <label class="form-label">Тип сделки *</label>
         <div style="display:flex;gap:8px;margin-bottom:14px;">
-          <div class="popt" id="prop-deal-sale" onclick="selectPropDeal('sale')" style="border-color:var(--accent);background:rgba(255,255,255,.1);color:#fff;">🔑 Продажа</div>
-          <div class="popt" id="prop-deal-rent" onclick="selectPropDeal('rent')" style="color:#fff;">🏠 Аренда</div>
+          <div class="popt" id="prop-deal-sale" onclick="selectPropDeal('sale')" style="border-color:var(--accent);background:rgba(255,255,255,.1);color:#fff;">Продажа</div>
+          <div class="popt" id="prop-deal-rent" onclick="selectPropDeal('rent')" style="color:#fff;">Аренда</div>
         </div>
         <div id="rent-period-row" style="display:none;margin-bottom:14px;">
           <label class="form-label">Тип аренды</label>
           <div style="display:flex;gap:8px;">
-            <div class="popt" id="prop-rent-monthly" onclick="selectRentPeriod('monthly')" style="border-color:var(--accent);background:rgba(255,255,255,.1);color:#fff;">📅 Помесячно</div>
-            <div class="popt" id="prop-rent-daily" onclick="selectRentPeriod('daily')" style="color:#fff;">☀️ Посуточно</div>
+            <div class="popt" id="prop-rent-monthly" onclick="selectRentPeriod('monthly')" style="border-color:var(--accent);background:rgba(255,255,255,.1);color:#fff;">Помесячно</div>
+            <div class="popt" id="prop-rent-daily" onclick="selectRentPeriod('daily')" style="color:#fff;">Посуточно</div>
           </div>
         </div>
         <label class="form-label">Тип жилья</label>
         <select class="form-select" id="prop-type">
           <option value="">— Выберите —</option>
-          <option value="apartment">🏢 Квартира</option>
-          <option value="studio">🛏 Студия</option>
-          <option value="house">🏡 Дом</option>
-          <option value="villa">🏖️ Вилла</option>
-          <option value="townhouse">🏘️ Таунхаус</option>
-          <option value="compound">🏰 Компаунд</option>
+          <option value="apartment">Квартира</option>
+          <option value="studio">Студия</option>
+          <option value="house">Дом</option>
+          <option value="villa">Вилла</option>
+          <option value="townhouse">Таунхаус</option>
+          <option value="compound">Компаунд</option>
         </select>
         <div style="display:flex;gap:8px;">
           <div style="flex:1;">
@@ -716,7 +716,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
         <label class="form-label">Материал стен</label>
         <select class="form-select" id="prop-material">
           <option value="">— Выберите —</option>
-          <option value="brick">🧱 Кирпич</option>
+          <option value="brick">Кирпич</option>
           <option value="panel">Панель</option>
           <option value="monolith">Монолит</option>
           <option value="wood">Дерево</option>
@@ -728,21 +728,21 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
         <label class="form-label">Состояние</label>
         <select class="form-select" id="prop-condition">
           <option value="">— Выберите —</option>
-          <option value="newbuild">🏗 Новостройка</option>
-          <option value="renovated">✨ Реновировано</option>
-          <option value="finished">✅ Завершён</option>
-          <option value="good">👍 В хорошем состоянии</option>
-          <option value="average">📊 Среднее</option>
-          <option value="new_finish">🎨 Новая отделка</option>
-          <option value="sanitary">🚿 Санитарный ремонт</option>
-          <option value="needs_sanitary">🔧 Требуется санитарный ремонт</option>
-          <option value="needs_update">🔄 Нуждается в обновлении</option>
-          <option value="needs_major">⚠️ Нужен капитальный ремонт</option>
+          <option value="newbuild">Новостройка</option>
+          <option value="renovated">Реновировано</option>
+          <option value="finished">Завершён</option>
+          <option value="good">В хорошем состоянии</option>
+          <option value="average">Среднее</option>
+          <option value="new_finish">Новая отделка</option>
+          <option value="sanitary">Санитарный ремонт</option>
+          <option value="needs_sanitary">Требуется санитарный ремонт</option>
+          <option value="needs_update">Нуждается в обновлении</option>
+          <option value="needs_major">Нужен капитальный ремонт</option>
         </select>
       </div>
       <div class="promote-box" style="border-color:var(--accent);box-shadow:0 0 10px rgba(255,255,255,.3);animation:gold-glow 2s ease-in-out infinite alternate;margin-bottom:10px;">
         <div class="promote-header">
-          <div class="promote-ttl" style="background:linear-gradient(135deg,#ffd700,#f0a500,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">⭐ ЗОЛОТОЕ</div>
+          <div class="promote-ttl" style="background:linear-gradient(135deg,#ffd700,#f0a500,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">ЗОЛОТОЕ</div>
           <div style="display:flex;align-items:center;gap:6px;">
             <div style="background:#e74c3c;color:#fff;font-size:9px;font-weight:900;padding:2px 7px;border-radius:8px;">−50%</div>
             <div class="promote-badge">30 дней</div>
@@ -764,7 +764,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
       </div>
       <div class="promote-box" style="border-color:#ff00ff;box-shadow:0 0 10px rgba(255,0,255,.3);animation:neon-glow 2s ease-in-out infinite alternate;margin-bottom:10px;">
         <div class="promote-header">
-          <div class="promote-ttl" style="background:linear-gradient(135deg,#ff00ff,#00ffff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">⚡ ЛЕГЕНДАРНОЕ</div>
+          <div class="promote-ttl" style="background:linear-gradient(135deg,#ff00ff,#00ffff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">ЛЕГЕНДАРНОЕ</div>
           <div style="display:flex;align-items:center;gap:6px;">
             <div style="background:#e74c3c;color:#fff;font-size:9px;font-weight:900;padding:2px 7px;border-radius:8px;">−50%</div>
             <div class="promote-badge" style="background:linear-gradient(135deg,#9b00ff,#ff00aa);color:#fff;">30 дней</div>
@@ -785,8 +785,8 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
         </div>
       </div>
       <button class="submit-btn" id="submit-btn" onclick="vib();submitListing()">Опубликовать</button>
-      <button onclick="vib();saveDraft(true);showToast('💾 Черновик сохранён');" style="width:100%;background:rgba(46,204,113,.15);color:#2ecc71;font-size:14px;font-weight:700;padding:12px;border-radius:14px;border:1.5px solid #2ecc71;cursor:pointer;margin-top:8px;transition:transform .1s;active:transform:scale(.97);" ontouchstart="this.style.transform='scale(.97)'" ontouchend="this.style.transform=''">💾 Сохранить черновик</button>
-      <button onclick="vib();clearDraft();resetForm();showToast('🗑 Форма очищена');" style="width:100%;background:rgba(231,76,60,.1);color:#e74c3c;font-size:14px;font-weight:700;padding:12px;border-radius:14px;border:1.5px solid #e74c3c;cursor:pointer;margin-top:8px;transition:transform .1s;" ontouchstart="this.style.transform='scale(.97)'" ontouchend="this.style.transform=''">🗑 Очистить форму</button>
+      <button onclick="vib();saveDraft(true);showToast('Черновик сохранён');" style="width:100%;background:rgba(46,204,113,.15);color:#2ecc71;font-size:14px;font-weight:700;padding:12px;border-radius:14px;border:1.5px solid #2ecc71;cursor:pointer;margin-top:8px;transition:transform .1s;active:transform:scale(.97);" ontouchstart="this.style.transform='scale(.97)'" ontouchend="this.style.transform=''">Сохранить черновик</button>
+      <button onclick="vib();clearDraft();resetForm();showToast('Форма очищена');" style="width:100%;background:rgba(231,76,60,.1);color:#e74c3c;font-size:14px;font-weight:700;padding:12px;border-radius:14px;border:1.5px solid #e74c3c;cursor:pointer;margin-top:8px;transition:transform .1s;" ontouchstart="this.style.transform='scale(.97)'" ontouchend="this.style.transform=''">Очистить форму</button>
       <button onclick="vib();closeModal('add-modal');" style="width:100%;background:var(--card2);color:var(--muted);font-size:14px;font-weight:700;padding:12px;border-radius:14px;border:1.5px solid var(--border);cursor:pointer;margin-top:8px;transition:transform .1s;" ontouchstart="this.style.transform='scale(.97)'" ontouchend="this.style.transform=''">✕ Закрыть</button>
     </div>
   </div>
@@ -801,7 +801,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
     <div class="modal-body">
       <div class="promote-box" style="border-color:var(--accent);box-shadow:0 0 10px rgba(255,255,255,.3);animation:gold-glow 2s ease-in-out infinite alternate;margin-bottom:12px;">
         <div class="promote-header">
-          <div class="promote-ttl" style="background:linear-gradient(135deg,#ffd700,#f0a500,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">⭐ ЗОЛОТОЕ</div>
+          <div class="promote-ttl" style="background:linear-gradient(135deg,#ffd700,#f0a500,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">ЗОЛОТОЕ</div>
           <div style="display:flex;align-items:center;gap:6px;">
             <div style="background:#e74c3c;color:#fff;font-size:9px;font-weight:900;padding:2px 7px;border-radius:8px;">−50%</div>
             <div class="promote-badge">30 дней</div>
@@ -823,7 +823,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
       </div>
       <div class="promote-box" style="border-color:#ff00ff;box-shadow:0 0 10px rgba(255,0,255,.3);animation:neon-glow 2s ease-in-out infinite alternate;">
         <div class="promote-header">
-          <div class="promote-ttl" style="background:linear-gradient(135deg,#ff00ff,#00ffff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">⚡ ЛЕГЕНДАРНОЕ</div>
+          <div class="promote-ttl" style="background:linear-gradient(135deg,#ff00ff,#00ffff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">ЛЕГЕНДАРНОЕ</div>
           <div style="display:flex;align-items:center;gap:6px;">
             <div style="background:#e74c3c;color:#fff;font-size:9px;font-weight:900;padding:2px 7px;border-radius:8px;">−50%</div>
             <div class="promote-badge" style="background:linear-gradient(135deg,#9b00ff,#ff00aa);color:#fff;">30 дней</div>
@@ -843,7 +843,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
           </div>
         </div>
       </div>
-      <button class="submit-btn" style="background:var(--card2);color:var(--muted);margin-top:8px;" onclick="vib();closeModal('pay-modal');closeModal('add-modal');resetForm();showToast('✅ Объявление опубликовано!');loadListings();loadProfile();">Пропустить →</button>
+      <button class="submit-btn" style="background:var(--card2);color:var(--muted);margin-top:8px;" onclick="vib();closeModal('pay-modal');closeModal('add-modal');resetForm();showToast('Объявление опубликовано!');loadListings();loadProfile();">Пропустить →</button>
     </div>
   </div>
 </div>
@@ -883,7 +883,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
       <svg width="18" height="18" viewBox="0 0 24 24" fill="#e0245e" stroke="#e0245e" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
       Избранное
     </div>
-    <div class="modal-body" id="fav-modal-body"><div class="deals-empty">🤍<br><br>Пока ничего нет</div></div>
+    <div class="modal-body" id="fav-modal-body"><div class="deals-empty">Пока ничего нет</div></div>
   </div>
 </div>
 
@@ -892,8 +892,8 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-close-btn" onclick="vib();closeModal('orders-modal')">✕</div>
-    <div class="modal-title">💰 Ордера</div>
-    <div class="modal-body" id="orders-modal-body"><div class="deals-empty">📭<br><br>Предложений пока нет</div></div>
+    <div class="modal-title">Ордера</div>
+    <div class="modal-body" id="orders-modal-body"><div class="deals-empty">Предложений пока нет</div></div>
   </div>
 </div>
 
@@ -902,7 +902,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-close-btn" onclick="vib();closeModal('offer-modal')">✕</div>
-    <div class="modal-title">💰 Предложить цену</div>
+    <div class="modal-title">Предложить цену</div>
     <div class="modal-body">
       <div style="color:var(--muted);font-size:13px;margin-bottom:16px;" id="offer-listing-title"></div>
       <label class="form-label">Ваша цена</label>
@@ -924,7 +924,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
     <div class="modal-handle"></div>
     <div class="modal-close-btn" onclick="vib();closeModal('deals-modal')">✕</div>
     <div class="modal-title" id="deals-modal-title">История сделок</div>
-    <div class="modal-body" id="deals-modal-body"><div class="deals-empty">🤝<br><br>Сделок пока нет</div></div>
+    <div class="modal-body" id="deals-modal-body"><div class="deals-empty">Сделок пока нет</div></div>
   </div>
 </div>
 
@@ -1073,6 +1073,7 @@ function openTgChat(){const u="https://t.me/rzabeyda";if(tg&&tg.openTelegramLink
 
 const CITY_KEYS=["sharm","hurghada","cairo","alexandria","dahab","marsa","el-gouna","taba","luxor","aswan","safaga","el-quseir","nuweiba","soma-bay","other"];
 const CAT_KEYS=["alcohol","medicine","business","household","diving","money","kids","home","other","animals","smoking","furniture","beauty","property","education","clothes","food","rental","jobs","repair","restaurant","sport","construction","transport","shipping","transfer","tours","services","hobby","excursions","electronics"];
+const EYE_ICO='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;opacity:.7"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
 const PH_ICON='<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.3"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="9" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg>';
 const CAT_EMOJI={property:"🏠",transport:"🚗",services:"🔧",beauty:"💄",clothes:"👗",kids:"🧸",home:"🌿",jobs:"💼",animals:"🐱",hobby:"🎨",sport:"⚽",electronics:"📱",food:"🛒",business:"📈",money:"💰",alcohol:"🍾",furniture:"🛋",household:"🏺",repair:"🪚",smoking:"🚬",tours:"🏖️",excursions:"🗺️",medicine:"💊",education:"📚",restaurant:"🍽️",rental:"🤝",diving:"🤿",construction:"🏗️",transfer:"🚕",shipping:"✈️",other:"📦"};
 
@@ -1092,10 +1093,10 @@ let _chatMsgTimer=null;
 startChatsPolling();
 
 const T={
-  ru:{search:"Поиск...",fp:"$",fc:"Город",fs:"Раздел",apply:"Применить",new_listing:"Новое объявление",lbl_photos:"Фото (до 8)",lbl_title:"Заголовок *",lbl_desc:"Описание *",lbl_price:"Цена (USD)",lbl_cat:"Категория *",lbl_city:"Город *",publish:"Опубликовать",contact:"Написать продавцу",edit:"Редактировать",empty:"Объявлений нет",free:"Бесплатно",nav_market:"Рынок",nav_auction:"Аукцион",nav_profile:"Профиль",auction_title:"Аукцион",auction_sub:"Здесь скоро появятся аукционы.",auction_badge:"Скоро",add_listing:"Добавить объявление",my_listings:"Мои объявления",no_listings:"Нет объявлений",recs:"Похожие",del_confirm:"Удалить объявление?",s_active:"Активных",s_total:"Всего",s_deals:"Сделки",promo_on:"Продвигается · $5 · 24ч",promo_off:"Не продвигать",all_cities:"Все города",all_cats:"Все разделы",deals_title:"История сделок",loading:"Загрузка...",no_msgs:"Нет сообщений",msgs_hint:"Когда покупатели напишут — диалоги появятся здесь",start_chat:"Начните общение!",load_err:"Ошибка загрузки",conn_err:"Ошибка соединения",chats_title:"💬 Чаты",chat_placeholder:"Сообщение...",verified_seller:"Верифицированный продавец",dialogs_lbl:"Диалоги",offers_lbl:"Предложения цены",deleted:"🗑 Удалено",err:"❌ Ошибка",bookmarks:"Закладки",orders_lbl:"Ордера",chats_nav:"Чаты",profile_nav:"Профиль",share_lbl:"Поделиться",condition_new:"✨ Новое",condition_used:"Б/У",sold_btn:"Продано!",delete_btn:"Удалить",edit_btn:"Редактировать",contact_btn:"Написать",offer_btn:"💰 Предложить цену",share_btn:"Поделиться",report_btn:"Пожаловаться",extend_btn:"✅ Продлить на 30 дней",my_ads:"Мои объявления",
+  ru:{search:"Поиск...",fp:"$",fc:"Город",fs:"Раздел",apply:"Применить",new_listing:"Новое объявление",lbl_photos:"Фото (до 8)",lbl_title:"Заголовок *",lbl_desc:"Описание *",lbl_price:"Цена (USD)",lbl_cat:"Категория *",lbl_city:"Город *",publish:"Опубликовать",contact:"Написать продавцу",edit:"Редактировать",empty:"Объявлений нет",free:"Бесплатно",nav_market:"Рынок",nav_auction:"Аукцион",nav_profile:"Профиль",auction_title:"Аукцион",auction_sub:"Здесь скоро появятся аукционы.",auction_badge:"Скоро",add_listing:"Добавить объявление",my_listings:"Мои объявления",no_listings:"Нет объявлений",recs:"Похожие",del_confirm:"Удалить объявление?",s_active:"Активных",s_total:"Всего",s_deals:"Сделки",promo_on:"Продвигается · $5 · 24ч",promo_off:"Не продвигать",all_cities:"Все города",all_cats:"Все разделы",deals_title:"История сделок",loading:"Загрузка...",no_msgs:"Нет сообщений",msgs_hint:"Когда покупатели напишут — диалоги появятся здесь",start_chat:"Начните общение!",load_err:"Ошибка загрузки",conn_err:"Ошибка соединения",chats_title:"Чаты",chat_placeholder:"Сообщение...",verified_seller:"Верифицированный продавец",dialogs_lbl:"Диалоги",offers_lbl:"Предложения цены",deleted:"Удалено",err:"Ошибка",bookmarks:"Закладки",orders_lbl:"Ордера",chats_nav:"Чаты",profile_nav:"Профиль",share_lbl:"Поделиться",condition_new:"Новое",condition_used:"Б/У",sold_btn:"Продано!",delete_btn:"Удалить",edit_btn:"Редактировать",contact_btn:"Написать",offer_btn:"Предложить цену",share_btn:"Поделиться",report_btn:"Пожаловаться",extend_btn:"Продлить на 30 дней",my_ads:"Мои объявления",
     cities:{sharm:"Шарм-эль-Шейх",hurghada:"Хургада",cairo:"Каир",alexandria:"Александрия",dahab:"Дахаб",marsa:"Марса-Алам","el-gouna":"Эль-Гуна",taba:"Таба",luxor:"Луксор",aswan:"Асуан",safaga:"Сафага","el-quseir":"Эль-Кусейр",nuweiba:"Нувейба","soma-bay":"Сома-Бей",other:"Другой город"},
     cats:{property:"Недвижимость",transport:"Транспорт",services:"Услуги",beauty:"Мода и красота",clothes:"Одежда",kids:"Детские товары",home:"Дом и сад",jobs:"Работа",animals:"Животные",hobby:"Хобби",sport:"Спорт",electronics:"Электроника",food:"Продовольствие",business:"Бизнес",money:"Деньги и финансы",alcohol:"Алкоголь",furniture:"Мебель",household:"Бытовые товары",repair:"Ремонт",smoking:"Курение",tours:"Туры",excursions:"Экскурсии",medicine:"Аптека",education:"Обучение",restaurant:"Рестораны и кафе",rental:"Прокат",diving:"Дайвинг",construction:"Стройматериалы",transfer:"Трансфер",shipping:"Транспортировка",other:"Другое"}},
-  en:{search:"Search...",fp:"$",fc:"City",fs:"Section",apply:"Apply",new_listing:"New Listing",lbl_photos:"Photos (up to 8)",lbl_title:"Title *",lbl_desc:"Description *",lbl_price:"Price (USD)",lbl_cat:"Category *",lbl_city:"City *",publish:"Publish",contact:"Contact seller",edit:"Edit",empty:"No listings",free:"Free",nav_market:"Market",nav_auction:"Auction",nav_profile:"Profile",auction_title:"Auction",auction_sub:"Auctions coming soon.",auction_badge:"Soon",add_listing:"Add listing",my_listings:"My listings",no_listings:"No listings yet",recs:"Similar",del_confirm:"Delete listing?",s_active:"Active",s_total:"Total",s_deals:"Deals",promo_on:"Promoted · $5 · 24h",promo_off:"Don't promote",all_cities:"All cities",all_cats:"All sections",deals_title:"Deal history",loading:"Loading...",no_msgs:"No messages",msgs_hint:"When buyers write to you — dialogs will appear here",start_chat:"Start chatting!",load_err:"Loading error",conn_err:"Connection error",chats_title:"💬 Chats",chat_placeholder:"Message...",verified_seller:"Verified seller",dialogs_lbl:"Dialogs",offers_lbl:"Price offers",deleted:"🗑 Deleted",err:"❌ Error",bookmarks:"Bookmarks",orders_lbl:"Orders",chats_nav:"Chats",profile_nav:"Profile",share_lbl:"Share",condition_new:"✨ New",condition_used:"🔧 Used",sold_btn:"Sold!",delete_btn:"Delete",edit_btn:"Edit",contact_btn:"Message",offer_btn:"💰 Make offer",share_btn:"Share",report_btn:"Report",extend_btn:"✅ Extend 30 days",my_ads:"My listings",
+  en:{search:"Search...",fp:"$",fc:"City",fs:"Section",apply:"Apply",new_listing:"New Listing",lbl_photos:"Photos (up to 8)",lbl_title:"Title *",lbl_desc:"Description *",lbl_price:"Price (USD)",lbl_cat:"Category *",lbl_city:"City *",publish:"Publish",contact:"Contact seller",edit:"Edit",empty:"No listings",free:"Free",nav_market:"Market",nav_auction:"Auction",nav_profile:"Profile",auction_title:"Auction",auction_sub:"Auctions coming soon.",auction_badge:"Soon",add_listing:"Add listing",my_listings:"My listings",no_listings:"No listings yet",recs:"Similar",del_confirm:"Delete listing?",s_active:"Active",s_total:"Total",s_deals:"Deals",promo_on:"Promoted · $5 · 24h",promo_off:"Don't promote",all_cities:"All cities",all_cats:"All sections",deals_title:"Deal history",loading:"Loading...",no_msgs:"No messages",msgs_hint:"When buyers write to you — dialogs will appear here",start_chat:"Start chatting!",load_err:"Loading error",conn_err:"Connection error",chats_title:"Chats",chat_placeholder:"Message...",verified_seller:"Verified seller",dialogs_lbl:"Dialogs",offers_lbl:"Price offers",deleted:"Deleted",err:"Error",bookmarks:"Bookmarks",orders_lbl:"Orders",chats_nav:"Chats",profile_nav:"Profile",share_lbl:"Share",condition_new:"New",condition_used:"Used",sold_btn:"Sold!",delete_btn:"Delete",edit_btn:"Edit",contact_btn:"Message",offer_btn:"Make offer",share_btn:"Share",report_btn:"Report",extend_btn:"Extend 30 days",my_ads:"My listings",
     cities:{sharm:"Sharm",hurghada:"Hurghada",cairo:"Cairo",alexandria:"Alexandria",dahab:"Dahab",marsa:"Marsa Alam","el-gouna":"El Gouna",taba:"Taba",luxor:"Luxor",aswan:"Aswan",safaga:"Safaga","el-quseir":"El Quseir",nuweiba:"Nuweiba","soma-bay":"Soma Bay",other:"Other city"},
     cats:{property:"Real Estate",transport:"Transport",services:"Services",beauty:"Fashion & Beauty",clothes:"Clothes",kids:"Kids",home:"Home & Garden",jobs:"Jobs",animals:"Animals",hobby:"Hobby",sport:"Sport",electronics:"Electronics",food:"Grocery",business:"Business",money:"Finance",alcohol:"Alcohol",furniture:"Furniture",household:"Household",repair:"Repair",smoking:"Smoking",tours:"Tours",excursions:"Excursions",medicine:"Pharmacy",education:"Education",restaurant:"Restaurants & Cafes",rental:"Rental",diving:"Diving",construction:"Construction",transfer:"Transfer",shipping:"Shipping",other:"Other"}},
   ar:{search:"بحث...",fp:"$",fc:"المدينة",fs:"القسم",apply:"تطبيق",new_listing:"إعلان جديد",lbl_photos:"صور (حتى 8)",lbl_title:"العنوان *",lbl_desc:"الوصف *",lbl_price:"السعر (USD)",lbl_cat:"الفئة *",lbl_city:"المدينة *",publish:"نشر",contact:"تواصل",edit:"تعديل",empty:"لا إعلانات",free:"مجاني",nav_market:"السوق",nav_auction:"مزاد",nav_profile:"الملف",auction_title:"مزاد",auction_sub:"قريباً.",auction_badge:"قريباً",add_listing:"إضافة إعلان",my_listings:"إعلاناتي",no_listings:"لا إعلانات",recs:"مشابهة",del_confirm:"حذف؟",s_active:"نشط",s_total:"المجموع",s_deals:"صفقات",promo_on:"مميز · $5",promo_off:"بدون ترويج",all_cities:"كل المدن",all_cats:"كل الأقسام",deals_title:"سجل الصفقات",loading:"جار التحميل...",no_msgs:"لا رسائل",msgs_hint:"عندما يكتب المشترون — ستظهر المحادثات هنا",start_chat:"ابدأ المحادثة!",load_err:"خطأ في التحميل",conn_err:"خطأ في الاتصال",chats_title:"💬 الدردشات",chat_placeholder:"رسالة...",verified_seller:"بائع موثق",dialogs_lbl:"المحادثات",offers_lbl:"عروض الأسعار",deleted:"🗑 تم الحذف",err:"❌ خطأ",bookmarks:"المفضلة",orders_lbl:"الطلبات",chats_nav:"الدردشات",profile_nav:"الملف",share_lbl:"مشاركة",condition_new:"✨ جديد",condition_used:"🔧 مستعمل",sold_btn:"تم البيع!",delete_btn:"حذف",edit_btn:"تعديل",contact_btn:"تواصل",offer_btn:"💰 اقتراح سعر",share_btn:"مشاركة",report_btn:"إبلاغ",extend_btn:"✅ تمديد 30 يوم",my_ads:"إعلاناتي",
@@ -1300,7 +1301,7 @@ async function loadChats(){
     ]);
     const offers=or.filter(o=>o.status==="pending");
     if(!dr.length&&!offers.length){
-      el.innerHTML="<div style='text-align:center;padding:60px 20px'><div style='font-size:52px;margin-bottom:14px'>💬</div><div style='font-size:16px;font-weight:700;color:#fff;margin-bottom:8px'>"+t("no_msgs")+"</div><div style='font-size:13px;color:var(--muted);line-height:1.5'>"+t("msgs_hint")+"</div></div>";
+      el.innerHTML="<div style='text-align:center;padding:60px 20px'><div style='font-size:16px;font-weight:700;color:#fff;margin-bottom:8px'>"+t("no_msgs")+"</div><div style='font-size:13px;color:var(--muted);line-height:1.5'>"+t("msgs_hint")+"</div></div>";
       return;
     }
     const wrap=document.createElement("div");
@@ -1315,12 +1316,12 @@ async function loadChats(){
         card.style.cssText="background:var(--card);border:1px solid var(--accent);border-radius:14px;padding:14px;margin-bottom:8px;";
         card.innerHTML="<div style='display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px'>"
           +"<div style='font-size:13px;font-weight:700;color:#fff;flex:1;margin-right:8px'>"+esc(o.listing_title||"")+"</div>"
-          +"<span style='font-size:11px;color:var(--accent);font-weight:700'>⏳ Ожидает</span></div>"
+          +"<span style='font-size:11px;color:var(--accent);font-weight:700'>Ожидает</span></div>"
           +"<div style='font-size:12px;color:var(--muted);margin-bottom:6px'>От: "+buyer+"</div>"
           +"<div style='font-size:15px;font-weight:800;color:var(--accent);margin-bottom:10px'>"+o.amount+" "+o.currency+"</div>"
           +"<div style='display:flex;gap:8px'>"
-          +"<button data-oid='"+o.id+"' data-act='accept' style='flex:1;padding:9px;background:rgba(0,136,204,.15);border:1px solid #0088cc;border-radius:10px;color:#0088cc;font-weight:700;font-size:13px;cursor:pointer'>✅ Принять</button>"
-          +"<button data-oid='"+o.id+"' data-act='decline' style='flex:1;padding:9px;background:rgba(231,76,60,.1);border:1px solid #e74c3c;border-radius:10px;color:#e74c3c;font-weight:700;font-size:13px;cursor:pointer'>❌ Отклонить</button>"
+          +"<button data-oid='"+o.id+"' data-act='accept' style='flex:1;padding:9px;background:rgba(0,136,204,.15);border:1px solid #0088cc;border-radius:10px;color:#0088cc;font-weight:700;font-size:13px;cursor:pointer'>Принять</button>"
+          +"<button data-oid='"+o.id+"' data-act='decline' style='flex:1;padding:9px;background:rgba(231,76,60,.1);border:1px solid #e74c3c;border-radius:10px;color:#e74c3c;font-weight:700;font-size:13px;cursor:pointer'>Отклонить</button>"
           +"</div>";
         card.querySelectorAll("button[data-oid]").forEach(btn=>{
           btn.addEventListener("click",()=>{vib();respondOffer(btn.dataset.oid,btn.dataset.act);});
@@ -1588,7 +1589,7 @@ function renderListings(data){
   if(!data.length){
     const _cta={ru:"Опубликовать объявление",en:"Post a listing",ar:"انشر إعلانًا"}[lang]||"Post a listing";
     const _hint={ru:"Будьте первым — это бесплатно и займёт минуту",en:"Be the first — it's free and takes a minute",ar:"كن الأول — مجاني ويستغرق دقيقة"}[lang]||"";
-    grid.innerHTML=`<div class="empty"><div class="empty-icon">🏪</div><div>${t("empty")}</div><div style="opacity:.6;font-size:13px;margin-top:8px">${_hint}</div><button onclick="vib();openAddModal()" style="margin-top:18px;background:var(--accent);color:#000;border:0;border-radius:14px;padding:12px 22px;font-weight:800;font-size:14px;cursor:pointer">+ ${_cta}</button></div>`;return;}
+    grid.innerHTML=`<div class="empty"><div class="empty-icon">${PH_ICON}</div><div>${t("empty")}</div><div style="opacity:.6;font-size:13px;margin-top:8px">${_hint}</div><button onclick="vib();openAddModal()" style="margin-top:18px;background:var(--accent);color:#000;border:0;border-radius:14px;padding:12px 22px;font-weight:800;font-size:14px;cursor:pointer">+ ${_cta}</button></div>`;return;}
   grid.innerHTML=data.map(l=>{
     const photos=getPhotos(l);
     const imgHtml=photos.length
@@ -1597,8 +1598,8 @@ function renderListings(data){
     const dots=photos.length>1?`<div class="card-idots">${photos.map((_,i)=>`<div class="card-idot${i===0?" active":""}"></div>`).join("")}</div>`:"";
     return`<div class="card${isMine(l)?" mine":""}${l.is_legendary?" legendary":""}${l.is_promoted&&!l.is_legendary?" promoted-card":""}" data-id="${l.id}">
       <div class="card-imgs" data-id="${l.id}" data-idx="0" data-photos="${photos.length}">${imgHtml}${dots}</div>
-      ${l.is_promoted&&!l.is_legendary?`<div class="promoted-badge">⭐ ЗОЛОТОЕ</div>`:""}
-      ${l.is_legendary?`<div class="card-badge">⚡ ЛЕГЕНДАРНОЕ</div>`:!l.is_promoted?`<div class="card-badge">${t(`cats.${l.category}`)}</div>`:`<div class="card-badge" style="display:none;"></div>`}
+      ${l.is_promoted&&!l.is_legendary?`<div class="promoted-badge">ЗОЛОТОЕ</div>`:""}
+      ${l.is_legendary?`<div class="card-badge">ЛЕГЕНДАРНОЕ</div>`:!l.is_promoted?`<div class="card-badge">${t(`cats.${l.category}`)}</div>`:`<div class="card-badge" style="display:none;"></div>`}
       <div class="card-body" onclick="vib();openDetail(${l.id})">
         <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:4px;">
           <div class="card-title" style="flex:1;">${esc(l.title)}</div>
@@ -1608,7 +1609,7 @@ function renderListings(data){
         <div class="card-city" style="display:flex;align-items:center;">
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:2px;opacity:.7;flex-shrink:0"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
           <span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${cityName(l.city)}</span>
-          ${isMine(l)?`<span style="opacity:.55;font-size:10px;margin-right:4px;flex-shrink:0;">👁 ${l.views||0}</span>`:`<span style="opacity:.4;font-size:10px;margin-right:4px;flex-shrink:0;">${dateStr(l.created_at)}</span>`}
+          ${isMine(l)?`<span style="opacity:.55;font-size:10px;margin-right:4px;flex-shrink:0;">${EYE_ICO} ${l.views||0}</span>`:`<span style="opacity:.4;font-size:10px;margin-right:4px;flex-shrink:0;">${dateStr(l.created_at)}</span>`}
           <span class="fav-btn" data-id="${l.id}" onclick="event.stopPropagation();vib();toggleFav(${l.id})" style="flex-shrink:0;padding:2px 0 2px 4px;cursor:pointer;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="${isFav(l.id)?'#e0245e':'none'}" stroke="${isFav(l.id)?'#e0245e':'rgba(255,255,255,0.4)'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
           </span>
@@ -1712,7 +1713,7 @@ function rotateBanner(dir){
 
 async function loadListings(){
   try{const res=await fetch(`${API}/api/listings?_=${Date.now()}`);allListings=await res.json();initBanners();renderListings(filterData());}
-  catch(e){document.getElementById("listings-grid").innerHTML=`<div class="empty"><div class="empty-icon">⚠️</div><div>Ошибка соединения</div></div>`;}
+  catch(e){document.getElementById("listings-grid").innerHTML=`<div class="empty"><div>Ошибка соединения</div></div>`;}
 }
 
 /* DETAIL */
@@ -1728,37 +1729,37 @@ async function openDetail(id){
     const verBadge=l.seller_verified?`<span style="display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;background:#0088cc;border-radius:50%;margin-left:6px;font-size:11px;vertical-align:middle;flex-shrink:0;">✓</span>`:"";
     document.getElementById("detail-title").innerHTML=esc(l.title)+verBadge;
     document.getElementById("detail-desc").textContent=l.description||"";
-    const phoneMeta=l.phone?`<span class="detail-chip">📞 ${l.phone}</span>`:"";
-    const condMeta=l.condition&&l.category!=="property"?`<span class="detail-chip">${l.condition==="new"?"✨ Новое":"Б/У"}</span>`:"";
-    const propTypeMap={apartment:"🏢 Квартира",studio:"🛏 Студия",house:"🏡 Дом",villa:"🏖️ Вилла",townhouse:"🏘️ Таунхаус",compound:"🏰 Компаунд"};
-    const propMatMap={brick:"🧱 Кирпич",panel:"Панель",monolith:"Монолит",wood:"Дерево",log:"Деревянный сруб",stone:"Камень",cassette:"Кассетный",other_mat:"Другой материал"};
-    const propCondMap={newbuild:"🏗 Новостройка",renovated:"✨ Реновировано",finished:"✅ Завершён",good:"👍 Хорошее",average:"📊 Среднее",new_finish:"🎨 Новая отделка",sanitary:"🚿 Санитарный ремонт",needs_sanitary:"🔧 Требуется санитарный ремонт",needs_update:"🔄 Нуждается в обновлении",needs_major:"⚠️ Капитальный ремонт"};
+    const phoneMeta=l.phone?`<span class="detail-chip">${l.phone}</span>`:"";
+    const condMeta=l.condition&&l.category!=="property"?`<span class="detail-chip">${l.condition==="new"?"Новое":"Б/У"}</span>`:"";
+    const propTypeMap={apartment:"Квартира",studio:"Студия",house:"Дом",villa:"Вилла",townhouse:"Таунхаус",compound:"Компаунд"};
+    const propMatMap={brick:"Кирпич",panel:"Панель",monolith:"Монолит",wood:"Дерево",log:"Деревянный сруб",stone:"Камень",cassette:"Кассетный",other_mat:"Другой материал"};
+    const propCondMap={newbuild:"Новостройка",renovated:"Реновировано",finished:"Завершён",good:"Хорошее",average:"Среднее",new_finish:"Новая отделка",sanitary:"Санитарный ремонт",needs_sanitary:"Требуется санитарный ремонт",needs_update:"Нуждается в обновлении",needs_major:"Капитальный ремонт"};
     const propMeta=l.category==="property"?[
-      l.prop_deal?`<span class="detail-chip">${l.prop_deal==="sale"?"🔑 Продажа":"🏠 Аренда "+(l.prop_rent_period==="monthly"?"· помесячно":"· посуточно")}</span>`:"",
+      l.prop_deal?`<span class="detail-chip">${l.prop_deal==="sale"?"Продажа":"Аренда "+(l.prop_rent_period==="monthly"?"· помесячно":"· посуточно")}</span>`:"",
       l.prop_type&&propTypeMap[l.prop_type]?`<span class="detail-chip">${propTypeMap[l.prop_type]}</span>`:"",
-      l.prop_area?`<span class="detail-chip">📐 ${l.prop_area} м²</span>`:"",
-      l.prop_rooms?`<span class="detail-chip">🚪 ${l.prop_rooms} комн.</span>`:"",
-      l.prop_floor?`<span class="detail-chip">🏢 ${l.prop_floor} эт.</span>`:"",
-      l.prop_year?`<span class="detail-chip">📅 ${l.prop_year} г.</span>`:"",
-      l.prop_material&&propMatMap[l.prop_material]?`<span class="detail-chip">🧱 ${propMatMap[l.prop_material]}</span>`:"",
+      l.prop_area?`<span class="detail-chip">${l.prop_area} м²</span>`:"",
+      l.prop_rooms?`<span class="detail-chip">${l.prop_rooms} комн.</span>`:"",
+      l.prop_floor?`<span class="detail-chip">${l.prop_floor} эт.</span>`:"",
+      l.prop_year?`<span class="detail-chip">${l.prop_year} г.</span>`:"",
+      l.prop_material&&propMatMap[l.prop_material]?`<span class="detail-chip">${propMatMap[l.prop_material]}</span>`:"",
       l.prop_condition&&propCondMap[l.prop_condition]?`<span class="detail-chip">${propCondMap[l.prop_condition]}</span>`:"",
-      l.prop_district?`<span class="detail-chip">📍 ${l.prop_district}</span>`:"",
+      l.prop_district?`<span class="detail-chip">${l.prop_district}</span>`:"",
     ].join(""):""
     // views always visible; expiry only for owner
     const views=l.views||0;
     let daysLeft="";
     if(isMine(l)&&l.expires_at){
       const diff=Math.ceil((new Date(l.expires_at)-new Date())/86400000);
-      daysLeft=`<span class="detail-chip">⏳ ${diff>0?diff+" дн.":"истёк"}</span>`;
+      daysLeft=`<span class="detail-chip">${diff>0?diff+" дн.":"истёк"}</span>`;
     }
-    const ownerMeta=`<span class="detail-chip">👁 ${views}</span>${daysLeft}`;
+    const ownerMeta=`<span class="detail-chip">${EYE_ICO} ${views}</span>${daysLeft}`;
     document.getElementById("detail-meta").innerHTML=`<span class="detail-chip">${t(`cats.${l.category}`)}</span><span class="detail-chip"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:middle;margin-right:3px"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>${cityName(l.city)}</span>${condMeta}${propMeta}${phoneMeta}${ownerMeta}`;
     const mine=isMine(l);
     if(mine){
       const buyRow=((!l.is_promoted)||(!l.is_legendary))?
         `<div style="display:flex;gap:8px;width:100%;margin-bottom:8px;">
-          ${!l.is_promoted?`<button class="edit-btn" style="flex:1;background:rgba(255,255,255,.15);border-color:var(--accent);color:var(--accent);padding:10px 6px;font-size:12px;" onclick="vib();buyPromo(${l.id})">⭐ ЗОЛОТОЕ</button>`:""}
-          ${!l.is_legendary?`<button class="edit-btn" style="flex:1;background:rgba(255,0,255,.1);border-color:#ff00ff;color:#ff00ff;padding:10px 6px;font-size:12px;" onclick="vib();buyLegendary(${l.id})">⚡ ЛЕГЕНДАРНОЕ</button>`:""}
+          ${!l.is_promoted?`<button class="edit-btn" style="flex:1;background:rgba(255,255,255,.15);border-color:var(--accent);color:var(--accent);padding:10px 6px;font-size:12px;" onclick="vib();buyPromo(${l.id})">ЗОЛОТОЕ</button>`:""}
+          ${!l.is_legendary?`<button class="edit-btn" style="flex:1;background:rgba(255,0,255,.1);border-color:#ff00ff;color:#ff00ff;padding:10px 6px;font-size:12px;" onclick="vib();buyLegendary(${l.id})">ЛЕГЕНДАРНОЕ</button>`:""}
         </div>`:"";
       document.getElementById("action-btns").innerHTML=
         buyRow+
@@ -1771,7 +1772,7 @@ async function openDetail(id){
     } else {
       const _su=l.seller_username||'';const _lt=esc(l.title);
       const contactHtml=`<button class="contact-btn" onclick="vib();openChat(${l.user_id},'${_su}',${l.id},'${_lt}')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 0 2 2z"/></svg>Написать</button>
-        <button class="edit-btn" style="margin-bottom:0;margin-top:8px;" onclick="vib();openOfferModal(${l.id},'${esc(l.title)}')">💰 Предложить цену</button>
+        <button class="edit-btn" style="margin-bottom:0;margin-top:8px;" onclick="vib();openOfferModal(${l.id},'${esc(l.title)}')">Предложить цену</button>
         <button class="edit-btn" style="margin-bottom:0;margin-top:8px;border-color:#0088cc;color:#0088cc;background:rgba(0,136,204,.08);" onclick="vib();shareListing(${l.id},'${esc(l.title)}')"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Поделиться</button>
         <button class="edit-btn" style="margin-bottom:0;margin-top:8px;border-color:#e74c3c;color:#e74c3c;background:rgba(231,76,60,.06);" onclick="vib();reportListing(${l.id})"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#e74c3c;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:inline;vertical-align:middle;margin-right:6px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Пожаловаться</button>
         <button class="edit-btn" style="margin-bottom:0;margin-top:12px;border-color:#555;color:#aaa;background:rgba(255,255,255,.04);" onclick="vib();closeModal('detail-modal')">✕ Закрыть</button>`;
@@ -1789,7 +1790,7 @@ function shareListing(id, title){
   const text=`${title} — Egypt Bazar`;
   if(tg) tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
   else if(navigator.share) navigator.share({title:text,url});
-  else{navigator.clipboard?.writeText(url);showToast("🔗 Ссылка скопирована");}
+  else{navigator.clipboard?.writeText(url);showToast("Ссылка скопирована");}
 }
 
 function initDetailListingSwipe(){
@@ -1893,16 +1894,16 @@ async function markSold(id){
   if(!confirm("Отметить как Продано?"))return;
   try{
     await fetch(`${API}/api/listings/${id}/sold?user_id=${tgUser?.id||0}`,{method:"POST"});
-    closeModal("detail-modal");await loadListings();loadProfile();showToast("✅ Отмечено как Продано!");
-  }catch(e){showToast("❌ Ошибка");}
+    closeModal("detail-modal");await loadListings();loadProfile();showToast("Отмечено как Продано!");
+  }catch(e){showToast("Ошибка");}
 }
 
 async function deleteListingFromDetail(id){
   if(!confirm("Удалить объявление?"))return;
   try{
     await fetch(`${API}/api/listings/${id}?user_id=${tgUser?.id||0}`,{method:"DELETE"});
-    closeModal("detail-modal");await loadListings();loadProfile();showToast("🗑 Удалено");
-  }catch(e){showToast("❌ Ошибка");}
+    closeModal("detail-modal");await loadListings();loadProfile();showToast("Удалено");
+  }catch(e){showToast("Ошибка");}
 }
 
 let editListingId=null;
@@ -1923,7 +1924,7 @@ async function openEditModal(id){
       // show lock notice
       let notice=document.getElementById("edit-paid-notice");
       if(!notice){notice=document.createElement("div");notice.id="edit-paid-notice";notice.style="font-size:11px;color:#ff9900;margin:-10px 0 10px;padding:8px 10px;background:rgba(255,153,0,.1);border-radius:8px;border:1px solid rgba(255,153,0,.3);";titleEl.parentNode.insertBefore(notice,titleEl.nextSibling);}
-      notice.textContent="🔒 Заголовок и раздел заблокированы — объявление платное";
+      notice.textContent="Заголовок и раздел заблокированы — объявление платное";
       notice.style.display="block";
     }else{
       const notice=document.getElementById("edit-paid-notice");
@@ -1954,7 +1955,7 @@ async function openEditModal(id){
       else{slot.innerHTML=`<input type="file" accept="image/*" onchange="editPhoto(this,${i})"><span>+</span>`;}
     }
     document.getElementById("edit-modal").classList.add("open");
-  }catch(e){showToast("❌ Ошибка загрузки");}
+  }catch(e){showToast("Ошибка загрузки");}
 }
 
 function editPhoto(input,idx){
@@ -1978,7 +1979,7 @@ function clearEditPhoto(idx){
 
 async function submitEdit(){
   const title=document.getElementById("edit-title").value.trim();
-  if(!title){showToast("⚠️ Введите заголовок");return;}
+  if(!title){showToast("Введите заголовок");return;}
   const btn=document.getElementById("edit-submit-btn");btn.disabled=true;
   const fd=new FormData();
   fd.append("user_id",tgUser?.id||0);
@@ -1997,9 +1998,9 @@ async function submitEdit(){
   if(editPhotoFiles[3])fd.append("photo_4",editPhotoFiles[3]);
   try{
     const res=await fetch(`${API}/api/listings/${editListingId}`,{method:"PUT",body:fd});
-    if(res.ok){showToast("✅ Сохранено!");closeModal("edit-modal");await loadListings();}
-    else showToast("❌ Ошибка");
-  }catch(e){showToast("❌ Ошибка соединения");}
+    if(res.ok){showToast("Сохранено!");closeModal("edit-modal");await loadListings();}
+    else showToast("Ошибка");
+  }catch(e){showToast("Ошибка соединения");}
   btn.disabled=false;
 }
 function renderDetailImgs(){
@@ -2020,7 +2021,7 @@ function renderDetailImgs(){
     const lbl=document.createElement("div");
     lbl.className="main-label";
     lbl.id="main-label";
-    lbl.textContent="⭐ Главное фото";
+    lbl.textContent="Главное фото";
     lbl.style.display=detailPhotoIdx===0?"flex":"none";
     wrap.appendChild(lbl);
   }
@@ -2127,7 +2128,7 @@ async function loadProfile(){
     </div>`;
   }).join("");
 }
-function shareProfile(){const botUrl="https://t.me/egypt_bazar_bot";if(tg)tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(botUrl)}&text=${encodeURIComponent("🌴 Egypt Bazar — барахолка для русскоязычных в Египте")}`);else if(navigator.share)navigator.share({title:"Egypt Bazar",url:botUrl});}
+function shareProfile(){const botUrl="https://t.me/egypt_bazar_bot";if(tg)tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(botUrl)}&text=${encodeURIComponent("Egypt Bazar — барахолка для русскоязычных в Египте")}`);else if(navigator.share)navigator.share({title:"Egypt Bazar",url:botUrl});}
 
 async function togglePauseListing(id, currentlyPaused, btn){
   try{
@@ -2139,7 +2140,7 @@ async function togglePauseListing(id, currentlyPaused, btn){
       showToast(d.is_active===3?"⏸ Объявление на паузе":"▶️ Объявление снова активно");
       await loadProfile();
     }
-  }catch(e){showToast("❌ Ошибка");}
+  }catch(e){showToast("Ошибка");}
 }
 
 async function openDeals(){
@@ -2149,7 +2150,7 @@ async function openDeals(){
     const sold=await res.json();
     document.getElementById("stat-deals").textContent=sold.length;
     const body=document.getElementById("deals-modal-body");
-    if(!sold.length){body.innerHTML='<div class="deals-empty">🤝<br><br>Сделок пока нет</div>';}
+    if(!sold.length){body.innerHTML='<div class="deals-empty">Сделок пока нет</div>';}
     else{
       body.innerHTML=sold.map(l=>`
         <div style="background:var(--card2);border:1px solid var(--border);border-radius:14px;display:flex;gap:10px;padding:10px;margin-bottom:8px;">
@@ -2159,23 +2160,23 @@ async function openDeals(){
           <div style="flex:1;min-width:0;">
             <div style="font-size:13px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(l.title)}</div>
             <div style="font-size:13px;font-weight:800;color:var(--green);margin-top:3px;">${priceStr(l)}</div>
-            <div style="font-size:11px;color:var(--muted);margin-top:2px;">✅ Продано · ${dateStr(l.created_at)}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Продано · ${dateStr(l.created_at)}</div>
           </div>
         </div>`).join("");
     }
     document.getElementById("deals-modal").classList.add("open");
-  }catch(e){showToast("❌ Ошибка");}
+  }catch(e){showToast("Ошибка");}
 }
 
 function openVerifyModal(){document.getElementById("verify-modal").classList.add("open");}
 
 async function reportListing(id){
   const reasons=[
-    {k:"spam",l:"🚫 Спам / реклама"},
-    {k:"fraud",l:"💸 Мошенничество"},
-    {k:"wrong",l:"📋 Неверная категория"},
-    {k:"fake",l:"🤖 Фейк / не реальное"},
-    {k:"other",l:"❓ Другое"},
+    {k:"spam",l:"Спам / реклама"},
+    {k:"fraud",l:"Мошенничество"},
+    {k:"wrong",l:"Неверная категория"},
+    {k:"fake",l:"Фейк / не реальное"},
+    {k:"other",l:"Другое"},
   ];
   const overlay=document.createElement("div");
   overlay.style="position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9000;display:flex;align-items:flex-end;justify-content:center;";
@@ -2198,8 +2199,8 @@ async function sendReport(listingId, reason, overlay){
     fd.append("reason",reason);
     await fetch(`${API}/api/reports`,{method:"POST",body:fd});
   }catch(e){}
-  if(window.Telegram?.WebApp) Telegram.WebApp.showAlert("✅ Жалоба отправлена. Мы рассмотрим её в ближайшее время.");
-  else alert("✅ Жалоба отправлена.");
+  if(window.Telegram?.WebApp) Telegram.WebApp.showAlert("Жалоба отправлена. Мы рассмотрим её в ближайшее время.");
+  else alert("Жалоба отправлена.");
 }
 
 async function payVerifyStars(){
@@ -2213,12 +2214,12 @@ async function payVerifyStars(){
       if(tg&&d.invoice_url){
         closeModal("verify-modal");
         tg.openInvoice(d.invoice_url,(s)=>{
-          if(s==="paid"){showToast("✅ Верификация активирована!");loadProfile();}
-          else showToast("❌ Отменено");
+          if(s==="paid"){showToast("Верификация активирована!");loadProfile();}
+          else showToast("Отменено");
         });
       }
-    }else showToast("❌ Ошибка");
-  }catch(e){showToast("❌ "+e.message);}
+    }else showToast("Ошибка");
+  }catch(e){showToast(""+e.message);}
 }
 
 async function payVerifyCard(){
@@ -2230,7 +2231,7 @@ async function payVerifyCard(){
   else window.open("https://web.tribute.tg/p/uqh","_blank");
 }
 
-async function deleteListing(id){if(!confirm(t("del_confirm")))return;try{await fetch(`${API}/api/listings/${id}?user_id=${tgUser?.id||0}`,{method:"DELETE"});await loadListings();loadProfile();showToast("🗑 Удалено");}catch(e){showToast("❌ Ошибка");}}
+async function deleteListing(id){if(!confirm(t("del_confirm")))return;try{await fetch(`${API}/api/listings/${id}?user_id=${tgUser?.id||0}`,{method:"DELETE"});await loadListings();loadProfile();showToast("Удалено");}catch(e){showToast("Ошибка");}}
 
 /* MODALS */
 function openAddModal(){
@@ -2400,7 +2401,7 @@ function selectRentPeriod(v){
 /* PROMOTE */
 function togglePromo(){vib();promoEnabled=!promoEnabled;document.getElementById("promo-toggle").classList.toggle("on",promoEnabled);document.getElementById("promo-lbl").textContent=promoEnabled?"Баннер · 1000⭐ · 30 дней":"Не продвигать";document.getElementById("promo-opts").style.display=promoEnabled?"":"none";}
 function selPay(p){vib();promoPayment=p;["stars","card"].forEach(x=>document.getElementById(`popt-${x}`).classList.toggle("selected",x===p));}
-function toggleLegendary(){vib();legendaryEnabled=!legendaryEnabled;document.getElementById("legend-toggle").classList.toggle("on",legendaryEnabled);document.getElementById("legend-lbl").textContent=legendaryEnabled?"⚡ Легендарное · 750⭐":"Не активировать";document.getElementById("legend-opts").style.display=legendaryEnabled?"":"none";}
+function toggleLegendary(){vib();legendaryEnabled=!legendaryEnabled;document.getElementById("legend-toggle").classList.toggle("on",legendaryEnabled);document.getElementById("legend-lbl").textContent=legendaryEnabled?"Легендарное · 750⭐":"Не активировать";document.getElementById("legend-opts").style.display=legendaryEnabled?"":"none";}
 function selLegPay(p){vib();legendaryPayment=p;["stars","card"].forEach(x=>document.getElementById(`popt-leg-${x}`)?.classList.toggle("selected",x===p));}
 
 /* SUBMIT */
@@ -2429,7 +2430,7 @@ function validateForm(){
   if(!title)missing.push("Заголовок");
   if(!desc)missing.push("Описание");
   if(!cat)missing.push("Категория");
-  if(missing.length){showToast("⚠️ Заполните: "+missing.join(", "));return false;}
+  if(missing.length){showToast("Заполните: "+missing.join(", "));return false;}
   return true;
 }
 
@@ -2439,14 +2440,14 @@ async function submitListing(){
   const desc=document.getElementById("inp-desc").value.trim();
   const uid=tgUser?.id||0;
   const btn=document.getElementById("submit-btn");btn.disabled=true;
-  if(!uid){showToast("❌ Откройте через Telegram");btn.disabled=false;return;}
+  if(!uid){showToast("Откройте через Telegram");btn.disabled=false;return;}
   const fd=new FormData();
   const cityVal=document.getElementById("inp-city").value;
   const cityOther=document.getElementById("inp-city-other").value.trim();
   const finalCity=cityVal==="other"?(cityOther||"other"):(cityVal||"other");
   const districtVal=document.getElementById("inp-district")?.value||"";
   const catVal=document.getElementById("inp-cat").value;
-  if(!catVal){showToast("❌ Выберите категорию");btn.disabled=false;return;}
+  if(!catVal){showToast("Выберите категорию");btn.disabled=false;return;}
   fd.append("user_id",uid);fd.append("title",title);
   fd.append("description",desc);
   fd.append("price",document.getElementById("inp-price").value||0);
@@ -2490,7 +2491,7 @@ async function submitListing(){
       // закрываем форму
       document.getElementById("add-modal").classList.remove("open");
       document.getElementById("fab-btn").classList.toggle("hidden", currentPage!=="market");
-      showToast("✅ Объявление опубликовано!");
+      showToast("Объявление опубликовано!");
       // clear filters so new listing is visible
       selectedCities.clear(); selectedCats.clear();
       if(typeof pendingCities!=="undefined"){pendingCities.clear();pendingCats.clear();}
@@ -2521,9 +2522,9 @@ async function submitListing(){
       },2500);
     } else {
       const err=await res.json().catch(()=>({}));
-      showToast("❌ "+(err.detail||res.status));
+      showToast(""+(err.detail||res.status));
     }
-  }catch(e){showToast("❌ "+e.message);}
+  }catch(e){showToast(""+e.message);}
   btn.disabled=false;
 }
 
@@ -2536,7 +2537,7 @@ async function payPromoStars(){
     if(pdata.free){
       closeModal("pay-modal");
       closeModal("detail-modal");
-      showToast("⭐ ЗОЛОТОЕ активировано!");
+      showToast("ЗОЛОТОЕ активировано!");
       await loadListings();
       return;
     }
@@ -2544,12 +2545,12 @@ async function payPromoStars(){
       closeModal("pay-modal");
       tg.openInvoice(pdata.invoice_url,(s)=>{
         if(s==="paid"){
-          showToast("⭐ ЗОЛОТОЕ активировано!");
+          showToast("ЗОЛОТОЕ активировано!");
           setTimeout(()=>loadListings(),1500);
         }
       });
     }
-  } else showToast("❌ Ошибка");
+  } else showToast("Ошибка");
 }
 
 async function payPromoCard(){
@@ -2560,7 +2561,7 @@ async function payPromoCard(){
   closeModal("pay-modal");
   if(tg)tg.openLink("https://web.tribute.tg/p/ujw");
   else window.open("https://web.tribute.tg/p/ujw","_blank");
-  showToast("💳 Ссылка отправлена в бот!");
+  showToast("Ссылка отправлена в бот!");
 }
 
 async function payLegStars(){
@@ -2572,7 +2573,7 @@ async function payLegStars(){
     if(pdata.free){
       closeModal("pay-modal");
       closeModal("detail-modal");
-      showToast("⚡ ЛЕГЕНДАРНОЕ активировано!");
+      showToast("ЛЕГЕНДАРНОЕ активировано!");
       await loadListings();
       return;
     }
@@ -2580,12 +2581,12 @@ async function payLegStars(){
       closeModal("pay-modal");
       tg.openInvoice(pdata.invoice_url,(s)=>{
         if(s==="paid"){
-          showToast("⚡ ЛЕГЕНДАРНОЕ активировано!");
+          showToast("ЛЕГЕНДАРНОЕ активировано!");
           setTimeout(()=>loadListings(),1500);
         }
       });
     }
-  } else showToast("❌ Ошибка");
+  } else showToast("Ошибка");
 }
 
 async function payLegCard(){
@@ -2596,7 +2597,7 @@ async function payLegCard(){
   closeModal("pay-modal");
   if(tg)tg.openLink("https://web.tribute.tg/p/uqf");
   else window.open("https://web.tribute.tg/p/uqf","_blank");
-  showToast("💳 Ссылка отправлена в бот!");
+  showToast("Ссылка отправлена в бот!");
 }
 function resetForm(){
   ["inp-title","inp-desc","inp-price","inp-phone"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
@@ -2669,7 +2670,7 @@ function loadDraft(){
     }
     if(d.phone)document.getElementById("inp-phone").value=d.phone;
     if(d.condition)selectCondition(d.condition);
-    if(d.title||d.cat||d.city)showToast("📝 Черновик восстановлен");
+    if(d.title||d.cat||d.city)showToast("Черновик восстановлен");
   }catch(e){}
 }
 function clearDraft(){localStorage.removeItem(_draftKey());}
@@ -2687,7 +2688,7 @@ function checkPendingPromo(){try{localStorage.removeItem('eb_pending_promo');}ca
     currentListingId=p.listingId;
     setTimeout(()=>{
       document.getElementById("pay-modal").classList.add("open");
-      showToast("💳 Возобновите оплату продвижения");
+      showToast("Возобновите оплату продвижения");
     },1200);
   }catch(e){}
 }
@@ -2704,15 +2705,15 @@ async function openOrders(){
     const offers=await res.json();
     document.getElementById("stat-orders").textContent=offers.filter(o=>o.status==="pending").length||offers.length;
     const body=document.getElementById("orders-modal-body");
-    if(!offers.length){body.innerHTML='<div class="deals-empty">📭<br><br>Предложений пока нет</div>';}
+    if(!offers.length){body.innerHTML='<div class="deals-empty">Предложений пока нет</div>';}
     else{
       body.innerHTML=offers.map(o=>{
-        const statusIcon=o.status==="accepted"?"✅":o.status==="declined"?"❌":"⏳";
+        const statusIcon=o.status==="accepted"?"✓":o.status==="declined"?"✕":"…";
         const statusLbl=o.status==="accepted"?"Принято":o.status==="declined"?"Отклонено":"Ожидает";
         const btns=o.status==="pending"
           ?`<div style="display:flex;gap:6px;margin-top:10px;">
-              <button onclick="vib();respondOffer(${o.id},'accept')" style="flex:1;padding:8px;border-radius:10px;border:none;background:#2ecc71;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">✅ Принять</button>
-              <button onclick="vib();respondOffer(${o.id},'decline')" style="flex:1;padding:8px;border-radius:10px;border:none;background:#e74c3c;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">❌ Отклонить</button>
+              <button onclick="vib();respondOffer(${o.id},'accept')" style="flex:1;padding:8px;border-radius:10px;border:none;background:#2ecc71;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">Принять</button>
+              <button onclick="vib();respondOffer(${o.id},'decline')" style="flex:1;padding:8px;border-radius:10px;border:none;background:#e74c3c;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">Отклонить</button>
             </div>`:""
         return`<div id="offer-row-${o.id}" style="background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;">
           <div style="font-size:13px;font-weight:600;color:#fff;margin-bottom:6px;">${esc(o.listing_title||"")}</div>
@@ -2726,7 +2727,7 @@ async function openOrders(){
       }).join("");
     }
     document.getElementById("orders-modal").classList.add("open");
-  }catch(e){showToast("❌ Ошибка");}
+  }catch(e){showToast("Ошибка");}
 }
 
 async function respondOffer(offerId, action){
@@ -2734,9 +2735,9 @@ async function respondOffer(offerId, action){
     const fd=new FormData();
     fd.append("action",action);
     const res=await fetch(`${API}/api/offers/${offerId}/respond`,{method:"POST",body:fd});
-    if(res.ok){showToast(action==="accept"?"✅ Принято!":"❌ Отклонено");openOrders();}
-    else showToast("❌ Ошибка");
-  }catch(e){showToast("❌ "+e.message);}
+    if(res.ok){showToast(action==="accept"?"Принято!":"Отклонено");openOrders();}
+    else showToast("Ошибка");
+  }catch(e){showToast(""+e.message);}
 }
 
 // ── OFFER PRICE ───────────────────────────────────────────────────────────────
@@ -2752,7 +2753,7 @@ function openOfferModal(id,title){
 async function submitOffer(){
   if(!tgUser){showToast("Войдите через Telegram");return;}
   const amount=parseFloat(document.getElementById("offer-amount").value);
-  if(!amount||amount<=0){showToast("⚠️ Введите сумму");return;}
+  if(!amount||amount<=0){showToast("Введите сумму");return;}
   const currency=document.getElementById("offer-currency").value;
   const fd=new FormData();
   fd.append("listing_id",offerListingId);
@@ -2765,18 +2766,18 @@ async function submitOffer(){
     if(res.ok){
       const data=await res.json();
       closeModal("offer-modal");
-      showToast("✅ Предложение отправлено продавцу!");
+      showToast("Предложение отправлено продавцу!");
       // send message so dialog appears in Чаты with unread dot
       const mfd=new FormData();
       mfd.append("sender_id",tgUser.id);
       mfd.append("receiver_id",data.seller_id);
       mfd.append("listing_id",data.listing_id);
-      mfd.append("text",`💰 Предлагаю цену: ${amount} ${currency}`);
+      mfd.append("text",`Предлагаю цену: ${amount} ${currency}`);
       if(tgUser.username)mfd.append("sender_username",tgUser.username);
       if(data.seller_username)mfd.append("receiver_username",data.seller_username);
       await fetch(`${API}/api/messages`,{method:"POST",body:mfd}).catch(()=>{});
-    }else showToast("❌ Ошибка");
-  }catch(e){showToast("❌ "+e.message);}
+    }else showToast("Ошибка");
+  }catch(e){showToast(""+e.message);}
 }
 
 // ── FAVOURITES ────────────────────────────────────────────────────────────────
@@ -2806,7 +2807,7 @@ function openFavourites(){
   const body=document.getElementById("fav-modal-body");
   const favListings=allListings.filter(l=>favs.has(l.id));
   if(!favListings.length){
-    body.innerHTML='<div class="deals-empty">🤍<br><br>Пока ничего нет</div>';
+    body.innerHTML='<div class="deals-empty">Пока ничего нет</div>';
   }else{
     body.innerHTML=favListings.map(l=>`
       <div style="background:var(--card2);border:1px solid var(--border);border-radius:14px;display:flex;gap:10px;padding:10px;margin-bottom:8px;cursor:pointer;" onclick="vib();closeModal('fav-modal');setTimeout(()=>openDetail(${l.id}),220)">
