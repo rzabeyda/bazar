@@ -704,7 +704,9 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
       <select class="form-select" id="inp-city" onchange="updateDistricts()">
         <option value="">— Не указан —</option>
         <option value="alexandria">Александрия</option>
+        <option value="dahab">Дахаб</option>
         <option value="cairo">Каир</option>
+        <option value="luxor">Люксор</option>
         <option value="marsa">Марса-Алам</option>
         <option value="hurghada">Хургада</option>
         <option value="sharm">Шарм-эль-Шейх</option>
@@ -1049,7 +1051,9 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
         <option value="sharm">Шарм-эль-Шейх</option>
         <option value="hurghada">Хургада</option>
         <option value="cairo">Каир</option>
+        <option value="luxor">Люксор</option>
         <option value="alexandria">Александрия</option>
+        <option value="dahab">Дахаб</option>
         <option value="marsa">Марса-Алам</option>
         <option value="other">Другой город...</option>
       </select>
@@ -1108,7 +1112,7 @@ function selectCondition(v){
 }
 function openTgChat(){const u="https://t.me/rzabeyda";if(tg&&tg.openTelegramLink)tg.openTelegramLink(u);else window.open(u,"_blank");}
 
-const CITY_KEYS=["sharm","hurghada","marsa","cairo","alexandria","other"];
+const CITY_KEYS=["sharm","hurghada","marsa","cairo","alexandria","dahab","luxor","other"];
 const CAT_KEYS=["visas","moto","events","alcohol","medicine","business","household","diving","money","kids","home","other","animals","smoking","furniture","beauty","property","education","clothes","food","rental","jobs","repair","restaurant","sport","construction","transport","shipping","transfer","tours","services","hobby","excursions","electronics"];
 const EYE_ICO='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;opacity:.7"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
 const PH_ICON='<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.3"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="9" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg>';
@@ -1131,7 +1135,7 @@ startChatsPolling();
 
 const T={
   ru:{search:"Поиск...",fp:"$",fc:"Город",fs:"Раздел",apply:"Применить",new_listing:"Новое объявление",lbl_photos:"Фото (минимум 1, до 8)",lbl_title:"Заголовок *",lbl_desc:"Описание *",lbl_price:"Цена (USD)",lbl_cat:"Категория *",lbl_city:"Город *",publish:"Опубликовать",contact:"Написать продавцу",edit:"Редактировать",empty:"Объявлений нет",free:"Бесплатно",nav_market:"Рынок",nav_auction:"Аукцион",nav_profile:"Профиль",auction_title:"Аукцион",auction_sub:"Здесь скоро появятся аукционы.",auction_badge:"Скоро",add_listing:"Добавить объявление",my_listings:"Мои объявления",no_listings:"Нет объявлений",recs:"Похожие",del_confirm:"Удалить объявление?",s_active:"Активных",s_total:"Всего",s_deals:"Сделки",promo_on:"Продвигается · $5 · 24ч",promo_off:"Не продвигать",all_cities:"Все города",all_cats:"Все разделы",deals_title:"История сделок",loading:"Загрузка...",no_msgs:"Нет сообщений",msgs_hint:"Когда покупатели напишут — диалоги появятся здесь",start_chat:"Начните общение!",load_err:"Ошибка загрузки",conn_err:"Ошибка соединения",chats_title:"Чаты",chat_placeholder:"Сообщение...",verified_seller:"Верифицированный продавец",dialogs_lbl:"Диалоги",offers_lbl:"Предложения цены",deleted:"Удалено",err:"Ошибка",bookmarks:"Закладки",orders_lbl:"Ордера",chats_nav:"Чаты",profile_nav:"Профиль",share_lbl:"Поделиться",condition_new:"Новое",condition_used:"Б/У",sold_btn:"Продано!",delete_btn:"Удалить",edit_btn:"Редактировать",contact_btn:"Написать",offer_btn:"Предложить цену",share_btn:"Поделиться",report_btn:"Пожаловаться",extend_btn:"Продлить на 30 дней",my_ads:"Мои объявления",
-    cities:{sharm:"Шарм-эль-Шейх",hurghada:"Хургада",cairo:"Каир",alexandria:"Александрия",dahab:"Дахаб",marsa:"Марса-Алам","el-gouna":"Эль-Гуна",taba:"Таба",luxor:"Луксор",aswan:"Асуан",safaga:"Сафага","el-quseir":"Эль-Кусейр",nuweiba:"Нувейба","soma-bay":"Сома-Бей",other:"Другой город"},
+    cities:{sharm:"Шарм-эль-Шейх",hurghada:"Хургада",cairo:"Каир",alexandria:"Александрия",dahab:"Дахаб",marsa:"Марса-Алам","el-gouna":"Эль-Гуна",taba:"Таба",luxor:"Люксор",aswan:"Асуан",safaga:"Сафага","el-quseir":"Эль-Кусейр",nuweiba:"Нувейба","soma-bay":"Сома-Бей",other:"Другой город"},
     cats:{visas:"Визы и документы",moto:"Мото и лодки",events:"Мероприятия",property:"Недвижимость",transport:"Транспорт",services:"Услуги",beauty:"Мода и красота",clothes:"Одежда",kids:"Детские товары",home:"Дом и сад",jobs:"Работа",animals:"Животные",hobby:"Хобби",sport:"Спорт",electronics:"Электроника",food:"Продовольствие",business:"Бизнес",money:"Деньги и финансы",alcohol:"Алкоголь",furniture:"Мебель",household:"Бытовые товары",repair:"Ремонт",smoking:"Курение",tours:"Туры",excursions:"Экскурсии",medicine:"Аптека",education:"Обучение",restaurant:"Рестораны и кафе",rental:"Прокат",diving:"Дайвинг",construction:"Стройматериалы",transfer:"Трансфер",shipping:"Транспортировка",other:"Другое"}},
   en:{search:"Search...",fp:"$",fc:"City",fs:"Section",apply:"Apply",new_listing:"New Listing",lbl_photos:"Photos (at least 1, up to 8)",lbl_title:"Title *",lbl_desc:"Description *",lbl_price:"Price (USD)",lbl_cat:"Category *",lbl_city:"City *",publish:"Publish",contact:"Contact seller",edit:"Edit",empty:"No listings",free:"Free",nav_market:"Market",nav_auction:"Auction",nav_profile:"Profile",auction_title:"Auction",auction_sub:"Auctions coming soon.",auction_badge:"Soon",add_listing:"Add listing",my_listings:"My listings",no_listings:"No listings yet",recs:"Similar",del_confirm:"Delete listing?",s_active:"Active",s_total:"Total",s_deals:"Deals",promo_on:"Promoted · $5 · 24h",promo_off:"Don't promote",all_cities:"All cities",all_cats:"All sections",deals_title:"Deal history",loading:"Loading...",no_msgs:"No messages",msgs_hint:"When buyers write to you — dialogs will appear here",start_chat:"Start chatting!",load_err:"Loading error",conn_err:"Connection error",chats_title:"Chats",chat_placeholder:"Message...",verified_seller:"Verified seller",dialogs_lbl:"Dialogs",offers_lbl:"Price offers",deleted:"Deleted",err:"Error",bookmarks:"Bookmarks",orders_lbl:"Orders",chats_nav:"Chats",profile_nav:"Profile",share_lbl:"Share",condition_new:"New",condition_used:"Used",sold_btn:"Sold!",delete_btn:"Delete",edit_btn:"Edit",contact_btn:"Message",offer_btn:"Make offer",share_btn:"Share",report_btn:"Report",extend_btn:"Extend 30 days",my_ads:"My listings",
     cities:{sharm:"Sharm",hurghada:"Hurghada",cairo:"Cairo",alexandria:"Alexandria",dahab:"Dahab",marsa:"Marsa Alam","el-gouna":"El Gouna",taba:"Taba",luxor:"Luxor",aswan:"Aswan",safaga:"Safaga","el-quseir":"El Quseir",nuweiba:"Nuweiba","soma-bay":"Soma Bay",other:"Other city"},
@@ -2979,7 +2983,7 @@ function loadFilters(){
     const c=JSON.parse(localStorage.getItem("eb_cities")||"[]");
     const ct=JSON.parse(localStorage.getItem("eb_cats")||"[]");
     const p=localStorage.getItem("eb_price");
-    selectedCities=new Set(c.map(k=>["el-gouna","safaga","soma-bay"].includes(k)?"hurghada":["dahab","taba","luxor","aswan","nuweiba","el-quseir"].includes(k)?"other":k).filter(k=>CITY_KEYS.includes(k)));
+    selectedCities=new Set(c.map(k=>["el-gouna","safaga","soma-bay"].includes(k)?"hurghada":["taba","aswan","nuweiba","el-quseir"].includes(k)?"other":k).filter(k=>CITY_KEYS.includes(k)));
     selectedCats=new Set(ct);
     if(p!==null)priceSort=parseInt(p);
     pendingCities=new Set(selectedCities);
