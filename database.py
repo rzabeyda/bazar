@@ -48,6 +48,7 @@ def init_db():
         ("legendary_until","TIMESTAMP"),
         ("condition","TEXT DEFAULT 'new'"),
         ("views","INTEGER DEFAULT 0"),
+        ("allow_offers","INTEGER DEFAULT 1"),
         ("prop_deal","TEXT"),
         ("prop_rent_period","TEXT"),
         ("prop_type","TEXT"),
@@ -86,6 +87,9 @@ def init_db():
         reporter_id INTEGER,
         reason TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
+    # counter-offers: seller's own price on a buyer's offer
+    try: c.execute("ALTER TABLE offers ADD COLUMN counter_amount REAL")
+    except: pass
     # likes / dislikes on listings (one vote per user per listing)
     c.execute("""CREATE TABLE IF NOT EXISTS reactions (
         listing_id INTEGER NOT NULL,

@@ -222,6 +222,7 @@ async def create_listing(
     prop_material: str=Form(None),
     prop_condition: str=Form(None),
     prop_district: str=Form(None),
+    allow_offers: int=Form(1),
     photo: UploadFile=File(None),
     photo_2: UploadFile=File(None),
     photo_3: UploadFile=File(None),
@@ -242,7 +243,9 @@ async def create_listing(
     conn=get_db(); c=conn.cursor()
     c.execute("INSERT INTO listings (user_id,title,description,price,currency,category,city,photo_path,photo_path2,photo_path3,photo_path4,photo_path5,photo_path6,photo_path7,photo_path8,is_promoted,seller_username,phone,condition,prop_deal,prop_rent_period,prop_type,prop_area,prop_rooms,prop_floor,prop_year,prop_material,prop_condition,prop_district) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
               (user_id,title,description,price,currency,category,city,p1,p2,p3,p4,p5,p6,p7,p8,is_promoted,seller_username,phone,condition,prop_deal,prop_rent_period,prop_type,prop_area,prop_rooms,prop_floor,prop_year,prop_material,prop_condition,prop_district))
-    conn.commit(); lid=c.lastrowid; conn.close()
+    lid=c.lastrowid
+    c.execute("UPDATE listings SET allow_offers=? WHERE id=?",(1 if allow_offers else 0,lid))
+    conn.commit(); conn.close()
     return {"ok":True,"id":lid}
 
 @app.put("/api/listings/{listing_id}")
@@ -253,6 +256,7 @@ async def edit_listing(
     price: float=Form(None), currency: str=Form("USD"),
     category: str=Form(...), city: str=Form(...),
     phone: str=Form(None),
+    allow_offers: int=Form(None),
     photo: UploadFile=File(None),
     photo_2: UploadFile=File(None),
     photo_3: UploadFile=File(None),
@@ -272,6 +276,8 @@ async def edit_listing(
     p4=save_photo(photo_4) if photo_4 and photo_4.filename else row["photo_path4"]
     c.execute("UPDATE listings SET title=?,description=?,price=?,currency=?,category=?,city=?,photo_path=?,photo_path2=?,photo_path3=?,photo_path4=?,phone=? WHERE id=?",
               (title,description,price,currency,category,city,p1,p2,p3,p4,phone,listing_id))
+    if allow_offers is not None:
+        c.execute("UPDATE listings SET allow_offers=? WHERE id=?",(1 if allow_offers else 0,listing_id))
     conn.commit(); conn.close()
     return {"ok":True}
 
@@ -460,8 +466,9 @@ async def create_offer(
     import httpx, logging
     require_user(request, buyer_id)
     conn=get_db(); c=conn.cursor()
-    row=c.execute("SELECT user_id, title FROM listings WHERE id=? AND is_active=1",(listing_id,)).fetchone()
+    row=c.execute("SELECT user_id, title, allow_offers FROM listings WHERE id=? AND is_active=1",(listing_id,)).fetchone()
     if not row: raise HTTPException(404,"Listing not found")
+    if row["allow_offers"] == 0: conn.close(); raise HTTPException(403,"Price offers are disabled for this listing")
     if row["user_id"] == buyer_id: raise HTTPException(400,"Cannot offer on own listing")
     c.execute("""INSERT INTO offers (listing_id, listing_title, seller_id, buyer_id, buyer_username, amount, currency)
                  VALUES (?,?,?,?,?,?,?)""",
@@ -499,14 +506,20 @@ def get_offers(request: Request, user_id: int):
     conn.close(); return [dict(r) for r in rows]
 
 @app.post("/api/offers/{offer_id}/respond")
-async def respond_offer(request: Request, offer_id: int, action: str = Form(...)):
+async def respond_offer(request: Request, offer_id: int, action: str = Form(...), amount: float = Form(None)):
     import httpx, logging
     conn=get_db(); c=conn.cursor()
     row=c.execute("SELECT * FROM offers WHERE id=?",(offer_id,)).fetchone()
-    if not row: raise HTTPException(404)
+    if not row: conn.close(); raise HTTPException(404)
     require_user(request, row["seller_id"])
-    status="accepted" if action=="accept" else "declined"
-    c.execute("UPDATE offers SET status=? WHERE id=?",(status,offer_id))
+    if row["status"] != "pending": conn.close(); raise HTTPException(409, "Offer already answered")
+    if action == "counter":
+        if not amount or amount <= 0: conn.close(); raise HTTPException(400, "Amount required")
+        status = "countered"
+        c.execute("UPDATE offers SET status=?, counter_amount=? WHERE id=?",(status,amount,offer_id))
+    else:
+        status = "accepted" if action=="accept" else "declined"
+        c.execute("UPDATE offers SET status=? WHERE id=?",(status,offer_id))
     conn.commit(); conn.close()
     # notify buyer
     token=os.getenv("BOT_TOKEN","")
@@ -514,15 +527,58 @@ async def respond_offer(request: Request, offer_id: int, action: str = Form(...)
         try:
             bot_url = f"https://t.me/{os.getenv('BOT_USERNAME','egypt_bazar_bot')}"
             kb = {"inline_keyboard":[[{"text":"Открыть Базар","url":bot_url}]]}
-            msg = ("Ваше ценовое предложение принято!"
-                   if action=="accept" else
-                   "Ваше ценовое предложение отклонено.")
+            if action == "counter":
+                msg = f"Продавец предложил свою цену: {amount:g} {row['currency']}. Откройте «Чаты», чтобы ответить."
+            elif action == "accept":
+                msg = "Ваше ценовое предложение принято!"
+            else:
+                msg = "Ваше ценовое предложение отклонено."
             async with httpx.AsyncClient(timeout=5) as client:
                 await client.post(f"https://api.telegram.org/bot{token}/sendMessage",json={
                     "chat_id":row["buyer_id"],"text":msg,"reply_markup":kb})
         except Exception as e:
             logging.warning(f"respond_offer notify: {e}")
-    return {"ok":True}
+    return {"ok":True,"status":status}
+
+@app.post("/api/offers/{offer_id}/buyer_respond")
+async def buyer_respond_offer(request: Request, offer_id: int, action: str = Form(...)):
+    import httpx, logging
+    conn=get_db(); c=conn.cursor()
+    row=c.execute("SELECT * FROM offers WHERE id=?",(offer_id,)).fetchone()
+    if not row: conn.close(); raise HTTPException(404)
+    require_user(request, row["buyer_id"])
+    if row["status"] != "countered": conn.close(); raise HTTPException(409, "No counter-offer to answer")
+    if action == "accept":
+        status = "accepted"
+        c.execute("UPDATE offers SET status=?, amount=counter_amount WHERE id=?",(status,offer_id))
+    else:
+        status = "declined"
+        c.execute("UPDATE offers SET status=? WHERE id=?",(status,offer_id))
+    conn.commit()
+    final = c.execute("SELECT amount, currency FROM offers WHERE id=?",(offer_id,)).fetchone()
+    conn.close()
+    token=os.getenv("BOT_TOKEN","")
+    if token:
+        try:
+            bot_url = f"https://t.me/{os.getenv('BOT_USERNAME','egypt_bazar_bot')}"
+            kb = {"inline_keyboard":[[{"text":"Открыть Базар","url":bot_url}]]}
+            msg = (f"Покупатель принял вашу цену: {final['amount']:g} {final['currency']}." if status=="accepted"
+                   else "Покупатель отклонил вашу цену.")
+            async with httpx.AsyncClient(timeout=5) as client:
+                await client.post(f"https://api.telegram.org/bot{token}/sendMessage",json={
+                    "chat_id":row["seller_id"],"text":msg,"reply_markup":kb})
+        except Exception as e:
+            logging.warning(f"buyer_respond notify: {e}")
+    return {"ok":True,"status":status}
+
+@app.get("/api/offers/mine/{user_id}")
+def my_offers(request: Request, user_id: int):
+    require_user(request, user_id)
+    conn=get_db(); c=conn.cursor()
+    rows=c.execute("""SELECT o.*, l.title as listing_title_cur FROM offers o
+                      LEFT JOIN listings l ON o.listing_id=l.id
+                      WHERE o.buyer_id=? ORDER BY o.created_at DESC LIMIT 50""",(user_id,)).fetchall()
+    conn.close(); return [dict(r) for r in rows]
 
 @app.post("/api/verify/pay_stars")
 async def verify_pay_stars(request: Request, user_id: int = Form(...)):

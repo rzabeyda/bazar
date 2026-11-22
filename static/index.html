@@ -780,6 +780,10 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
           <option value="EGP">EGP</option>
         </select>
       </div>
+      <div class="toggle-wrap" style="margin:-4px 0 16px;cursor:pointer;" onclick="vib();setAllowOffers(!allowOffers)">
+        <div class="toggle on" id="allow-offers-toggle"><div class="toggle-knob"></div></div>
+        <span class="toggle-lbl" id="allow-offers-lbl">Принимать предложения цены</span>
+      </div>
       <label class="form-label">Телефон (необязательно)</label>
       <input class="form-input" id="inp-phone" type="tel" placeholder="+7 / +20 / +972..." maxlength="20">
 
@@ -1087,6 +1091,10 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
       <textarea class="form-textarea" id="edit-desc" maxlength="600"></textarea>
       <label class="form-label">Цена (USD)</label>
       <input class="form-input" id="edit-price" type="number" min="0" placeholder="Оставьте пустым если договорная">
+      <div class="toggle-wrap" style="margin:-4px 0 16px;cursor:pointer;" onclick="vib();setEditAllowOffers(!editAllowOffers)">
+        <div class="toggle on" id="edit-allow-offers-toggle"><div class="toggle-knob"></div></div>
+        <span class="toggle-lbl" id="edit-allow-offers-lbl">Принимать предложения цены</span>
+      </div>
       <label class="form-label">Телефон (необязательно)</label>
       <input class="form-input" id="edit-phone" type="tel" placeholder="+7 / +20 / +972..." maxlength="20">
       <label class="form-label">Категория *</label>
@@ -1377,18 +1385,58 @@ function stopChatsPolling(){
   if(_chatsPollingTimer){clearInterval(_chatsPollingTimer);_chatsPollingTimer=null;}
 }
 
+const OFR_T={
+  ru:{mine:"Мои предложения",your:"Ваша цена",deal:"Договорились",seller_price:"Цена продавца",st_pending:"Ждёт ответа",st_countered:"Ответ продавца",st_accepted:"Принято",st_declined:"Отклонено",st_wait_buyer:"Ждёт ответа покупателя",counter:"Своя цена",counter_title:"Ваша цена для покупателя",buyer_offer:"Предложение покупателя",send:"Отправить",sent:"Отправлено",enter:"Введите сумму",accept:"Принять",decline:"Отклонить"},
+  en:{mine:"My offers",your:"Your price",deal:"Agreed",seller_price:"Seller's price",st_pending:"Awaiting reply",st_countered:"Seller replied",st_accepted:"Accepted",st_declined:"Declined",st_wait_buyer:"Waiting for buyer",counter:"Counter",counter_title:"Your price for the buyer",buyer_offer:"Buyer's offer",send:"Send",sent:"Sent",enter:"Enter an amount",accept:"Accept",decline:"Decline"},
+  ar:{mine:"عروضي",your:"سعرك",deal:"تم الاتفاق",seller_price:"سعر البائع",st_pending:"بانتظار الرد",st_countered:"رد البائع",st_accepted:"مقبول",st_declined:"مرفوض",st_wait_buyer:"بانتظار المشتري",counter:"سعر آخر",counter_title:"سعرك للمشتري",buyer_offer:"عرض المشتري",send:"إرسال",sent:"تم الإرسال",enter:"أدخل المبلغ",accept:"قبول",decline:"رفض"}
+};
+function ot(k){return (OFR_T[lang]||OFR_T.ru)[k];}
+function openCounterModal(offerId,amount,cur){
+  const overlay=document.createElement("div");
+  overlay.style="position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9000;display:flex;align-items:flex-end;justify-content:center;";
+  const box=document.createElement("div");
+  box.style="background:#0f0f13;border:1px solid rgba(255,255,255,.12);border-radius:24px 24px 0 0;width:100%;max-width:480px;padding:18px 16px 30px;";
+  box.innerHTML=`<div style="width:36px;height:4px;background:rgba(255,255,255,.15);border-radius:2px;margin:0 auto 16px;"></div>
+    <div style="font-size:16px;font-weight:800;color:#fff;margin-bottom:4px">${ot("counter_title")}</div>
+    <div style="font-size:12px;color:#9a9aa5;margin-bottom:12px">${ot("buyer_offer")}: ${amount} ${cur}</div>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px"><input id="counter-input" type="number" inputmode="decimal" min="0" placeholder="0" style="flex:1;min-width:0;background:#16161b;border:1px solid rgba(255,255,255,.14);border-radius:14px;padding:13px 14px;color:#fff;font-size:16px;outline:none"><span style="color:#fff;font-weight:800">${cur}</span></div>
+    <button id="counter-send" style="width:100%;padding:14px;border-radius:16px;border:none;background:#fff;color:#000;font-weight:800;font-size:15px;cursor:pointer">${ot("send")}</button>`;
+  overlay.appendChild(box);
+  overlay.addEventListener("click",e=>{if(e.target===overlay)overlay.remove();});
+  document.body.appendChild(overlay);
+  box.querySelector("#counter-send").onclick=async()=>{
+    const v=parseFloat(box.querySelector("#counter-input").value);
+    if(!v||v<=0){showToast(ot("enter"));return;}
+    const fd=new FormData();fd.append("action","counter");fd.append("amount",v);
+    try{
+      const r=await fetch(`${API}/api/offers/${offerId}/respond`,{method:"POST",body:fd});
+      if(r.ok){overlay.remove();showToast(ot("sent"));loadChats();const om=document.getElementById("orders-modal");if(om&&om.classList.contains("open"))openOrders();}
+      else showToast("❌ "+r.status);
+    }catch(e){}
+  };
+}
+async function buyerRespond(offerId,action){
+  try{
+    const fd=new FormData();fd.append("action",action);
+    const r=await fetch(`${API}/api/offers/${offerId}/buyer_respond`,{method:"POST",body:fd});
+    if(r.ok){showToast(action==="accept"?ot("st_accepted"):ot("st_declined"));loadChats();}
+    else showToast("❌ "+r.status);
+  }catch(e){}
+}
 async function loadChats(){
   const uid=tgUser?.id||0;
   if(!uid)return;
   const el=document.getElementById("messages-list");
   el.innerHTML="<div style='text-align:center;padding:40px;color:var(--muted);'>"+t("loading")+"</div>";
   try{
-    const [dr,or]=await Promise.all([
+    const [dr,or,mr]=await Promise.all([
       fetch(API+"/api/dialogs/"+uid+"?_="+Date.now()).then(r=>r.json()).catch(()=>[]),
-      fetch(API+"/api/offers/"+uid+"?_="+Date.now()).then(r=>r.json()).catch(()=>[])
+      fetch(API+"/api/offers/"+uid+"?_="+Date.now()).then(r=>r.json()).catch(()=>[]),
+      fetch(API+"/api/offers/mine/"+uid+"?_="+Date.now()).then(r=>r.ok?r.json():[]).catch(()=>[])
     ]);
     const offers=or.filter(o=>o.status==="pending");
-    if(!dr.length&&!offers.length){
+    const myOffers=(Array.isArray(mr)?mr:[]).slice(0,8);
+    if(!dr.length&&!offers.length&&!myOffers.length){
       el.innerHTML="<div style='text-align:center;padding:60px 20px'><div style='font-size:16px;font-weight:700;color:#fff;margin-bottom:8px'>"+t("no_msgs")+"</div><div style='font-size:13px;color:var(--muted);line-height:1.5'>"+t("msgs_hint")+"</div></div>";
       return;
     }
@@ -1408,12 +1456,34 @@ async function loadChats(){
           +"<div style='font-size:12px;color:var(--muted);margin-bottom:6px'>От: "+buyer+"</div>"
           +"<div style='font-size:15px;font-weight:800;color:var(--accent);margin-bottom:10px'>"+o.amount+" "+o.currency+"</div>"
           +"<div style='display:flex;gap:8px'>"
-          +"<button data-oid='"+o.id+"' data-act='accept' style='flex:1;padding:9px;background:rgba(0,136,204,.15);border:1px solid #0088cc;border-radius:10px;color:#0088cc;font-weight:700;font-size:13px;cursor:pointer'>Принять</button>"
-          +"<button data-oid='"+o.id+"' data-act='decline' style='flex:1;padding:9px;background:rgba(231,76,60,.1);border:1px solid #e74c3c;border-radius:10px;color:#e74c3c;font-weight:700;font-size:13px;cursor:pointer'>Отклонить</button>"
+          +"<button data-oid='"+o.id+"' data-act='accept' style='flex:1;padding:9px;background:#fff;border:1px solid #fff;border-radius:12px;color:#000;font-weight:800;font-size:13px;cursor:pointer'>"+ot("accept")+"</button>"
+          +"<button data-oid='"+o.id+"' data-act='counter' data-amt='"+o.amount+"' data-cur='"+o.currency+"' style='flex:1;padding:9px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.28);border-radius:12px;color:#fff;font-weight:700;font-size:13px;cursor:pointer'>"+ot("counter")+"</button>"
+          +"<button data-oid='"+o.id+"' data-act='decline' style='flex:1;padding:9px;background:transparent;border:1px solid rgba(231,76,60,.5);border-radius:12px;color:#e74c3c;font-weight:700;font-size:13px;cursor:pointer'>"+ot("decline")+"</button>"
           +"</div>";
         card.querySelectorAll("button[data-oid]").forEach(btn=>{
-          btn.addEventListener("click",()=>{vib();respondOffer(btn.dataset.oid,btn.dataset.act);});
+          btn.addEventListener("click",()=>{vib();if(btn.dataset.act==="counter")openCounterModal(btn.dataset.oid,btn.dataset.amt,btn.dataset.cur);else respondOffer(btn.dataset.oid,btn.dataset.act);});
         });
+        wrap.appendChild(card);
+      });
+    }
+    if(myOffers.length){
+      const lblm=document.createElement("div");
+      lblm.style.cssText="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin:"+(offers.length?"12px":"0")+" 0 8px;";
+      lblm.textContent=ot("mine");wrap.appendChild(lblm);
+      myOffers.forEach(o=>{
+        const st=o.status;
+        const stTxt={pending:ot("st_pending"),countered:ot("st_countered"),accepted:ot("st_accepted"),declined:ot("st_declined")}[st]||st;
+        const card=document.createElement("div");
+        card.style.cssText="background:#0f0f13;border:1px solid "+(st==="countered"?"rgba(255,255,255,.35)":"rgba(255,255,255,.1)")+";border-radius:16px;padding:11px 12px;margin-bottom:6px;";
+        let h="<div style='display:flex;justify-content:space-between;gap:8px;margin-bottom:5px'><div style='font-size:13px;font-weight:700;color:#fff;flex:1;min-width:0'>"+esc(o.listing_title_cur||o.listing_title||"")+"</div><span style='font-size:11px;color:var(--muted);font-weight:700;white-space:nowrap'>"+stTxt+"</span></div>";
+        if(st==="accepted")h+="<div style='font-size:13px;color:var(--muted)'>"+ot("deal")+": <b style='color:#fff'>"+o.amount+" "+o.currency+"</b></div>";
+        else h+="<div style='font-size:13px;color:var(--muted)'>"+ot("your")+": <b style='color:#fff'>"+o.amount+" "+o.currency+"</b></div>";
+        if(st==="countered")h+="<div style='font-size:13px;color:var(--muted);margin-top:2px'>"+ot("seller_price")+": <b style='color:#D9A520'>"+o.counter_amount+" "+o.currency+"</b></div>"
+          +"<div style='display:flex;gap:8px;margin-top:10px'>"
+          +"<button data-boid='"+o.id+"' data-bact='accept' style='flex:1;padding:9px;background:#fff;border:1px solid #fff;border-radius:12px;color:#000;font-weight:800;font-size:13px;cursor:pointer'>"+ot("accept")+"</button>"
+          +"<button data-boid='"+o.id+"' data-bact='decline' style='flex:1;padding:9px;background:transparent;border:1px solid rgba(231,76,60,.5);border-radius:12px;color:#e74c3c;font-weight:700;font-size:13px;cursor:pointer'>"+ot("decline")+"</button></div>";
+        card.innerHTML=h;
+        card.querySelectorAll("button[data-boid]").forEach(b=>b.addEventListener("click",()=>{vib();buyerRespond(b.dataset.boid,b.dataset.bact);}));
         wrap.appendChild(card);
       });
     }
@@ -1607,7 +1677,7 @@ function updateExtraLabels(){
   if(mn)mn.placeholder=xt("from");if(mx)mx.placeholder=xt("to");
   const on=(id,v)=>{const el=document.getElementById(id);if(el)el.classList.toggle("active",!!v);};
   on("filter-price-range-btn",has);on("filter-verified-btn",onlyVerified);
-  updateSortLabel();
+  updateSortLabel();updateAllowOffersLabels();
 }
 function setPriceCur(c){
   vib();priceCur=c;
@@ -1994,6 +2064,11 @@ async function loadProfileRating(){
     if(el&&d.count&&!el.dataset.rated){el.dataset.rated="1";el.textContent+="  ·  "+d.avg.toFixed(1)+" ★ ("+d.count+")";}
   }catch(e){}
 }
+let allowOffers=true, editAllowOffers=true;
+function setAllowOffers(v){allowOffers=!!v;const t0=document.getElementById("allow-offers-toggle");if(t0)t0.classList.toggle("on",allowOffers);}
+function setEditAllowOffers(v){editAllowOffers=!!v;const t0=document.getElementById("edit-allow-offers-toggle");if(t0)t0.classList.toggle("on",editAllowOffers);}
+const AO_T={ru:"Принимать предложения цены",en:"Accept price offers",ar:"قبول عروض الأسعار"};
+function updateAllowOffersLabels(){const x=AO_T[lang]||AO_T.ru;["allow-offers-lbl","edit-allow-offers-lbl"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=x;});}
 async function loadListings(){
   try{const res=await fetch(`${API}/api/listings?_=${Date.now()}`);allListings=await res.json();await loadMyReacts();initBanners();renderListings(filterData());}
   catch(e){document.getElementById("listings-grid").innerHTML=`<div class="empty"><div>Ошибка соединения</div></div>`;}
@@ -2055,7 +2130,7 @@ async function openDetail(id){
     } else {
       const _su=l.seller_username||'';const _lt=esc(l.title);
       const contactHtml=`<button class="contact-btn" onclick="vib();openChat(${l.user_id},'${_su}',${l.id},'${_lt}')"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 0 2 2z"/></svg>Написать</button>
-        <button class="edit-btn" style="margin-bottom:0;margin-top:8px;" onclick="vib();openOfferModal(${l.id},'${esc(l.title)}')">Предложить цену</button>
+        ${l.allow_offers===0?"":`<button class="edit-btn" style="margin-bottom:0;margin-top:8px;" onclick="vib();openOfferModal(${l.id},'${esc(l.title)}')">Предложить цену</button>`}
         <button class="edit-btn" style="margin-bottom:0;margin-top:8px;border-color:#0088cc;color:#0088cc;background:rgba(0,136,204,.08);" onclick="vib();shareListing(${l.id},'${esc(l.title)}')"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Поделиться</button>
         <button class="edit-btn" style="margin-bottom:0;margin-top:8px;border-color:#e74c3c;color:#e74c3c;background:rgba(231,76,60,.06);" onclick="vib();reportListing(${l.id})"><svg viewBox="0 0 24 24" style="width:16px;height:16px;stroke:#e74c3c;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:inline;vertical-align:middle;margin-right:6px;"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>Пожаловаться</button>
         <button class="edit-btn" style="margin-bottom:0;margin-top:12px;border-color:#555;color:#aaa;background:rgba(255,255,255,.04);" onclick="vib();closeModal('detail-modal')">✕ Закрыть</button>`;
@@ -2216,6 +2291,7 @@ async function openEditModal(id){
     }
     document.getElementById("edit-desc").value=l.description||"";
     document.getElementById("edit-price").value=l.price||"";
+    setEditAllowOffers(l.allow_offers!==0);
     document.getElementById("edit-phone").value=l.phone||"";
     // build cat select
     const catSel=document.getElementById("edit-cat");
@@ -2270,6 +2346,7 @@ async function submitEdit(){
   fd.append("title",title);
   fd.append("description",document.getElementById("edit-desc").value);
   fd.append("price",document.getElementById("edit-price").value||0);
+  fd.append("allow_offers",editAllowOffers?1:0);
   fd.append("currency","USD");
   fd.append("category",document.getElementById("edit-cat").value);
   const cityVal=document.getElementById("edit-city").value;
@@ -2746,6 +2823,7 @@ async function submitListing(){
   fd.append("condition",document.getElementById("inp-condition").value||"new");
   if(tgUser?.username)fd.append("seller_username",tgUser.username);
   fd.append("phone",document.getElementById("inp-phone").value||"");
+  fd.append("allow_offers",allowOffers?1:0);
   // поля недвижимости
   if(document.getElementById("inp-cat").value==="property"){
     fd.append("prop_deal",_propDeal);
@@ -2888,7 +2966,7 @@ async function payLegCard(){
   else window.open("https://web.tribute.tg/p/uqf","_blank");
   showToast("Ссылка отправлена в бот!");
 }
-function resetForm(){
+function resetForm(){setAllowOffers(true);
   ["inp-title","inp-desc","inp-price","inp-phone"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});
   photoFiles=[null,null,null,null,null,null,null,null];
   const thumbs=document.getElementById("photo-thumbs");if(thumbs)thumbs.innerHTML="";
@@ -2998,10 +3076,11 @@ async function openOrders(){
     else{
       body.innerHTML=offers.map(o=>{
         const statusIcon=o.status==="accepted"?"✓":o.status==="declined"?"✕":"…";
-        const statusLbl=o.status==="accepted"?"Принято":o.status==="declined"?"Отклонено":"Ожидает";
+        const statusLbl=o.status==="accepted"?"Принято":o.status==="declined"?"Отклонено":o.status==="countered"?ot("st_wait_buyer"):"Ожидает";
         const btns=o.status==="pending"
           ?`<div style="display:flex;gap:6px;margin-top:10px;">
               <button onclick="vib();respondOffer(${o.id},'accept')" style="flex:1;padding:8px;border-radius:10px;border:none;background:#2ecc71;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">Принять</button>
+              <button onclick="vib();openCounterModal(${o.id},${o.amount},'${o.currency}')" style="flex:1;padding:8px;border-radius:10px;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.08);color:#fff;font-size:13px;font-weight:700;cursor:pointer;">${ot("counter")}</button>
               <button onclick="vib();respondOffer(${o.id},'decline')" style="flex:1;padding:8px;border-radius:10px;border:none;background:#e74c3c;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">Отклонить</button>
             </div>`:""
         return`<div id="offer-row-${o.id}" style="background:var(--card2);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;">
