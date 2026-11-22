@@ -450,7 +450,6 @@ button,input,select,textarea{font-family:inherit;}
     <div class="filter-btn" id="filter-cond-btn" onclick="vib();cycleCondition()" style="flex-shrink:0;">
       <span id="filter-cond-lbl">Состояние</span>
     </div>
-    <div class="filter-btn" id="filter-photo-btn" onclick="vib();toggleExtra('photo')"><span id="filter-photo-lbl">С фото</span></div>
     <div class="filter-btn" id="filter-verified-btn" onclick="vib();toggleExtra('verified')"><span id="filter-verified-lbl">Проверенные</span></div>
   </div>
   <div class="cat-chips" id="cat-chips" style="display:none"></div>
@@ -1093,7 +1092,7 @@ let selectedCities=new Set(); // empty = all
 let selectedCats=new Set();   // empty = all
 let priceSort=3;
 let conditionFilter=0;
-let priceMin=null,priceMax=null,priceCur="USD",onlyPhoto=false,onlyVerified=false;
+let priceMin=null,priceMax=null,priceCur="USD",onlyVerified=false;
 // pending selections (before apply)
 let pendingCities=new Set();
 let pendingCats=new Set();
@@ -1547,9 +1546,9 @@ function quickCat(k){
   renderListings(filterData());saveFilters();
 }
 const EXTRA_T={
-  ru:{price:"Цена",photo:"С фото",verified:"Проверенные",from:"от",to:"до",clear:"Сбросить"},
-  en:{price:"Price",photo:"With photo",verified:"Verified",from:"from",to:"to",clear:"Clear"},
-  ar:{price:"السعر",photo:"مع صورة",verified:"موثّق",from:"من",to:"إلى",clear:"مسح"}
+  ru:{price:"Цена",verified:"Проверенные",from:"от",to:"до",clear:"Сбросить"},
+  en:{price:"Price",verified:"Verified",from:"from",to:"to",clear:"Clear"},
+  ar:{price:"السعر",verified:"موثّق",from:"من",to:"إلى",clear:"مسح"}
 };
 function xt(k){return (EXTRA_T[lang]||EXTRA_T.ru)[k];}
 function priceUSD(l){if(!l.price||l.price<=0)return null;return l.currency==="EGP"?l.price/(egpRate||50):l.price;}
@@ -1559,12 +1558,12 @@ function updateExtraLabels(){
   let lbl=xt("price");
   if(has){lbl=(priceMin!=null?priceMin:"")+"–"+(priceMax!=null?priceMax:"")+" "+(priceCur==="EGP"?"EGP":"$");}
   set("filter-price-range-lbl",lbl);
-  set("filter-photo-lbl",xt("photo"));set("filter-verified-lbl",xt("verified"));
+  set("filter-verified-lbl",xt("verified"));
   set("pr-title",xt("price"));set("pr-clear",xt("clear"));
   const mn=document.getElementById("pr-min"),mx=document.getElementById("pr-max");
   if(mn)mn.placeholder=xt("from");if(mx)mx.placeholder=xt("to");
   const on=(id,v)=>{const el=document.getElementById(id);if(el)el.classList.toggle("active",!!v);};
-  on("filter-price-range-btn",has);on("filter-photo-btn",onlyPhoto);on("filter-verified-btn",onlyVerified);
+  on("filter-price-range-btn",has);on("filter-verified-btn",onlyVerified);
   updateSortLabel();
 }
 function setPriceCur(c){
@@ -1600,7 +1599,7 @@ function clearPrice(){
   closeAllDD();updateExtraLabels();updateResetBtn();renderListings(filterData());
 }
 function toggleExtra(k){
-  if(k==="photo")onlyPhoto=!onlyPhoto;else onlyVerified=!onlyVerified;
+  onlyVerified=!onlyVerified;
   updateExtraLabels();updateResetBtn();renderListings(filterData());
 }
 const SORT_T={
@@ -1639,7 +1638,7 @@ function setSort(k){
 }
 function resetFilters(){
   vib();
-  selectedCities.clear();selectedCats.clear();priceSort=3;conditionFilter=0;priceMin=null;priceMax=null;onlyPhoto=false;onlyVerified=false;
+  selectedCities.clear();selectedCats.clear();priceSort=3;conditionFilter=0;priceMin=null;priceMax=null;onlyVerified=false;
   pendingCities.clear();pendingCats.clear();
   document.getElementById("filter-price").classList.add("active");
   const lbl=document.getElementById("filter-price-lbl");
@@ -1651,7 +1650,7 @@ function resetFilters(){
   renderListings(filterData());saveFilters();
 }
 function updateResetBtn(){
-  const hasFilters=selectedCities.size>0||selectedCats.size>0||(priceSort!==3&&priceSort!==0)||conditionFilter!==0||priceMin!=null||priceMax!=null||onlyPhoto||onlyVerified;
+  const hasFilters=selectedCities.size>0||selectedCats.size>0||(priceSort!==3&&priceSort!==0)||conditionFilter!==0||priceMin!=null||priceMax!=null||onlyVerified;
   const btn=document.getElementById("filter-reset");
   if(btn)btn.style.display=hasFilters?"flex":"none";
 }
@@ -1694,7 +1693,6 @@ function filterData(){
       if(priceMin!=null&&usd<cv(priceMin)-0.005)return false;
       if(priceMax!=null&&usd>cv(priceMax)+0.005)return false;
     }
-    if(onlyPhoto&&!getPhotos(l).length)return false;
     if(onlyVerified&&!l.seller_verified)return false;
     if(q&&!l.title.toLowerCase().includes(q)&&!(l.description||"").toLowerCase().includes(q))return false;
     return true;
@@ -1727,7 +1725,7 @@ function renderListings(data){
     renderCatChips();
     const rc=document.getElementById("res-count");
     if(rc){
-      const filtersOn=selectedCities.size>0||selectedCats.size>0||conditionFilter!==0||priceMin!=null||priceMax!=null||onlyPhoto||onlyVerified||(document.getElementById("search-input")||{value:""}).value.trim()!=="";
+      const filtersOn=selectedCities.size>0||selectedCats.size>0||conditionFilter!==0||priceMin!=null||priceMax!=null||onlyVerified||(document.getElementById("search-input")||{value:""}).value.trim()!=="";
       rc.style.display=(filtersOn&&allListings.length)?"block":"none";
       rc.textContent=({ru:"Найдено: ",en:"Found: ",ar:"تم العثور: "}[lang]||"Found: ")+data.length;
     }
