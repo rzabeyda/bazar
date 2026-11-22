@@ -90,6 +90,14 @@ def init_db():
     # counter-offers: seller's own price on a buyer's offer
     try: c.execute("ALTER TABLE offers ADD COLUMN counter_amount REAL")
     except: pass
+    # places directory (pharmacies, exchange, shops ...) with moderation
+    c.execute("""CREATE TABLE IF NOT EXISTS places (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        city TEXT NOT NULL, category TEXT NOT NULL, area TEXT,
+        name TEXT NOT NULL, description TEXT, address TEXT, map_url TEXT,
+        phone TEXT, telegram TEXT, hours TEXT, prices_json TEXT, photo_path TEXT,
+        status TEXT DEFAULT 'pending', created_by INTEGER,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)""")
     # likes / dislikes on listings (one vote per user per listing)
     c.execute("""CREATE TABLE IF NOT EXISTS reactions (
         listing_id INTEGER NOT NULL,

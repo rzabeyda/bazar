@@ -444,6 +444,57 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
 #action-btns{flex-wrap:wrap;}
 #action-btns>.react-row.big,#action-btns>.sr-box{flex:0 0 100%;width:100%;box-sizing:border-box;}
 .react-row.big .react-btn i{white-space:nowrap;}
+/* places tab */
+.pl-wrap{padding:14px 14px 120px;}
+.pl-cities{display:flex;gap:8px;margin-bottom:8px;}
+.pl-city{flex:1;text-align:center;padding:12px 8px;border-radius:16px;background:#0f0f13;border:1px solid rgba(255,255,255,.12);color:#cfcfd6;font-weight:800;font-size:14px;cursor:pointer;}
+.pl-city.on{background:#fff;color:#000;border-color:#fff;}
+.pl-hint{font-size:12px;color:#8a8a95;line-height:1.5;margin:0 4px 12px;}
+.pl-actions{display:flex;gap:8px;margin-bottom:12px;}
+.pl-btn{flex:1;text-align:center;padding:12px 10px;border-radius:14px;background:#16161b;border:1px solid rgba(255,255,255,.14);color:#fff;font-weight:700;font-size:13px;cursor:pointer;}
+.pl-btn.primary{background:#fff;color:#000;border-color:#fff;}
+.pl-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.pl-tile{background:#0f0f13;border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:16px 14px;min-height:84px;display:flex;flex-direction:column;justify-content:space-between;cursor:pointer;transition:transform .15s;}
+.pl-tile:active{transform:scale(.97);}
+.pl-tile-t{font-size:15px;font-weight:800;color:#fff;line-height:1.25;}
+.pl-tile-c{font-size:12px;color:#8a8a95;font-weight:700;margin-top:8px;}
+.pl-tile.has .pl-tile-c{color:#D9A520;}
+.pl-back{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:16px;background:#0f0f13;border:1px solid rgba(255,255,255,.12);color:#fff;font-weight:700;font-size:13px;cursor:pointer;margin-bottom:12px;}
+.pl-cat-title{font-size:20px;font-weight:900;color:#fff;margin:0 2px 4px;letter-spacing:-.3px;}
+.pl-cat-sub{font-size:12px;color:#8a8a95;margin:0 2px 12px;}
+.pl-areas{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin-bottom:12px;}
+.pl-areas::-webkit-scrollbar{display:none;}
+.pl-area-chip{flex-shrink:0;padding:7px 12px;border-radius:14px;background:#0f0f13;border:1px solid rgba(255,255,255,.1);color:#cfcfd6;font-size:12.5px;font-weight:700;cursor:pointer;}
+.pl-area-chip.on{background:#fff;color:#000;border-color:#fff;}
+.pl-card{background:#0f0f13;border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:14px;margin-bottom:10px;}
+.pl-photo{width:100%;height:150px;object-fit:cover;border-radius:14px;margin-bottom:10px;display:block;}
+.pl-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;}
+.pl-name{font-size:16px;font-weight:800;color:#fff;line-height:1.25;}
+.pl-area{flex-shrink:0;font-size:11px;font-weight:700;color:#9a9aa5;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:2px 8px;}
+.pl-desc{font-size:13px;color:#b5b5be;line-height:1.5;margin-top:6px;}
+.pl-rows{margin-top:10px;display:flex;flex-direction:column;gap:7px;}
+.pl-row{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:#e6e6ea;line-height:1.4;}
+.pl-row.link{cursor:pointer;}
+.pl-row svg{width:16px;height:16px;flex-shrink:0;margin-top:1px;fill:none;stroke:#9a9aa5;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.pl-row span{min-width:0;word-break:break-word;}
+.pl-prices{margin-top:12px;background:#16161b;border-radius:14px;padding:4px 12px;}
+.pl-pr{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px;color:#d8d8de;}
+.pl-pr:last-child{border-bottom:none;}
+.pl-pr b{color:#D9A520;font-weight:800;white-space:nowrap;}
+.pl-adm{display:flex;gap:8px;margin-top:12px;}
+.pl-adm .pl-btn{padding:9px 8px;font-size:12px;}
+.pl-adm .pl-btn.danger{color:#e74c3c;border-color:rgba(231,76,60,.5);background:transparent;}
+.pl-empty{text-align:center;padding:36px 16px;color:#8a8a95;font-size:14px;line-height:1.6;}
+.pm-price-row{display:flex;gap:8px;margin-bottom:8px;}
+.pm-price-row input{margin-bottom:0!important;min-width:0;}
+.pm-add-price{display:inline-block;padding:9px 14px;border-radius:12px;background:#16161b;border:1px solid rgba(255,255,255,.14);color:#fff;font-weight:700;font-size:13px;cursor:pointer;margin-bottom:14px;}
+.back-pill{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:16px;background:#0f0f13;border:1px solid rgba(255,255,255,.12);color:#fff;font-weight:700;font-size:13px;cursor:pointer;margin-bottom:10px;}
+.row-card{display:flex;align-items:center;gap:11px;background:#0f0f13;border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:9px 12px;margin-bottom:10px;cursor:pointer;}
+.chat-dot{width:9px;height:9px;border-radius:50%;background:#fff;flex-shrink:0;}
+#nav-profile .nav-icon{position:relative;}
+#nav-profile.has-unread .nav-icon::after{content:"";position:absolute;top:-1px;right:-3px;width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px #0c0c0f;}
+#chats-back,#chats-page-title{display:inline-block!important;vertical-align:middle;margin:0 8px 14px 0!important;}
+#chats-back{margin-bottom:14px;}
 /* banner (ads) */
 .banner-wrap{padding:10px 16px 0;}
 .banner-area{height:64px;border-radius:18px;border:1px solid rgba(255,255,255,.12);box-shadow:none;background:#0f0f13;}
@@ -549,6 +600,7 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
 <!-- AUCTION -->
 <div class="page" id="page-auction">
   <div style="padding:16px 14px 0;">
+    <div class="back-pill" id="chats-back" onclick="vib();goPage('profile')">‹ Профиль</div>
     <div id="chats-page-title" style="margin-bottom:16px;"><div style="display:inline-block;border:1px solid rgba(255,255,255,.22);border-radius:30px;padding:5px 16px;"><span style="font-size:13px;font-weight:900;color:#fff;letter-spacing:2px;">ЧАТЫ</span></div></div>
     <div id="messages-list">
       <div style="text-align:center;padding:60px 20px;">
@@ -589,6 +641,15 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
         </div>
       </div>
     </div>
+    <div class="row-card" id="prof-chats-btn" onclick="vib();goPage('auction')">
+      <div class="vf-card-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg></div>
+      <div style="flex:1;min-width:0;">
+        <div class="vf-card-t" id="prof-chats-title">Сообщения</div>
+        <div class="vf-card-s" id="prof-chats-sub">Диалоги и предложения цены</div>
+      </div>
+      <span class="chat-dot" id="prof-chats-badge" style="display:none"></span>
+      <svg class="vf-card-ch" viewBox="0 0 24 24" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+    </div>
     <div id="verify-profile-btn" class="vf-card" onclick="vib();openVerifyModal()">
       <div class="vf-card-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>
       <div style="flex:1;min-width:0;">
@@ -608,9 +669,51 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
   </div>
 </div>
 
+<!-- PAGE PLACES -->
+<div class="page" id="page-places">
+  <div class="pl-wrap" id="places-root"></div>
+</div>
+
 </div>
 
 
+
+<div class="modal-overlay" id="place-modal" style="z-index:650;">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-close-btn" onclick="vib();closeModal('place-modal')">✕</div>
+    <div class="modal-title" id="pm-title">Добавить место</div>
+    <div class="modal-body">
+      <label class="form-label" id="pm-l-city">Город</label>
+      <select class="form-select" id="pm-city" onchange="fillAreaList()"><option value="hurghada">Хургада</option><option value="sharm">Шарм-эль-Шейх</option></select>
+      <label class="form-label" id="pm-l-cat">Раздел</label>
+      <select class="form-select" id="pm-cat"></select>
+      <label class="form-label" id="pm-l-area">Район</label>
+      <input class="form-input" id="pm-area" list="pm-area-list" maxlength="40" placeholder="Сахль-Хашиш, Эль-Гуна, Макади...">
+      <datalist id="pm-area-list"></datalist>
+      <label class="form-label" id="pm-l-name">Название *</label>
+      <input class="form-input" id="pm-name" maxlength="80">
+      <label class="form-label" id="pm-l-desc">Описание</label>
+      <textarea class="form-textarea" id="pm-desc" maxlength="400" style="min-height:80px"></textarea>
+      <label class="form-label" id="pm-l-address">Адрес *</label>
+      <input class="form-input" id="pm-address" maxlength="200">
+      <label class="form-label" id="pm-l-map">Ссылка на карту</label>
+      <input class="form-input" id="pm-map" maxlength="300" placeholder="https://maps.app.goo.gl/...">
+      <label class="form-label" id="pm-l-phone">Телефон</label>
+      <input class="form-input" id="pm-phone" type="tel" maxlength="30" placeholder="+20 ...">
+      <label class="form-label">Telegram</label>
+      <input class="form-input" id="pm-tg" maxlength="60" placeholder="@username">
+      <label class="form-label" id="pm-l-hours">Часы работы</label>
+      <input class="form-input" id="pm-hours" maxlength="60" placeholder="09:00 - 23:00">
+      <label class="form-label" id="pm-l-prices">Фиксированные цены</label>
+      <div id="pm-prices"></div>
+      <div class="pm-add-price" id="pm-add-price" onclick="vib();addPriceRow()">+ Добавить цену</div>
+      <label class="form-label" id="pm-l-photo">Фото</label>
+      <input class="form-input" id="pm-photo" type="file" accept="image/*">
+      <button class="submit-btn" id="pm-submit" onclick="vib();submitPlace()">Отправить на проверку</button>
+    </div>
+  </div>
+</div>
 
 <!-- PAGE PARTNERS -->
 <div class="page" id="page-partners">
@@ -674,9 +777,13 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
     <div class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
     <div id="nav-lbl-partners">Партнёры</div>
   </div>
-  <div class="nav-item" id="nav-auction" onclick="vib();goPage('auction')">
+  <div class="nav-item" id="nav-auction" onclick="vib();goPage('auction')" style="display:none">
     <div class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8z"/></svg></div>
     <div id="nav-lbl-auction">Чаты</div>
+  </div>
+  <div class="nav-item" id="nav-places" onclick="vib();goPage('places')">
+    <div class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+    <div id="nav-lbl-places">Места</div>
   </div>
   <div class="nav-item" id="nav-profile" onclick="vib();goPage('profile')">
     <div class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
@@ -1261,20 +1368,20 @@ function updatePriceLabel(){
 
 function goPage(page){
   currentPage=page;
-  ["market","auction","profile","partners"].forEach(p=>{
+  ["market","auction","profile","partners","places"].forEach(p=>{
     document.getElementById(`page-${p}`).classList.toggle("active",p===page);
-    document.getElementById(`nav-${p}`).classList.toggle("active",p===page);
+    document.getElementById(`nav-${p}`).classList.toggle("active",p===page||(p==="profile"&&page==="auction"));
   });
   // FAB only on market
   document.getElementById("fab-btn").classList.toggle("hidden", page!=="market");
   if(page==="profile")loadProfile();
   if(page==="market")loadListings();
   if(page==="partners")loadPartners();
+  if(page==="places")loadPlaces();
   if(page==="auction"){
     loadChats();
     // remove unread pulse
-    const lbl=document.getElementById("nav-lbl-auction");
-    if(lbl)lbl.innerHTML="Чаты";
+    setChatsUnread(false);
   }
 }
 
@@ -1371,15 +1478,12 @@ async function checkUnreadBadge(){
   if(!uid)return;
   try{
     const dialogs=await fetch(API+"/api/dialogs/"+uid+"?_="+Date.now()).then(r=>r.json()).catch(()=>[]);
-    const hasUnread=dialogs.some(d=>!d.is_read&&d.receiver_id===uid);
-    const lbl=document.getElementById("nav-lbl-auction");
-    if(!lbl)return;
-    if(hasUnread&&!document.getElementById("chat-pulse")){
-      lbl.innerHTML="Чаты <span id='chat-pulse' style='display:inline-block;width:7px;height:7px;background:#2ecc71;border-radius:50%;vertical-align:middle;margin-left:2px;animation:pulse-dot 1.2s ease-in-out infinite;'></span>";
-    } else if(!hasUnread){
-      lbl.innerHTML="Чаты";
-    }
+    setChatsUnread(Array.isArray(dialogs)&&dialogs.some(d=>!d.is_read&&d.receiver_id===uid));
   }catch(e){}
+}
+function setChatsUnread(has){
+  const b=document.getElementById("prof-chats-badge");if(b)b.style.display=has?"block":"none";
+  const n=document.getElementById("nav-profile");if(n)n.classList.toggle("has-unread",!!has);
 }
 function stopChatsPolling(){
   if(_chatsPollingTimer){clearInterval(_chatsPollingTimer);_chatsPollingTimer=null;}
@@ -1677,7 +1781,7 @@ function updateExtraLabels(){
   if(mn)mn.placeholder=xt("from");if(mx)mx.placeholder=xt("to");
   const on=(id,v)=>{const el=document.getElementById(id);if(el)el.classList.toggle("active",!!v);};
   on("filter-price-range-btn",has);on("filter-verified-btn",onlyVerified);
-  updateSortLabel();updateAllowOffersLabels();
+  updateSortLabel();updateAllowOffersLabels();updatePlacesLabels();
 }
 function setPriceCur(c){
   vib();priceCur=c;
@@ -2069,6 +2173,211 @@ function setAllowOffers(v){allowOffers=!!v;const t0=document.getElementById("all
 function setEditAllowOffers(v){editAllowOffers=!!v;const t0=document.getElementById("edit-allow-offers-toggle");if(t0)t0.classList.toggle("on",editAllowOffers);}
 const AO_T={ru:"Принимать предложения цены",en:"Accept price offers",ar:"قبول عروض الأسعار"};
 function updateAllowOffersLabels(){const x=AO_T[lang]||AO_T.ru;["allow-offers-lbl","edit-allow-offers-lbl"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=x;});}
+const PL_CATS={
+  pharmacy:{ru:"Аптеки",en:"Pharmacies",ar:"صيدليات"},exchange:{ru:"Обмен валют",en:"Currency exchange",ar:"صرافة"},
+  shops:{ru:"Магазины",en:"Shops",ar:"متاجر"},restaurants:{ru:"Рестораны",en:"Restaurants",ar:"مطاعم"},
+  sim:{ru:"SIM-карты",en:"SIM cards",ar:"شرائح SIM"},taxi:{ru:"Такси",en:"Taxi",ar:"تاكسي"},
+  transfer:{ru:"Трансфер",en:"Transfer",ar:"ترانسفير"},tours:{ru:"Экскурсии",en:"Excursions",ar:"رحلات"},
+  clinics:{ru:"Клиники и врачи",en:"Clinics & doctors",ar:"عيادات وأطباء"},rental:{ru:"Аренда авто и байков",en:"Car & bike rental",ar:"تأجير سيارات ودراجات"},
+  beauty:{ru:"Салоны красоты",en:"Beauty salons",ar:"صالونات تجميل"},other:{ru:"Другое",en:"Other",ar:"أخرى"}
+};
+const PL_CAT_KEYS=Object.keys(PL_CATS);
+const PL_AREAS={
+  hurghada:["Центр","Сахль-Хашиш","Эль-Гуна","Макади","Сома-Бей","Эль-Ахиль","Дахар","Сигала","Мамша"],
+  sharm:["Наама-Бей","Старый город","Хадаба","Набк","Шаркс-Бей","Рас-Умм-Сид","Шарм Эль-Майя"]
+};
+const PL_T={
+  ru:{tab:"Места",hurghada:"Хургада",sharm:"Шарм-эль-Шейх",hint_hurghada:"Хургада и окрестности до 50 км: Сахль-Хашиш, Эль-Гуна, Макади, Сома-Бей",hint_sharm:"Шарм-эль-Шейх и окрестности: Наама-Бей, Хадаба, Набк, Старый город",
+      add:"Добавить место",pending:"На модерации",back:"Назад",all_areas:"Все районы",soon:"Скоро",places_n:"мест",empty:"Здесь пока пусто",empty2:"Добавьте первое место, чтобы помочь другим",
+      f_title:"Добавить место",f_city:"Город",f_cat:"Раздел",f_area:"Район",f_name:"Название *",f_desc:"Описание",f_address:"Адрес *",f_map:"Ссылка на карту",f_phone:"Телефон",f_hours:"Часы работы",f_prices:"Фиксированные цены",f_photo:"Фото",f_addprice:"+ Добавить цену",f_item:"Что",f_price:"Цена",f_send:"Отправить на проверку",f_save:"Сохранить",
+      sent:"Отправлено на проверку. Спасибо!",added:"Добавлено",saved:"Сохранено",fill:"Укажите название и адрес",approve:"Одобрить",reject:"Отклонить",del:"Удалить",edit:"Изменить",confirm_del:"Удалить это место?",no_pending:"Нет мест на проверке",login:"Откройте через Telegram",limit:"Слишком много мест на проверке, подождите",err:"Ошибка",
+      prof_chats:"Сообщения",prof_chats_sub:"Диалоги и предложения цены",prof_back:"‹ Профиль"},
+  en:{tab:"Places",hurghada:"Hurghada",sharm:"Sharm el-Sheikh",hint_hurghada:"Hurghada and surroundings within 50 km: Sahl Hasheesh, El Gouna, Makadi, Soma Bay",hint_sharm:"Sharm el-Sheikh and surroundings: Naama Bay, Hadaba, Nabq, Old Town",
+      add:"Add a place",pending:"Pending review",back:"Back",all_areas:"All areas",soon:"Soon",places_n:"places",empty:"Nothing here yet",empty2:"Add the first place to help others",
+      f_title:"Add a place",f_city:"City",f_cat:"Category",f_area:"Area",f_name:"Name *",f_desc:"Description",f_address:"Address *",f_map:"Map link",f_phone:"Phone",f_hours:"Opening hours",f_prices:"Fixed prices",f_photo:"Photo",f_addprice:"+ Add a price",f_item:"Item",f_price:"Price",f_send:"Send for review",f_save:"Save",
+      sent:"Sent for review. Thank you!",added:"Added",saved:"Saved",fill:"Enter a name and address",approve:"Approve",reject:"Reject",del:"Delete",edit:"Edit",confirm_del:"Delete this place?",no_pending:"Nothing to review",login:"Open via Telegram",limit:"Too many places waiting for review",err:"Error",
+      prof_chats:"Messages",prof_chats_sub:"Chats and price offers",prof_back:"‹ Profile"},
+  ar:{tab:"أماكن",hurghada:"الغردقة",sharm:"شرم الشيخ",hint_hurghada:"الغردقة وما حولها حتى 50 كم: سهل حشيش، الجونة، مكادي، سوما باي",hint_sharm:"شرم الشيخ وما حولها: نعمة باي، الهضبة، نبق، البلدة القديمة",
+      add:"أضف مكانًا",pending:"قيد المراجعة",back:"رجوع",all_areas:"كل المناطق",soon:"قريبًا",places_n:"أماكن",empty:"لا شيء هنا بعد",empty2:"أضف أول مكان لمساعدة الآخرين",
+      f_title:"أضف مكانًا",f_city:"المدينة",f_cat:"القسم",f_area:"المنطقة",f_name:"الاسم *",f_desc:"الوصف",f_address:"العنوان *",f_map:"رابط الخريطة",f_phone:"الهاتف",f_hours:"ساعات العمل",f_prices:"أسعار ثابتة",f_photo:"صورة",f_addprice:"+ أضف سعرًا",f_item:"البند",f_price:"السعر",f_send:"أرسل للمراجعة",f_save:"حفظ",
+      sent:"تم الإرسال للمراجعة. شكرًا!",added:"تمت الإضافة",saved:"تم الحفظ",fill:"أدخل الاسم والعنوان",approve:"موافقة",reject:"رفض",del:"حذف",edit:"تعديل",confirm_del:"حذف هذا المكان؟",no_pending:"لا شيء للمراجعة",login:"افتح عبر تيليجرام",limit:"عدد كبير من الأماكن قيد المراجعة",err:"خطأ",
+      prof_chats:"الرسائل",prof_chats_sub:"المحادثات وعروض الأسعار",prof_back:"‹ الملف الشخصي"}
+};
+function pt(k){return (PL_T[lang]||PL_T.ru)[k];}
+function plN(n){
+  if(lang==="ru"){const m10=n%10,m100=n%100;return n+" "+((m10===1&&m100!==11)?"место":(m10>=2&&m10<=4&&(m100<12||m100>14))?"места":"мест");}
+  if(lang==="ar")return n+" "+(n===1?"مكان":"أماكن");
+  return n+" "+(n===1?"place":"places");
+}
+function plCat(k){return ((PL_CATS[k]||{})[lang])||((PL_CATS[k]||{}).ru)||k;}
+let placesCity="hurghada",placesCat=null,placesArea="",placesAdmin=false,placesPending=[],placesCount={},placesList=[],editingPlace=null;
+const PL_ICONS={
+  pin:'<svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+  clock:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  phone:'<svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.58 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+  tg:'<svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>'
+};
+function openExternal(url){try{if(tg&&tg.openLink)tg.openLink(url);else window.open(url,"_blank");}catch(e){window.open(url,"_blank");}}
+function placeMapUrl(p){
+  if(p.map_url)return p.map_url;
+  return "https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(p.name+", "+p.address+", "+pt(p.city));
+}
+function openPlaceMap(i){const p=placesList[i];if(p){vib();openExternal(placeMapUrl(p));}}
+function openPlaceTg(h){vib();const u="https://t.me/"+h;if(tg&&tg.openTelegramLink)tg.openTelegramLink(u);else window.open(u,"_blank");}
+function placeCardHtml(p,i,mod){
+  const rows=[];
+  rows.push(`<div class="pl-row link" onclick="openPlaceMap(${i})">${PL_ICONS.pin}<span>${esc(p.address)}</span></div>`);
+  if(p.hours)rows.push(`<div class="pl-row">${PL_ICONS.clock}<span>${esc(p.hours)}</span></div>`);
+  if(p.phone)rows.push(`<div class="pl-row link" onclick="vib();openExternal('tel:${esc(p.phone).replace(/[^0-9+]/g,"")}')">${PL_ICONS.phone}<span>${esc(p.phone)}</span></div>`);
+  if(p.telegram)rows.push(`<div class="pl-row link" onclick="openPlaceTg('${esc(p.telegram)}')">${PL_ICONS.tg}<span>@${esc(p.telegram)}</span></div>`);
+  const prices=(p.prices&&p.prices.length)?`<div class="pl-prices">${p.prices.map(x=>`<div class="pl-pr"><span>${esc(x.item)}</span><b>${esc(x.price)}</b></div>`).join("")}</div>`:"";
+  const adm=placesAdmin?(mod
+    ?`<div class="pl-adm"><div class="pl-btn primary" onclick="moderatePlace(${p.id},'approve')">${pt("approve")}</div><div class="pl-btn danger" onclick="moderatePlace(${p.id},'reject')">${pt("reject")}</div></div>`
+    :`<div class="pl-adm"><div class="pl-btn" onclick="openPlaceForm(${i})">${pt("edit")}</div><div class="pl-btn danger" onclick="deletePlace(${p.id})">${pt("del")}</div></div>`):"";
+  return `<div class="pl-card">${p.photo_path?`<img class="pl-photo" src="${p.photo_path}" alt="" loading="lazy">`:""}
+    <div class="pl-top"><div class="pl-name">${esc(p.name)}</div>${p.area?`<span class="pl-area">${esc(p.area)}</span>`:""}</div>
+    ${p.description?`<div class="pl-desc">${esc(p.description)}</div>`:""}
+    <div class="pl-rows">${rows.join("")}</div>${prices}${adm}</div>`;
+}
+async function loadPlacesAdmin(){
+  placesAdmin=false;placesPending=[];
+  if(!tgUser||!tgUser.id)return;
+  try{
+    const r=await fetch(`${API}/api/me/role?user_id=${tgUser.id}`);
+    if(r.ok&&(await r.json()).admin){
+      placesAdmin=true;
+      const p=await fetch(`${API}/api/places/pending?user_id=${tgUser.id}&_=${Date.now()}`);
+      if(p.ok)placesPending=await p.json();
+    }
+  }catch(e){}
+}
+async function loadPlaces(){
+  placesCat=null;
+  renderPlaces();
+  await loadPlacesAdmin();
+  await loadPlacesSummary();
+}
+async function loadPlacesSummary(){
+  try{const r=await fetch(`${API}/api/places/summary?city=${placesCity}&_=${Date.now()}`);placesCount=r.ok?await r.json():{};}catch(e){placesCount={};}
+  renderPlaces();
+}
+function setPlacesCity(c){vib();placesCity=c;placesCat=null;placesArea="";loadPlacesSummary();}
+function renderPlaces(){
+  const root=document.getElementById("places-root");if(!root)return;
+  if(placesCat)return renderPlaceCategory(root);
+  const tiles=PL_CAT_KEYS.map(k=>{const n=placesCount[k]||0;return `<div class="pl-tile${n?" has":""}" onclick="openPlaceCat('${k}')"><div class="pl-tile-t">${plCat(k)}</div><div class="pl-tile-c">${n?plN(n):pt("soon")}</div></div>`;}).join("");
+  root.innerHTML=`<div class="pl-cities">${PLACE_CITIES.map(c=>`<div class="pl-city${c===placesCity?" on":""}" onclick="setPlacesCity('${c}')">${pt(c)}</div>`).join("")}</div>
+    <div class="pl-hint">${pt("hint_"+placesCity)}</div>
+    <div class="pl-actions"><div class="pl-btn primary" onclick="openPlaceForm()">${pt("add")}</div>${placesAdmin?`<div class="pl-btn" onclick="openPlaceModeration()">${pt("pending")}${placesPending.length?" ("+placesPending.length+")":""}</div>`:""}</div>
+    <div class="pl-grid">${tiles}</div>`;
+}
+const PLACE_CITIES=["hurghada","sharm"];
+async function openPlaceCat(k){
+  vib();placesCat=k;placesArea="";placesList=[];
+  renderPlaces();
+  try{const r=await fetch(`${API}/api/places?city=${placesCity}&category=${k}&_=${Date.now()}`);placesList=r.ok?await r.json():[];}catch(e){placesList=[];}
+  renderPlaces();window.scrollTo({top:0});
+}
+function closePlaceCat(){vib();placesCat=null;placesArea="";renderPlaces();}
+function setPlaceArea(a){vib();placesArea=a;renderPlaces();}
+function renderPlaceCategory(root){
+  const areas=[...new Set(placesList.map(p=>p.area).filter(Boolean))];
+  const chips=areas.length>1?`<div class="pl-areas"><div class="pl-area-chip${placesArea===""?" on":""}" onclick="setPlaceArea('')">${pt("all_areas")}</div>${areas.map(a=>`<div class="pl-area-chip${placesArea===a?" on":""}" onclick="setPlaceArea(this.dataset.a)" data-a="${esc(a)}">${esc(a)}</div>`).join("")}</div>`:"";
+  const shown=placesList.map((p,i)=>({p,i})).filter(x=>!placesArea||x.p.area===placesArea);
+  const body=shown.length?shown.map(x=>placeCardHtml(x.p,x.i,false)).join(""):`<div class="pl-empty">${pt("empty")}<br>${pt("empty2")}</div>`;
+  root.innerHTML=`<div class="pl-back" onclick="closePlaceCat()">‹ ${pt("back")}</div>
+    <div class="pl-cat-title">${plCat(placesCat)}</div><div class="pl-cat-sub">${pt(placesCity)}</div>${chips}${body}
+    <div class="pl-actions" style="margin-top:6px"><div class="pl-btn primary" onclick="openPlaceForm()">${pt("add")}</div></div>`;
+}
+function fillAreaList(){
+  const city=document.getElementById("pm-city").value;
+  document.getElementById("pm-area-list").innerHTML=(PL_AREAS[city]||[]).map(a=>`<option value="${a}">`).join("");
+}
+function addPriceRow(item,price){
+  const box=document.getElementById("pm-prices");if(!box||box.children.length>=15)return;
+  const row=document.createElement("div");row.className="pm-price-row";
+  row.innerHTML=`<input class="form-input pm-item" maxlength="60" placeholder="${pt("f_item")}" style="flex:2"><input class="form-input pm-price" maxlength="30" placeholder="${pt("f_price")}" style="flex:1">`;
+  row.querySelector(".pm-item").value=item||"";row.querySelector(".pm-price").value=price||"";
+  box.appendChild(row);
+}
+function openPlaceForm(idx){
+  if(!tgUser||!tgUser.id){showToast(pt("login"));return;}
+  editingPlace=(typeof idx==="number"&&placesList[idx])?placesList[idx]:null;
+  const p=editingPlace;
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.value=v||"";};
+  document.getElementById("pm-cat").innerHTML=PL_CAT_KEYS.map(k=>`<option value="${k}">${plCat(k)}</option>`).join("");
+  document.getElementById("pm-city").innerHTML=PLACE_CITIES.map(c=>`<option value="${c}">${pt(c)}</option>`).join("");
+  document.getElementById("pm-city").value=p?p.city:placesCity;
+  document.getElementById("pm-cat").value=p?p.category:(placesCat||"pharmacy");
+  set("pm-area",p&&p.area);set("pm-name",p&&p.name);set("pm-desc",p&&p.description);set("pm-address",p&&p.address);
+  set("pm-map",p&&p.map_url);set("pm-phone",p&&p.phone);set("pm-tg",p&&p.telegram?"@"+p.telegram:"");set("pm-hours",p&&p.hours);set("pm-photo","");
+  document.getElementById("pm-prices").innerHTML="";
+  (p&&p.prices&&p.prices.length?p.prices:[{item:"",price:""}]).forEach(x=>addPriceRow(x.item,x.price));
+  fillAreaList();updatePlacesLabels();
+  document.getElementById("pm-submit").textContent=p?pt("f_save"):(placesAdmin?pt("add"):pt("f_send"));
+  document.getElementById("place-modal").classList.add("open");
+}
+async function submitPlace(){
+  const g=id=>document.getElementById(id).value.trim();
+  if(g("pm-name").length<2||g("pm-address").length<3){showToast("⚠️ "+pt("fill"));return;}
+  const prices=[...document.querySelectorAll("#pm-prices .pm-price-row")].map(r=>({item:r.querySelector(".pm-item").value.trim(),price:r.querySelector(".pm-price").value.trim()})).filter(x=>x.item&&x.price);
+  const fd=new FormData();
+  fd.append("user_id",tgUser.id);fd.append("city",g("pm-city"));fd.append("category",g("pm-cat"));fd.append("area",g("pm-area"));
+  fd.append("name",g("pm-name"));fd.append("description",g("pm-desc"));fd.append("address",g("pm-address"));fd.append("map_url",g("pm-map"));
+  fd.append("phone",g("pm-phone"));fd.append("telegram",g("pm-tg"));fd.append("hours",g("pm-hours"));fd.append("prices",JSON.stringify(prices));
+  const ph=document.getElementById("pm-photo").files[0];if(ph)fd.append("photo",ph);
+  const btn=document.getElementById("pm-submit");btn.disabled=true;
+  try{
+    const url=editingPlace?`${API}/api/places/${editingPlace.id}`:`${API}/api/places`;
+    const r=await fetch(url,{method:editingPlace?"PUT":"POST",body:fd});
+    if(r.ok){
+      const d=await r.json();
+      closeModal("place-modal");
+      showToast(editingPlace?pt("saved"):(d.status==="approved"?pt("added"):pt("sent")));
+      if(placesCat)openPlaceCat(placesCat);else loadPlacesSummary();
+      if(placesAdmin&&!editingPlace)loadPlacesAdmin().then(renderPlaces);
+    }else{
+      let msg=pt("err");try{const e=await r.json();msg=r.status===429?pt("limit"):(e.detail||msg);}catch(x){}
+      showToast("❌ "+msg);
+    }
+  }catch(e){showToast("❌ "+pt("err"));}
+  btn.disabled=false;
+}
+async function openPlaceModeration(){
+  vib();await loadPlacesAdmin();
+  const overlay=document.createElement("div");
+  overlay.style="position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:9000;overflow-y:auto;padding:16px 14px 100px;";
+  placesList=placesPending;
+  overlay.innerHTML=`<div style="max-width:480px;margin:0 auto"><div class="pl-back" id="pm-close">✕ ${pt("pending")}</div>${placesPending.length?placesPending.map((p,i)=>`<div style="font-size:11px;color:#8a8a95;margin:0 4px 4px">${plCat(p.category)} · ${pt(p.city)}</div>`+placeCardHtml(p,i,true)).join(""):`<div class="pl-empty">${pt("no_pending")}</div>`}</div>`;
+  document.body.appendChild(overlay);
+  overlay.querySelector("#pm-close").onclick=()=>{overlay.remove();loadPlacesAdmin().then(renderPlaces);};
+  window._modOverlay=overlay;
+}
+async function moderatePlace(id,action){
+  vib();
+  try{
+    const fd=new FormData();fd.append("user_id",tgUser.id);fd.append("action",action);
+    const r=await fetch(`${API}/api/places/${id}/moderate`,{method:"POST",body:fd});
+    if(r.ok){showToast(action==="approve"?pt("approve"):pt("reject"));if(window._modOverlay){window._modOverlay.remove();openPlaceModeration();}loadPlacesSummary();}
+    else showToast("❌ "+r.status);
+  }catch(e){}
+}
+async function deletePlace(id){
+  vib();if(!confirm(pt("confirm_del")))return;
+  try{
+    const r=await fetch(`${API}/api/places/${id}?user_id=${tgUser.id}`,{method:"DELETE"});
+    if(r.ok){showToast(pt("del"));if(placesCat)openPlaceCat(placesCat);else loadPlacesSummary();}
+    else showToast("❌ "+r.status);
+  }catch(e){}
+}
+function updatePlacesLabels(){
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set("nav-lbl-places",pt("tab"));set("prof-chats-title",pt("prof_chats"));set("prof-chats-sub",pt("prof_chats_sub"));set("chats-back",pt("prof_back"));
+  set("pm-title",editingPlace?pt("edit"):pt("f_title"));set("pm-l-city",pt("f_city"));set("pm-l-cat",pt("f_cat"));set("pm-l-area",pt("f_area"));set("pm-l-name",pt("f_name"));
+  set("pm-l-desc",pt("f_desc"));set("pm-l-address",pt("f_address"));set("pm-l-map",pt("f_map"));set("pm-l-phone",pt("f_phone"));set("pm-l-hours",pt("f_hours"));
+  set("pm-l-prices",pt("f_prices"));set("pm-l-photo",pt("f_photo"));set("pm-add-price",pt("f_addprice"));
+  if(currentPage==="places")renderPlaces();
+}
 async function loadListings(){
   try{const res=await fetch(`${API}/api/listings?_=${Date.now()}`);allListings=await res.json();await loadMyReacts();initBanners();renderListings(filterData());}
   catch(e){document.getElementById("listings-grid").innerHTML=`<div class="empty"><div>Ошибка соединения</div></div>`;}
@@ -3243,10 +3552,7 @@ setTimeout(async()=>{
     const r=await fetch(API+"/api/dialogs/"+uid+"?_="+Date.now());
     const dialogs=await r.json();
     const hasUnread=dialogs.some(d=>!d.is_read&&d.receiver_id===uid);
-    const lbl=document.getElementById("nav-lbl-auction");
-    if(lbl&&hasUnread){
-      lbl.innerHTML="Чаты <span id='chat-pulse' style='display:inline-block;width:7px;height:7px;background:#2ecc71;border-radius:50%;vertical-align:middle;margin-left:2px;animation:pulse-dot 1.2s ease-in-out infinite;'></span>";
-    }
+    setChatsUnread(hasUnread);
   }catch(e){}
 },1000);
 </script>

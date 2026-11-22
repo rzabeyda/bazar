@@ -162,6 +162,151 @@ def rate_seller(request: Request, seller_id: int, user_id: int = Form(...), star
     conn.close()
     return {"ok": True, "avg": avg, "count": n, "my": stars}
 
+
+# -- PLACES DIRECTORY ------------------------------------------------------------
+PLACE_CITIES = ["hurghada", "sharm"]   # hurghada = the city and its surroundings (~50 km)
+PLACE_CATEGORIES = ["pharmacy","exchange","shops","restaurants","sim","taxi","transfer","tours","clinics","rental","beauty","other"]
+
+def _is_admin(user_id) -> bool:
+    return int(user_id) == ADMIN_TG_ID
+
+def _place_dict(r):
+    d = dict(r)
+    try: d["prices"] = json.loads(d.pop("prices_json") or "[]")
+    except Exception: d["prices"] = []
+    d.pop("created_by", None)
+    return d
+
+def _clean_place(city, category, area, name, description, address, map_url, phone, telegram, hours, prices):
+    import re as _re
+    if city not in PLACE_CITIES: raise HTTPException(400, "Invalid city")
+    if category not in PLACE_CATEGORIES: raise HTTPException(400, "Invalid category")
+    name = (name or "").strip()[:80]
+    address = (address or "").strip()[:200]
+    if len(name) < 2: raise HTTPException(400, "Name is required")
+    if len(address) < 3: raise HTTPException(400, "Address is required")
+    map_url = (map_url or "").strip()[:300]
+    if map_url and not _re.match(r"^https?://", map_url, _re.I): raise HTTPException(400, "Invalid map link")
+    phone = (phone or "").strip()[:30]
+    if phone and not _re.match(r"^[0-9+()\- ]{5,30}$", phone): raise HTTPException(400, "Invalid phone")
+    tg = (telegram or "").strip()
+    tg = _re.sub(r"^(https?://)?(t\.me/|telegram\.me/)", "", tg, flags=_re.I).lstrip("@")
+    if tg and not _re.match(r"^[A-Za-z0-9_]{4,32}$", tg): raise HTTPException(400, "Invalid Telegram username")
+    items = []
+    try: raw = json.loads(prices) if prices else []
+    except Exception: raise HTTPException(400, "Invalid prices")
+    for it in (raw if isinstance(raw, list) else [])[:15]:
+        if not isinstance(it, dict): continue
+        i, p = str(it.get("item", "")).strip()[:60], str(it.get("price", "")).strip()[:30]
+        if i and p: items.append({"item": i, "price": p})
+    return dict(city=city, category=category, area=(area or "").strip()[:40], name=name,
+                description=(description or "").strip()[:400], address=address, map_url=map_url or None,
+                phone=phone or None, telegram=tg or None, hours=(hours or "").strip()[:60] or None,
+                prices_json=json.dumps(items, ensure_ascii=False))
+
+@app.get("/api/me/role")
+def me_role(request: Request, user_id: int):
+    require_user(request, user_id)
+    return {"admin": _is_admin(user_id)}
+
+@app.get("/api/places/summary")
+def places_summary(city: str):
+    conn = get_db()
+    rows = conn.execute("SELECT category, COUNT(*) n FROM places WHERE status='approved' AND city=? GROUP BY category", (city,)).fetchall()
+    conn.close()
+    return {r["category"]: r["n"] for r in rows}
+
+@app.get("/api/places/pending")
+def places_pending(request: Request, user_id: int):
+    require_user(request, user_id)
+    if not _is_admin(user_id): raise HTTPException(403, "Admin only")
+    conn = get_db()
+    rows = conn.execute("SELECT * FROM places WHERE status='pending' ORDER BY created_at ASC").fetchall()
+    conn.close()
+    return [_place_dict(r) for r in rows]
+
+@app.get("/api/places")
+def places_list(city: str, category: str):
+    conn = get_db()
+    rows = conn.execute("SELECT * FROM places WHERE status='approved' AND city=? AND category=? ORDER BY COALESCE(area,''), name", (city, category)).fetchall()
+    conn.close()
+    return [_place_dict(r) for r in rows]
+
+@app.post("/api/places")
+async def places_create(
+    request: Request,
+    user_id: int = Form(...), city: str = Form(...), category: str = Form(...), area: str = Form(None),
+    name: str = Form(...), description: str = Form(None), address: str = Form(...), map_url: str = Form(None),
+    phone: str = Form(None), telegram: str = Form(None), hours: str = Form(None), prices: str = Form(None),
+    photo: UploadFile = File(None),
+):
+    import httpx, logging
+    require_user(request, user_id)
+    f = _clean_place(city, category, area, name, description, address, map_url, phone, telegram, hours, prices)
+    admin = _is_admin(user_id)
+    conn = get_db(); c = conn.cursor()
+    if not admin:
+        n = c.execute("SELECT COUNT(*) FROM places WHERE created_by=? AND status='pending'", (user_id,)).fetchone()[0]
+        if n >= 5: conn.close(); raise HTTPException(429, "Too many places waiting for review")
+    p1 = save_photo(photo) if has_image(photo) else None
+    status = "approved" if admin else "pending"
+    c.execute("""INSERT INTO places (city,category,area,name,description,address,map_url,phone,telegram,hours,prices_json,photo_path,status,created_by)
+                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+              (f["city"],f["category"],f["area"],f["name"],f["description"],f["address"],f["map_url"],f["phone"],f["telegram"],f["hours"],f["prices_json"],p1,status,user_id))
+    pid = c.lastrowid
+    conn.commit(); conn.close()
+    if not admin:
+        token = os.getenv("BOT_TOKEN", "")
+        if token and ADMIN_TG_ID:
+            try:
+                async with httpx.AsyncClient(timeout=5) as client:
+                    await client.post(f"https://api.telegram.org/bot{token}/sendMessage", json={
+                        "chat_id": ADMIN_TG_ID,
+                        "text": f"Новое место на проверке: {f['name']} ({f['city']}, {f['category']}). Откройте вкладку «Места» → «На модерации»."})
+            except Exception as e:
+                logging.warning(f"place notify: {e}")
+    return {"ok": True, "id": pid, "status": status}
+
+@app.put("/api/places/{place_id}")
+async def places_update(
+    request: Request, place_id: int,
+    user_id: int = Form(...), city: str = Form(...), category: str = Form(...), area: str = Form(None),
+    name: str = Form(...), description: str = Form(None), address: str = Form(...), map_url: str = Form(None),
+    phone: str = Form(None), telegram: str = Form(None), hours: str = Form(None), prices: str = Form(None),
+    photo: UploadFile = File(None),
+):
+    require_user(request, user_id)
+    if not _is_admin(user_id): raise HTTPException(403, "Admin only")
+    f = _clean_place(city, category, area, name, description, address, map_url, phone, telegram, hours, prices)
+    conn = get_db(); c = conn.cursor()
+    row = c.execute("SELECT photo_path FROM places WHERE id=?", (place_id,)).fetchone()
+    if not row: conn.close(); raise HTTPException(404)
+    p1 = save_photo(photo) if has_image(photo) else row["photo_path"]
+    c.execute("""UPDATE places SET city=?,category=?,area=?,name=?,description=?,address=?,map_url=?,phone=?,telegram=?,hours=?,prices_json=?,photo_path=? WHERE id=?""",
+              (f["city"],f["category"],f["area"],f["name"],f["description"],f["address"],f["map_url"],f["phone"],f["telegram"],f["hours"],f["prices_json"],p1,place_id))
+    conn.commit(); conn.close()
+    return {"ok": True}
+
+@app.post("/api/places/{place_id}/moderate")
+def places_moderate(request: Request, place_id: int, user_id: int = Form(...), action: str = Form(...)):
+    require_user(request, user_id)
+    if not _is_admin(user_id): raise HTTPException(403, "Admin only")
+    if action not in ("approve", "reject"): raise HTTPException(400, "Invalid action")
+    conn = get_db(); c = conn.cursor()
+    if not c.execute("SELECT 1 FROM places WHERE id=?", (place_id,)).fetchone(): conn.close(); raise HTTPException(404)
+    c.execute("UPDATE places SET status=? WHERE id=?", ("approved" if action == "approve" else "rejected", place_id))
+    conn.commit(); conn.close()
+    return {"ok": True}
+
+@app.delete("/api/places/{place_id}")
+def places_delete(request: Request, place_id: int, user_id: int):
+    require_user(request, user_id)
+    if not _is_admin(user_id): raise HTTPException(403, "Admin only")
+    conn = get_db()
+    conn.execute("DELETE FROM places WHERE id=?", (place_id,))
+    conn.commit(); conn.close()
+    return {"ok": True}
+
 # IMPORTANT: sold route must be before /{listing_id} to avoid conflict
 @app.get("/api/listings/sold/{user_id}")
 def get_sold(request: Request, user_id: int):
