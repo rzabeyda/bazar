@@ -374,8 +374,47 @@ button,input,select,textarea{font-family:inherit;}
 .filters-row .filter-btn{min-width:0;overflow:hidden;}
 .filters-row .filter-label,#filter-price-range-lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
 #filter-price{display:none!important;}
-/* promotion / ads switched off for now */
-.promote-box,#pay-modal,.banner-wrap,[onclick*="buyPromo"],[onclick*="buyLegendary"]{display:none!important;}
+/* verification window */
+.vf-hero{text-align:center;padding:6px 0 18px;}
+.vf-badge{width:76px;height:76px;margin:0 auto 14px;border-radius:24px;background:#16161b;border:1px solid rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;color:#fff;box-shadow:0 0 18px rgba(255,255,255,.08);}
+.vf-badge svg{width:38px;height:38px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.vf-title{font-size:19px;font-weight:900;color:#fff;margin-bottom:6px;letter-spacing:-.2px;}
+.vf-sub{font-size:13px;color:#9a9aa5;line-height:1.55;max-width:300px;margin:0 auto;}
+.vf-list{background:#0f0f13;border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:4px 14px;margin-bottom:14px;}
+.vf-row{display:flex;align-items:center;gap:12px;padding:13px 0;font-size:14px;font-weight:600;color:#e6e6ea;border-bottom:1px solid rgba(255,255,255,.07);}
+.vf-row:last-child{border-bottom:none;}
+.vf-ic{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.vf-ic svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;}
+.vf-price{display:flex;justify-content:space-between;align-items:center;padding:4px 6px 14px;color:#fff;font-weight:700;font-size:15px;}
+.vf-price s{opacity:.4;font-size:13px;margin-right:6px;font-weight:600;}
+.vf-pay{display:flex;flex-direction:column;gap:10px;}
+.vf-btn{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-radius:18px;background:#16161b;border:1px solid rgba(255,255,255,.14);color:#fff;font-weight:800;font-size:15px;cursor:pointer;}
+.vf-btn:first-child{background:#fff;color:#000;border-color:#fff;}
+.vf-btn:active{transform:scale(.98);}
+.vf-btn-p{opacity:.7;font-weight:700;}
+.popt-icon{display:none;}
+body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn{opacity:0!important;pointer-events:none!important;}
+/* banner (ads) */
+.banner-wrap{padding:10px 16px 0;}
+.banner-area{height:64px;border-radius:18px;border:1px solid rgba(255,255,255,.12);box-shadow:none;background:#0f0f13;}
+.banner-area::after{display:none;}
+.banner-info{padding:8px 0 8px 14px;}
+.banner-name{font-size:14px;margin-bottom:2px;-webkit-line-clamp:1;}
+.banner-price-big{font-size:16px;color:var(--gold);}
+.banner-photo,.banner-photo-empty{width:84px;}
+.banner-photo-empty{color:#fff;}
+.banner-default-slide{padding:0 14px;background:linear-gradient(135deg,#17171d,#0f0f13);}
+.banner-default-icon{display:none;}
+.banner-default-title{font-size:14px;margin-bottom:2px;}
+.banner-default-sub{font-size:11px;color:#9a9aa5;font-weight:600;}
+.banner-default-btn{background:#fff;color:#000;font-size:12px;font-weight:800;padding:9px 16px;border-radius:14px;}
+.banner-dots{padding:6px 0 0;}
+.bdot.active{background:#fff;}
+.promote-box{background:#0f0f13;border:1px solid rgba(217,165,32,.45)!important;border-radius:18px;box-shadow:none!important;animation:none!important;}
+.promoted-badge,.promote-badge{background:var(--gold);color:#000;}
+.card.promoted-card{border:1px solid rgba(217,165,32,.7);box-shadow:0 0 14px rgba(217,165,32,.16);animation:none;}
+/* legendary (neon) stays off */
+.legend-box,[onclick*="buyLegendary"]{display:none!important;}
 @keyframes cardIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
 @media (prefers-reduced-motion:reduce){.card{animation:none;}}
 </style>
@@ -398,16 +437,9 @@ button,input,select,textarea{font-family:inherit;}
 
 <!-- MARKET -->
 <div class="page active" id="page-market">
-  <div class="banner-wrap" style="display:none">
+  <div class="banner-wrap">
     <div class="banner-area" id="banner-area">
-      <div class="banner-slide active">
-        <div class="banner-bg"></div><div class="banner-pattern"></div><div class="banner-overlay"></div>
-        <div class="banner-content">
-          <div class="banner-tag">РЕКЛАМА</div>
-          <div class="banner-title">Продвиньте объявление в ТОП</div>
-          <div class="banner-price">$5 · 24 часа · Шарм, Хургада, Каир</div>
-        </div>
-      </div>
+      <div class="banner-slide active"><div class="banner-default-slide" onclick="vib();openAddModal()"><div class="banner-default-left"><div class="banner-default-title">Реклама в баннере</div><div class="banner-default-sub">500 Stars · 30 дней · все города</div></div><div class="banner-default-btn">Разместить</div></div></div>
     </div>
     <div class="banner-dots" id="banner-dots"></div>
   </div>
@@ -678,12 +710,9 @@ button,input,select,textarea{font-family:inherit;}
         <option value="luxor">Луксор</option>
         <option value="marsa">Марса-Алам</option>
         <option value="nuweiba">Нувейба</option>
-        <option value="safaga">Сафага</option>
-        <option value="soma-bay">Сома-Бей</option>
         <option value="taba">Таба</option>
         <option value="hurghada">Хургада</option>
         <option value="sharm">Шарм-эль-Шейх</option>
-        <option value="el-gouna">Эль-Гуна</option>
         <option value="el-quseir">Эль-Кусейр</option>
         <option value="other">Другой город...</option>
       </select>
@@ -786,7 +815,7 @@ button,input,select,textarea{font-family:inherit;}
       </div>
       <div class="promote-box" style="border-color:var(--accent);box-shadow:0 0 10px rgba(255,255,255,.3);animation:gold-glow 2s ease-in-out infinite alternate;margin-bottom:10px;">
         <div class="promote-header">
-          <div class="promote-ttl" style="background:linear-gradient(135deg,#ffd700,#f0a500,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">ЗОЛОТОЕ</div>
+          <div class="promote-ttl" style="background:linear-gradient(135deg,#ffd700,#f0a500,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">Баннер</div>
           <div style="display:flex;align-items:center;gap:6px;">
             <div style="background:#e74c3c;color:#fff;font-size:9px;font-weight:900;padding:2px 7px;border-radius:8px;">−50%</div>
             <div class="promote-badge">30 дней</div>
@@ -802,11 +831,11 @@ button,input,select,textarea{font-family:inherit;}
           <div class="popt" onclick="vib();setPromoAndPublish('gold','stars')">
             <div class="popt-icon">⭐</div>
             <div class="popt-name">Stars</div>
-            <div class="popt-price"><span style="text-decoration:line-through;opacity:.5;font-size:11px;font-weight:500;">1000⭐</span> 500⭐</div>
+            <div class="popt-price"><span style="text-decoration:line-through;opacity:.5;font-size:11px;font-weight:500;">1000 Stars</span> 500 Stars</div>
           </div>
         </div>
       </div>
-      <div class="promote-box" style="border-color:#ff00ff;box-shadow:0 0 10px rgba(255,0,255,.3);animation:neon-glow 2s ease-in-out infinite alternate;margin-bottom:10px;">
+      <div class="promote-box legend-box" style="border-color:#ff00ff;box-shadow:0 0 10px rgba(255,0,255,.3);animation:neon-glow 2s ease-in-out infinite alternate;margin-bottom:10px;">
         <div class="promote-header">
           <div class="promote-ttl" style="background:linear-gradient(135deg,#ff00ff,#00ffff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">ЛЕГЕНДАРНОЕ</div>
           <div style="display:flex;align-items:center;gap:6px;">
@@ -824,7 +853,7 @@ button,input,select,textarea{font-family:inherit;}
           <div class="popt" onclick="vib();setPromoAndPublish('legendary','stars')">
             <div class="popt-icon">⭐</div>
             <div class="popt-name">Stars</div>
-            <div class="popt-price"><span style="text-decoration:line-through;opacity:.5;font-size:11px;font-weight:500;">750⭐</span> 375⭐</div>
+            <div class="popt-price"><span style="text-decoration:line-through;opacity:.5;font-size:11px;font-weight:500;">750 Stars</span> 375 Stars</div>
           </div>
         </div>
       </div>
@@ -845,7 +874,7 @@ button,input,select,textarea{font-family:inherit;}
     <div class="modal-body">
       <div class="promote-box" style="border-color:var(--accent);box-shadow:0 0 10px rgba(255,255,255,.3);animation:gold-glow 2s ease-in-out infinite alternate;margin-bottom:12px;">
         <div class="promote-header">
-          <div class="promote-ttl" style="background:linear-gradient(135deg,#ffd700,#f0a500,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">ЗОЛОТОЕ</div>
+          <div class="promote-ttl" style="background:linear-gradient(135deg,#ffd700,#f0a500,#ffd700);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">Баннер</div>
           <div style="display:flex;align-items:center;gap:6px;">
             <div style="background:#e74c3c;color:#fff;font-size:9px;font-weight:900;padding:2px 7px;border-radius:8px;">−50%</div>
             <div class="promote-badge">30 дней</div>
@@ -861,11 +890,11 @@ button,input,select,textarea{font-family:inherit;}
           <div class="popt" onclick="vib();payPromoStars()">
             <div class="popt-icon">⭐</div>
             <div class="popt-name">Stars</div>
-            <div class="popt-price"><span style="text-decoration:line-through;opacity:.5;font-size:11px;font-weight:500;">1000⭐</span> 500⭐</div>
+            <div class="popt-price"><span style="text-decoration:line-through;opacity:.5;font-size:11px;font-weight:500;">1000 Stars</span> 500 Stars</div>
           </div>
         </div>
       </div>
-      <div class="promote-box" style="border-color:#ff00ff;box-shadow:0 0 10px rgba(255,0,255,.3);animation:neon-glow 2s ease-in-out infinite alternate;">
+      <div class="promote-box legend-box" style="border-color:#ff00ff;box-shadow:0 0 10px rgba(255,0,255,.3);animation:neon-glow 2s ease-in-out infinite alternate;">
         <div class="promote-header">
           <div class="promote-ttl" style="background:linear-gradient(135deg,#ff00ff,#00ffff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;">ЛЕГЕНДАРНОЕ</div>
           <div style="display:flex;align-items:center;gap:6px;">
@@ -883,7 +912,7 @@ button,input,select,textarea{font-family:inherit;}
           <div class="popt" onclick="vib();payLegStars()">
             <div class="popt-icon">⭐</div>
             <div class="popt-name">Stars</div>
-            <div class="popt-price"><span style="text-decoration:line-through;opacity:.5;font-size:11px;font-weight:500;">750⭐</span> 375⭐</div>
+            <div class="popt-price"><span style="text-decoration:line-through;opacity:.5;font-size:11px;font-weight:500;">750 Stars</span> 375 Stars</div>
           </div>
         </div>
       </div>
@@ -977,44 +1006,22 @@ button,input,select,textarea{font-family:inherit;}
   <div class="modal">
     <div class="modal-handle"></div>
     <div class="modal-close-btn" onclick="vib();closeModal('verify-modal')">✕</div>
-    <div class="modal-title" style="border:none;padding-bottom:0;">User Verified</div>
+    <div class="modal-title" style="border:none;padding-bottom:0;">Верификация</div>
     <div class="modal-body">
-      <div style="text-align:center;padding:10px 0 22px;">
-        <div style="width:80px;height:80px;background:linear-gradient(135deg,#0055aa,#0088cc);border-radius:20px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,136,204,.45);">
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-        </div>
-        <div id="verified-seller-title" style="font-size:18px;font-weight:900;color:#fff;margin-bottom:6px;">Верифицированный продавец</div>
-        <div style="font-size:13px;color:var(--muted);line-height:1.6;">Синяя галочка на всех объявлениях.<br>Вызывает доверие — приносит больше сделок.</div>
+      <div class="vf-hero">
+        <div class="vf-badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>
+        <div class="vf-title" id="verified-seller-title">Верифицированный продавец</div>
+        <div class="vf-sub">Галочка на всех ваших объявлениях. Больше доверия, больше сделок.</div>
       </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
-        <div style="background:var(--card2);border-radius:12px;padding:12px 8px;text-align:center;">
-          <div style="font-size:20px;margin-bottom:4px;">✅</div>
-          <div style="font-size:11px;color:#fff;font-weight:600;opacity:.8;">Галочка</div>
-        </div>
-        <div style="background:var(--card2);border-radius:12px;padding:12px 8px;text-align:center;">
-          <div style="font-size:20px;margin-bottom:4px;">🔝</div>
-          <div style="font-size:11px;color:#fff;font-weight:600;opacity:.8;">Доверие</div>
-        </div>
-        <div style="background:var(--card2);border-radius:12px;padding:12px 8px;text-align:center;">
-          <div style="font-size:20px;margin-bottom:4px;">📅</div>
-          <div style="font-size:11px;color:#fff;font-weight:600;opacity:.8;">30 дней</div>
-        </div>
+      <div class="vf-list">
+        <div class="vf-row"><span class="vf-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span><span>Галочка на всех объявлениях</span></div>
+        <div class="vf-row"><span class="vf-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span><span>Выше доверие покупателей</span></div>
+        <div class="vf-row"><span class="vf-ic"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg></span><span>Действует 30 дней</span></div>
       </div>
-      <div style="background:linear-gradient(135deg,rgba(0,136,204,.12),rgba(0,85,170,.08));border:1px solid rgba(0,136,204,.3);border-radius:14px;padding:14px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;">
-        <span style="color:#fff;font-size:15px;font-weight:700;">Стоимость</span>
-        <span style="color:#0099dd;font-weight:800;font-size:17px;"><span style="text-decoration:line-through;opacity:.45;font-size:13px;margin-right:6px;color:var(--muted);">$10</span>$5 / мес</span>
-      </div>
-      <div style="display:flex;gap:8px;">
-        <div class="popt" style="flex:1;" onclick="vib();payVerifyCard()">
-          <div class="popt-icon">💳</div>
-          <div class="popt-name">Карта/Крипто</div>
-          <div class="popt-price"><span style="text-decoration:line-through;opacity:.5;font-size:11px;font-weight:500;">$10</span> $5</div>
-        </div>
-        <div class="popt" style="flex:1;" onclick="vib();payVerifyStars()">
-          <div class="popt-icon">⭐</div>
-          <div class="popt-name">Stars</div>
-          <div class="popt-price"><span style="text-decoration:line-through;opacity:.5;font-size:11px;font-weight:500;">700⭐</span> 350⭐</div>
-        </div>
+      <div class="vf-price"><span>Стоимость</span><span><s>$10</s>$5 / мес</span></div>
+      <div class="vf-pay">
+        <div class="vf-btn" onclick="vib();payVerifyCard()"><span>Карта / Крипто</span><span class="vf-btn-p">$5</span></div>
+        <div class="vf-btn" onclick="vib();payVerifyStars()"><span>Telegram Stars</span><span class="vf-btn-p">350 Stars</span></div>
       </div>
     </div>
   </div>
@@ -1051,11 +1058,8 @@ button,input,select,textarea{font-family:inherit;}
         <option value="alexandria">Александрия</option>
         <option value="dahab">Дахаб</option>
         <option value="marsa">Марса-Алам</option>
-        <option value="el-gouna">Эль-Гуна</option>
-        <option value="soma-bay">Сома-Бей</option>
         <option value="taba">Таба</option>
         <option value="nuweiba">Нувейба</option>
-        <option value="safaga">Сафага</option>
         <option value="el-quseir">Эль-Кусейр</option>
         <option value="luxor">Луксор</option>
         <option value="aswan">Асуан</option>
@@ -1116,7 +1120,7 @@ function selectCondition(v){
 }
 function openTgChat(){const u="https://t.me/rzabeyda";if(tg&&tg.openTelegramLink)tg.openTelegramLink(u);else window.open(u,"_blank");}
 
-const CITY_KEYS=["sharm","hurghada","cairo","alexandria","dahab","marsa","el-gouna","taba","luxor","aswan","safaga","el-quseir","nuweiba","soma-bay","other"];
+const CITY_KEYS=["sharm","hurghada","cairo","alexandria","dahab","marsa","taba","luxor","aswan","el-quseir","nuweiba","other"];
 const CAT_KEYS=["visas","moto","events","alcohol","medicine","business","household","diving","money","kids","home","other","animals","smoking","furniture","beauty","property","education","clothes","food","rental","jobs","repair","restaurant","sport","construction","transport","shipping","transfer","tours","services","hobby","excursions","electronics"];
 const EYE_ICO='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;opacity:.7"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
 const PH_ICON='<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.3"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="9" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg>';
@@ -1797,25 +1801,27 @@ function initBanners(){
   const area=document.getElementById("banner-area");
   const dots=document.getElementById("banner-dots");
   if(!promoted.length){
+    const BT={ru:{t:"Реклама в баннере",s:"500 Stars · 30 дней · все города",b:"Разместить"},
+              en:{t:"Advertise in the banner",s:"500 Stars · 30 days · all cities",b:"Place an ad"},
+              ar:{t:"أعلن في البانر",s:"500 نجمة · 30 يومًا · كل المدن",b:"أضف إعلانًا"}}[lang]||{t:"Реклама в баннере",s:"500 Stars · 30 дней · все города",b:"Разместить"};
     area.innerHTML=`<div class="banner-slide active">
       <div class="banner-default-slide" onclick="vib();openAddModal()">
         <div class="banner-default-left">
-          <div class="banner-default-icon">📢</div>
-          <div class="banner-default-title">Реклама в баннере</div>
-          <div class="banner-default-sub">500 ⭐ · 30 дней · все города</div>
+          <div class="banner-default-title">${BT.t}</div>
+          <div class="banner-default-sub">${BT.s}</div>
         </div>
-        <div class="banner-default-btn">Разместить</div>
+        <div class="banner-default-btn">${BT.b}</div>
       </div>
     </div>`;
     dots.innerHTML="";return;
   }
   area.innerHTML=promoted.map((l,i)=>{
     const p=getPhotos(l)[0];
-    const bg="#1a1200";
+    const bg="#0f0f13";
     const photoHtml=p
       ?`<div class="banner-photo" style="--bbg:${bg}"><img src="${p}" alt="" loading="lazy"></div>`
-      :`<div class="banner-photo-empty" style="background:linear-gradient(135deg,#2a1e00,#4a3500)">${PH_ICON}</div>`;
-    return`<div class="banner-slide${i===0?" active":""}" style="background:linear-gradient(135deg,#1a1200,#3d2d00,#1a1200)" onclick="vib();openDetail(${l.id})">
+      :`<div class="banner-photo-empty" style="background:linear-gradient(135deg,#17171d,#0f0f13)">${PH_ICON}</div>`;
+    return`<div class="banner-slide${i===0?" active":""}" style="background:linear-gradient(135deg,#17171d,#0f0f13)" onclick="vib();openDetail(${l.id})">
       <div class="banner-info">
         <div class="banner-name">${esc(l.title)}</div>
         <div class="banner-row">
@@ -2484,19 +2490,16 @@ document.addEventListener("click",e=>{
 
 const DISTRICTS={
   sharm:["Акаба","Верхний Хадаба","Гебель Аль-Ахдар","Корниш","Наама Бей","Набк","Рас Умм Сид","Сохо Сквер","Тиран","Хадаба","Шарм Эль Майя","Шейх Зайед","Другой район"],
-  hurghada:["Арабский квартал","Вилладж Роуд","Дахар","Мамша","Новый Хургада","Сахль Хашиш","Серена","Хурмет","Эль Ахья","Эль Каусар","Эль Хай","Другой район"],
+  hurghada:["Сома-Бей","Сафага","Эль-Гуна","Арабский квартал","Вилладж Роуд","Дахар","Мамша","Новый Хургада","Сахль Хашиш","Серена","Хурмет","Эль Ахья","Эль Каусар","Эль Хай","Другой район"],
   cairo:["6 Октября","Гелиополис","Докки","Замалек","Катамея","Маади","Мохандесин","Насер Сити","Новый Каир","Шубра","Другой район"],
   alexandria:["Бахари","Глим","Мандара","Монтаза","Рамле","Сиди Бишр","Смуха","Стэнли","Другой район"],
   dahab:["Азура","Лагуна","Масбат","Медина","Другой район"],
   marsa:["Порт","Центр","Другой район"],
-  "el-gouna":["Абу Тиг Марина","Центр","Другой район"],
   luxor:["Восточный берег","Западный берег","Другой район"],
   aswan:["Центр","Другой район"],
   taba:["Центр","Другой район"],
   nuweiba:["Центр","Другой район"],
-  safaga:["Центр","Другой район"],
   "el-quseir":["Центр","Другой район"],
-  "soma-bay":["Центр","Другой район"],
 };
 
 function updateDistricts(){
@@ -2543,9 +2546,9 @@ function selectRentPeriod(v){
 }
 
 /* PROMOTE */
-function togglePromo(){vib();promoEnabled=!promoEnabled;document.getElementById("promo-toggle").classList.toggle("on",promoEnabled);document.getElementById("promo-lbl").textContent=promoEnabled?"Баннер · 1000⭐ · 30 дней":"Не продвигать";document.getElementById("promo-opts").style.display=promoEnabled?"":"none";}
+function togglePromo(){vib();promoEnabled=!promoEnabled;document.getElementById("promo-toggle").classList.toggle("on",promoEnabled);document.getElementById("promo-lbl").textContent=promoEnabled?"Баннер · 1000 Stars · 30 дней":"Не продвигать";document.getElementById("promo-opts").style.display=promoEnabled?"":"none";}
 function selPay(p){vib();promoPayment=p;["stars","card"].forEach(x=>document.getElementById(`popt-${x}`).classList.toggle("selected",x===p));}
-function toggleLegendary(){vib();legendaryEnabled=!legendaryEnabled;document.getElementById("legend-toggle").classList.toggle("on",legendaryEnabled);document.getElementById("legend-lbl").textContent=legendaryEnabled?"Легендарное · 750⭐":"Не активировать";document.getElementById("legend-opts").style.display=legendaryEnabled?"":"none";}
+function toggleLegendary(){vib();legendaryEnabled=!legendaryEnabled;document.getElementById("legend-toggle").classList.toggle("on",legendaryEnabled);document.getElementById("legend-lbl").textContent=legendaryEnabled?"Легендарное · 750 Stars":"Не активировать";document.getElementById("legend-opts").style.display=legendaryEnabled?"":"none";}
 function selLegPay(p){vib();legendaryPayment=p;["stars","card"].forEach(x=>document.getElementById(`popt-leg-${x}`)?.classList.toggle("selected",x===p));}
 
 /* SUBMIT */
@@ -2988,7 +2991,7 @@ function loadFilters(){
     const c=JSON.parse(localStorage.getItem("eb_cities")||"[]");
     const ct=JSON.parse(localStorage.getItem("eb_cats")||"[]");
     const p=localStorage.getItem("eb_price");
-    selectedCities=new Set(c);
+    selectedCities=new Set(c.map(k=>["el-gouna","safaga","soma-bay"].includes(k)?"hurghada":k).filter(k=>CITY_KEYS.includes(k)));
     selectedCats=new Set(ct);
     if(p!==null)priceSort=parseInt(p);
     pendingCities=new Set(selectedCities);

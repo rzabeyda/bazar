@@ -17,7 +17,8 @@ app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 CATEGORIES = ["visas","moto","events","property","transport","services","beauty","clothes","kids","home","furniture","household","repair","jobs","animals","hobby","sport","electronics","food","business","money","alcohol","smoking","tours","excursions","medicine","education","restaurant","rental","diving","construction","transfer","shipping","other"]
-CITIES = ["sharm","hurghada","cairo","alexandria","dahab","marsa","el-gouna","taba","luxor","aswan","safaga","el-quseir","nuweiba","soma-bay","other"]
+CITIES = ["sharm","hurghada","cairo","alexandria","dahab","marsa","taba","luxor","aswan","el-quseir","nuweiba","other"]
+CITY_ALIASES = {"el-gouna":"hurghada","safaga":"hurghada","soma-bay":"hurghada"}  # towns next to Hurghada
 
 # -- AUTH ---------------------------------------------------------------------
 ADMIN_TG_ID = int(os.getenv("ADMIN_ID", "0") or 0) or 7308147004
@@ -161,6 +162,7 @@ async def create_listing(
 ):
     require_user(request, user_id)
     if category not in CATEGORIES: raise HTTPException(400,"Invalid category")
+    city = CITY_ALIASES.get(city, city)
     if not validate_city(city): raise HTTPException(400,"Invalid city")
     if not any(has_image(f) for f in (photo,photo_2,photo_3,photo_4,photo_5,photo_6,photo_7,photo_8)):
         raise HTTPException(400,"At least one photo is required")
@@ -187,6 +189,7 @@ async def edit_listing(
 ):
     require_user(request, user_id)
     if category not in CATEGORIES: raise HTTPException(400,"Invalid category")
+    city = CITY_ALIASES.get(city, city)
     if not validate_city(city): raise HTTPException(400,"Invalid city")
     conn=get_db(); c=conn.cursor()
     row=c.execute("SELECT user_id,photo_path,photo_path2,photo_path3,photo_path4 FROM listings WHERE id=?",(listing_id,)).fetchone()
@@ -300,7 +303,6 @@ def delete_listing(request: Request, listing_id: int, user_id: int):
 
 @app.post("/api/listings/{listing_id}/pay_stars")
 async def pay_stars(request: Request, listing_id: int, user_id: int = Form(...)):
-    raise HTTPException(410, "Promotion is temporarily disabled")
     import httpx, logging
     require_user(request, user_id)
     from datetime import datetime, timedelta
@@ -352,7 +354,6 @@ async def egp_rate():
 
 @app.post("/api/listings/{listing_id}/pay_card")
 async def pay_card(request: Request, listing_id: int, user_id: int = Form(...)):
-    raise HTTPException(410, "Promotion is temporarily disabled")
     import httpx
     require_user(request, user_id)
     conn=get_db(); c=conn.cursor()
