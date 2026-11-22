@@ -439,7 +439,7 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
 <div class="page active" id="page-market">
   <div class="banner-wrap">
     <div class="banner-area" id="banner-area">
-      <div class="banner-slide active"><div class="banner-default-slide" onclick="vib();openAddModal()"><div class="banner-default-left"><div class="banner-default-title">Реклама в баннере</div><div class="banner-default-sub">500 Stars · 30 дней · все города</div></div><div class="banner-default-btn">Разместить</div></div></div>
+      <div class="banner-slide active"><div class="banner-default-slide" onclick="vib();openAddModal()"><div class="banner-default-left"><div class="banner-default-title">Реклама в баннере</div><div class="banner-default-sub">$7.5 · 30 дней · все города</div></div><div class="banner-default-btn">Разместить</div></div></div>
     </div>
     <div class="banner-dots" id="banner-dots"></div>
   </div>
@@ -1793,9 +1793,9 @@ function initBanners(){
   const area=document.getElementById("banner-area");
   const dots=document.getElementById("banner-dots");
   if(!promoted.length){
-    const BT={ru:{t:"Реклама в баннере",s:"500 Stars · 30 дней · все города",b:"Разместить"},
-              en:{t:"Advertise in the banner",s:"500 Stars · 30 days · all cities",b:"Place an ad"},
-              ar:{t:"أعلن في البانر",s:"500 نجمة · 30 يومًا · كل المدن",b:"أضف إعلانًا"}}[lang]||{t:"Реклама в баннере",s:"500 Stars · 30 дней · все города",b:"Разместить"};
+    const BT={ru:{t:"Реклама в баннере",s:"$7.5 · 30 дней · все города",b:"Разместить"},
+              en:{t:"Advertise in the banner",s:"$7.5 · 30 days · all cities",b:"Place an ad"},
+              ar:{t:"أعلن في البانر",s:"$7.5 · 30 يومًا · كل المدن",b:"أضف إعلانًا"}}[lang]||{t:"Реклама в баннере",s:"$7.5 · 30 дней · все города",b:"Разместить"};
     area.innerHTML=`<div class="banner-slide active">
       <div class="banner-default-slide" onclick="vib();openAddModal()">
         <div class="banner-default-left">
