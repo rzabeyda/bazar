@@ -25,9 +25,9 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
 .chat-btn:active{transform:scale(.9);}
 /* lang switcher — always LTR regardless of page direction */
 .lang-sw{display:flex;background:var(--card2);border-radius:20px;border:1.5px solid #fff;padding:3px;gap:2px;direction:ltr;box-shadow:0 0 0 1px rgba(255,255,255,.07);}
-.lang-opt{padding:4px 9px;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;border-radius:16px;transition:all .2s;display:flex;align-items:center;gap:3px;}
-.lang-opt.active{background:var(--accent);color:#000;}
-.flag{font-size:13px;}
+.lang-opt{padding:5px 8px;font-size:11px;font-weight:700;color:var(--muted);cursor:pointer;border-radius:16px;transition:all .2s;display:flex;align-items:center;gap:3px;opacity:.55;}
+.lang-opt.active{background:var(--accent);color:#000;opacity:1;}
+.flag-svg{width:22px;height:15px;border-radius:3px;display:block;box-shadow:0 0 0 1px rgba(255,255,255,.28);}
 
 /* BANNER */
 .banner-wrap{padding:12px 16px 0;}
@@ -278,6 +278,32 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
 .deals-empty{text-align:center;padding:40px 20px;color:#fff;opacity:.5;font-size:14px;}
 .toast{position:fixed;bottom:calc(var(--nav-h)+20px);left:50%;transform:translateX(-50%) translateY(16px);background:rgba(28,28,28,.97);border:1px solid var(--border);border-radius:12px;padding:11px 22px;font-size:14px;font-weight:500;color:#fff;z-index:999;opacity:0;transition:all .3s;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+/* ===== visual refresh ===== */
+:root{--border:rgba(255,255,255,.09);--card:#161616;--card2:#1f1f1f;--radius:18px;}
+.header{background:rgba(13,13,13,.82);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border-bottom:1px solid rgba(255,255,255,.06);}
+.logo{font-size:21px;}
+.lang-sw{background:#1a1a1a;border:1px solid rgba(255,255,255,.14);box-shadow:none;}
+.search-input{background:#1a1a1a;border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:12px 36px 12px 38px;box-shadow:none;}
+.search-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(240,165,0,.15);}
+.filter-btn{background:#1a1a1a;border:1px solid rgba(255,255,255,.14);box-shadow:none;padding:10px 13px;font-size:12.5px;}
+.filter-btn:active{transform:scale(.97);}
+.filter-btn.active{border-color:rgba(240,165,0,.6);background:rgba(240,165,0,.12);color:var(--accent);}
+.cat-chip{background:#1a1a1a;border:1px solid rgba(255,255,255,.08);}
+.cat-chip.active{background:rgba(240,165,0,.14);border-color:rgba(240,165,0,.7);}
+.listings{gap:12px;padding:6px 14px 24px;}
+.card{border-radius:var(--radius);border:1px solid rgba(255,255,255,.07);background:linear-gradient(180deg,#1b1b1b,#141414);box-shadow:0 6px 18px rgba(0,0,0,.35);animation:cardIn .35s ease both;}
+.card-imgs{aspect-ratio:4/3;}
+.card-badge{top:8px;left:8px;border-radius:20px;padding:3px 9px;background:rgba(0,0,0,.5);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.14);font-weight:600;}
+.card-body{padding:10px 11px 12px;}
+.card-title{font-size:13.5px;margin-bottom:5px;}
+.card-price{font-size:16px;letter-spacing:-.2px;}
+.card-city{margin-top:4px;}
+.bottom-nav{background:rgba(18,18,18,.86);-webkit-backdrop-filter:blur(20px) saturate(1.4);backdrop-filter:blur(20px) saturate(1.4);border-top:1px solid rgba(255,255,255,.07);box-shadow:0 -8px 24px rgba(0,0,0,.4);}
+.nav-item.active{background:rgba(240,165,0,.09);}
+.fab{width:52px;height:52px;box-shadow:0 8px 22px rgba(240,165,0,.45);}
+.empty{color:#fff;}
+@keyframes cardIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+@media (prefers-reduced-motion:reduce){.card{animation:none;}}
 </style>
 </head>
 <body>
@@ -288,9 +314,9 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
     <div class="logo"><span class="logo-em">Egypt</span> Bazar</div>
     <div style="display:flex;align-items:center;gap:8px;">
       <div class="lang-sw">
-        <div class="lang-opt active" onclick="setLang('ru')" id="lo-ru"><span class="flag">🇷🇺</span></div>
-        <div class="lang-opt" onclick="setLang('ar')" id="lo-ar"><span class="flag">🇪🇬</span></div>
-        <div class="lang-opt" onclick="setLang('en')" id="lo-en"><span class="flag">🇬🇧</span></div>
+        <div class="lang-opt active" onclick="vib();setLang('ru')" id="lo-ru" title="Русский" role="button" aria-label="Русский"><svg class="flag-svg" viewBox="0 0 24 16" aria-hidden="true"><rect width="24" height="16" fill="#fff"/><rect y="5.33" width="24" height="5.34" fill="#0039A6"/><rect y="10.67" width="24" height="5.33" fill="#D52B1E"/></svg></div>
+        <div class="lang-opt" onclick="vib();setLang('ar')" id="lo-ar" title="العربية" role="button" aria-label="العربية"><svg class="flag-svg" viewBox="0 0 24 16" aria-hidden="true"><rect width="24" height="16" fill="#fff"/><rect width="24" height="5.33" fill="#CE1126"/><rect y="10.67" width="24" height="5.33" fill="#000"/><circle cx="12" cy="8" r="1.7" fill="#C09300"/></svg></div>
+        <div class="lang-opt" onclick="vib();setLang('en')" id="lo-en" title="English" role="button" aria-label="English"><svg class="flag-svg" viewBox="0 0 24 16" aria-hidden="true"><rect width="24" height="16" fill="#012169"/><path d="M0 0L24 16M24 0L0 16" stroke="#fff" stroke-width="3.2"/><path d="M0 0L24 16M24 0L0 16" stroke="#C8102E" stroke-width="1.2"/><path d="M12 0V16M0 8H24" stroke="#fff" stroke-width="5.2"/><path d="M12 0V16M0 8H24" stroke="#C8102E" stroke-width="3"/></svg></div>
       </div>
     </div>
   </div>
@@ -298,7 +324,7 @@ html,body{background:#000;min-height:100vh;overflow-x:hidden;}
 
 <!-- MARKET -->
 <div class="page active" id="page-market">
-  <div class="banner-wrap">
+  <div class="banner-wrap" style="display:none">
     <div class="banner-area" id="banner-area">
       <div class="banner-slide active">
         <div class="banner-bg"></div><div class="banner-pattern"></div><div class="banner-overlay"></div>
@@ -1034,6 +1060,7 @@ const t=k=>{const keys=k.split(".");let v=T[lang];for(const x of keys)v=v?.[x];r
 
 function setLang(l){
   lang=l;
+  try{localStorage.setItem("eb_lang",l);}catch(e){}
   // content direction only, not the whole page — keep LTR for layout
   ["ru","ar","en"].forEach(x=>document.getElementById(`lo-${x}`).classList.toggle("active",x===l));
   applyLang();
@@ -2774,7 +2801,16 @@ function loadFilters(){
 loadFilters();
 updateFavCount();
 
-applyLang();loadListings();checkPendingPromo();
+function initLang(){
+  let l=null;
+  try{l=localStorage.getItem("eb_lang");}catch(e){}
+  if(!["ru","ar","en"].includes(l)){
+    const code=((tg&&tg.initDataUnsafe&&tg.initDataUnsafe.user&&tg.initDataUnsafe.user.language_code)||navigator.language||"ru").toLowerCase().slice(0,2);
+    l=code==="ar"?"ar":["ru","uk","be","kk"].includes(code)?"ru":"en";
+  }
+  setLang(l);
+}
+initLang();loadListings();checkPendingPromo();
 initDetailListingSwipe();
 
 // scroll-to-top button
