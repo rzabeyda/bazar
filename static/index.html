@@ -373,6 +373,7 @@ button,input,select,textarea{font-family:inherit;}
 .extra-filters .filter-btn{flex:1;justify-content:center;white-space:nowrap;}
 .filters-row .filter-btn{min-width:0;overflow:hidden;}
 .filters-row .filter-label,#filter-price-range-lbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
+#filter-price{flex:0 0 auto!important;}
 /* promotion / ads switched off for now */
 .promote-box,#pay-modal,.banner-wrap,[onclick*="buyPromo"],[onclick*="buyLegendary"]{display:none!important;}
 @keyframes cardIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
@@ -412,9 +413,6 @@ button,input,select,textarea{font-family:inherit;}
   </div>
   <div class="search-wrap">
     <div style="display:flex;align-items:center;gap:8px;">
-      <div class="filter-btn active" id="filter-price" onclick="vib();cyclePrice()" style="flex-shrink:0;padding:10px 12px;">
-        <span id="filter-price-lbl" style="font-size:13px;font-weight:700;display:flex;align-items:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
-      </div>
       <div class="search-box" style="flex:1;position:relative;">
         <svg class="search-ico" viewBox="0 0 24 24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input class="search-input" id="search-input" type="text" placeholder="Поиск..." oninput="filterListings();toggleClearBtn()">
@@ -443,6 +441,10 @@ button,input,select,textarea{font-family:inherit;}
     </div>
   </div>
   <div class="extra-filters" id="extra-filters">
+    <!-- SORT -->
+    <div class="filter-btn active" id="filter-price" onclick="vib();cyclePrice()" style="flex-shrink:0;padding:10px 12px;">
+        <span id="filter-price-lbl" style="font-size:13px;font-weight:700;display:flex;align-items:center;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+    </div>
     <div class="filter-btn" id="filter-cond-btn" onclick="vib();cycleCondition()" style="flex-shrink:0;">
       <span id="filter-cond-lbl">Состояние</span>
     </div>
@@ -2233,7 +2235,7 @@ async function loadProfile(){
     </div>`;
   }).join("");
 }
-function shareProfile(){const botUrl="https://t.me/egypt_bazar_bot";if(tg)tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(botUrl)}&text=${encodeURIComponent("Egypt Bazar — барахолка для русскоязычных в Египте")}`);else if(navigator.share)navigator.share({title:"Egypt Bazar",url:botUrl});}
+function shareProfile(){const botUrl="https://t.me/egypt_bazar_bot";if(tg)tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(botUrl)}&text=${encodeURIComponent(({ru:"Egypt Bazar — барахолка в Египте",en:"Egypt Bazar — classifieds in Egypt",ar:"Egypt Bazar — سوق الإعلانات في مصر"})[lang]||"Egypt Bazar — барахолка в Египте")}`);else if(navigator.share)navigator.share({title:"Egypt Bazar",url:botUrl});}
 
 async function togglePauseListing(id, currentlyPaused, btn){
   try{
