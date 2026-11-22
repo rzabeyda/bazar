@@ -1612,7 +1612,7 @@ function updateSortLabel(){
 }
 function buildSortDD(){
   const list=document.getElementById("sort-dd-list");if(!list)return;
-  list.innerHTML=[3,4,1,2].map(k=>`<div class="dd-item${sortMode()===k?" selected":""}" onclick="setSort(${k})"><span>${st("f"+k)}</span><svg class="dd-chk" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>`).join("");
+  list.innerHTML=[1,2,3,4].map(k=>`<div class="dd-item${sortMode()===k?" selected":""}" onclick="setSort(${k})"><span>${st("f"+k)}</span><svg class="dd-chk" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>`).join("");
 }
 function toggleSortDD(e){
   vib();e.stopPropagation();
