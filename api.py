@@ -17,7 +17,7 @@ app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 CATEGORIES = ["visas","moto","events","property","transport","services","beauty","clothes","kids","home","furniture","household","repair","jobs","animals","hobby","sport","electronics","food","business","money","alcohol","smoking","tours","excursions","medicine","education","restaurant","rental","diving","construction","transfer","shipping","other"]
-CITIES = ["sharm","hurghada","marsa","cairo","alexandria","dahab","luxor","other"]  # main cities; any other town is free text
+CITIES = ["hurghada","sharm","marsa","dahab","cairo","luxor","alexandria","other"]  # main cities; any other town is free text
 CITY_ALIASES = {"el-gouna":"hurghada","safaga":"hurghada","soma-bay":"hurghada"}  # towns next to Hurghada
 
 # -- AUTH ---------------------------------------------------------------------

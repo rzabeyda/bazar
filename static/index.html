@@ -459,18 +459,18 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
     </div>
   </div>
   <div class="filters-row">
-    <!-- SORT -->
-    <div class="filter-btn" id="filter-sort-btn" onclick="toggleSortDD(event)"><span id="filter-sort-lbl">Новые</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></div>
-    <!-- CITY -->
-    <div class="filter-btn" id="filter-city-btn" onclick="toggleDD(event,'city-dd')">
-      <span class="filter-label" id="filter-city-lbl">Город</span>
-      <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
-    </div>
     <!-- CAT -->
     <div class="filter-btn" id="filter-cat-btn" onclick="toggleDD(event,'cat-dd')">
       <span class="filter-label" id="filter-cat-lbl">Раздел</span>
       <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
+    <!-- CITY -->
+    <div class="filter-btn" id="filter-city-btn" onclick="toggleDD(event,'city-dd')">
+      <span class="filter-label" id="filter-city-lbl">Город</span>
+      <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <!-- SORT -->
+    <div class="filter-btn" id="filter-sort-btn" onclick="toggleSortDD(event)"><span id="filter-sort-lbl">Новые</span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></div>
   </div>
   <div class="extra-filters" id="extra-filters">
     <!-- PRICE -->
@@ -499,7 +499,7 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
 <!-- AUCTION -->
 <div class="page" id="page-auction">
   <div style="padding:16px 14px 0;">
-    <div id="chats-page-title" style="margin-bottom:16px;"><div style="display:inline-block;border:2px solid #fff;border-radius:30px;padding:4px 16px;"><span style="font-size:13px;font-weight:900;color:#fff;letter-spacing:2px;">ЧАТЫ</span></div></div>
+    <div id="chats-page-title" style="margin-bottom:16px;"><div style="display:inline-block;border:1px solid rgba(255,255,255,.22);border-radius:30px;padding:5px 16px;"><span style="font-size:13px;font-weight:900;color:#fff;letter-spacing:2px;">ЧАТЫ</span></div></div>
     <div id="messages-list">
       <div style="text-align:center;padding:60px 20px;">
         
@@ -703,13 +703,13 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
       <label class="form-label" id="lbl-city-f" style="margin-top:14px;">Город (необязательно)</label>
       <select class="form-select" id="inp-city" onchange="updateDistricts()">
         <option value="">— Не указан —</option>
-        <option value="alexandria">Александрия</option>
+        <option value="hurghada">Хургада</option>
+        <option value="sharm">Шарм-эль-Шейх</option>
+        <option value="marsa">Марса-Алам</option>
         <option value="dahab">Дахаб</option>
         <option value="cairo">Каир</option>
         <option value="luxor">Люксор</option>
-        <option value="marsa">Марса-Алам</option>
-        <option value="hurghada">Хургада</option>
-        <option value="sharm">Шарм-эль-Шейх</option>
+        <option value="alexandria">Александрия</option>
         <option value="other">Другой город...</option>
       </select>
       <input class="form-input" id="inp-city-other" type="text" placeholder="Введите название города" style="display:none;margin-top:-8px;" maxlength="60">
@@ -853,7 +853,7 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
           </div>
         </div>
       </div>
-      <button class="submit-btn" id="submit-btn" onclick="vib();submitListing()">Опубликовать</button>
+      <button class="submit-btn" id="submit-btn" onclick="vib();submitListing()">Добавить</button>
       <button onclick="vib();saveDraft(true);showToast('Черновик сохранён');" style="width:100%;background:rgba(46,204,113,.15);color:#2ecc71;font-size:14px;font-weight:700;padding:12px;border-radius:14px;border:1.5px solid #2ecc71;cursor:pointer;margin-top:8px;transition:transform .1s;active:transform:scale(.97);" ontouchstart="this.style.transform='scale(.97)'" ontouchend="this.style.transform=''">Сохранить черновик</button>
       <button onclick="vib();clearDraft();resetForm();showToast('Форма очищена');" style="width:100%;background:rgba(231,76,60,.1);color:#e74c3c;font-size:14px;font-weight:700;padding:12px;border-radius:14px;border:1.5px solid #e74c3c;cursor:pointer;margin-top:8px;transition:transform .1s;" ontouchstart="this.style.transform='scale(.97)'" ontouchend="this.style.transform=''">Очистить форму</button>
       <button onclick="vib();closeModal('add-modal');" style="width:100%;background:var(--card2);color:var(--muted);font-size:14px;font-weight:700;padding:12px;border-radius:14px;border:1.5px solid var(--border);cursor:pointer;margin-top:8px;transition:transform .1s;" ontouchstart="this.style.transform='scale(.97)'" ontouchend="this.style.transform=''">✕ Закрыть</button>
@@ -1048,13 +1048,13 @@ body:has(.modal-overlay.open) .fab,body:has(.modal-overlay.open) #scroll-top-btn
       <select class="form-select" id="edit-cat"></select>
       <label class="form-label">Город *</label>
       <select class="form-select" id="edit-city">
-        <option value="sharm">Шарм-эль-Шейх</option>
         <option value="hurghada">Хургада</option>
+        <option value="sharm">Шарм-эль-Шейх</option>
+        <option value="marsa">Марса-Алам</option>
+        <option value="dahab">Дахаб</option>
         <option value="cairo">Каир</option>
         <option value="luxor">Люксор</option>
         <option value="alexandria">Александрия</option>
-        <option value="dahab">Дахаб</option>
-        <option value="marsa">Марса-Алам</option>
         <option value="other">Другой город...</option>
       </select>
       <input class="form-input" id="edit-city-other" type="text" placeholder="Введите название города" style="display:none;margin-top:-8px;" maxlength="60">
@@ -1112,7 +1112,7 @@ function selectCondition(v){
 }
 function openTgChat(){const u="https://t.me/rzabeyda";if(tg&&tg.openTelegramLink)tg.openTelegramLink(u);else window.open(u,"_blank");}
 
-const CITY_KEYS=["sharm","hurghada","marsa","cairo","alexandria","dahab","luxor","other"];
+const CITY_KEYS=["hurghada","sharm","marsa","dahab","cairo","luxor","alexandria","other"];
 const CAT_KEYS=["visas","moto","events","alcohol","medicine","business","household","diving","money","kids","home","other","animals","smoking","furniture","beauty","property","education","clothes","food","rental","jobs","repair","restaurant","sport","construction","transport","shipping","transfer","tours","services","hobby","excursions","electronics"];
 const EYE_ICO='<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;opacity:.7"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
 const PH_ICON='<svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="opacity:.3"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="9" r="1.6"/><path d="M21 16l-5-5-8 8"/></svg>';
@@ -1134,13 +1134,13 @@ let _chatMsgTimer=null;
 startChatsPolling();
 
 const T={
-  ru:{search:"Поиск...",fp:"$",fc:"Город",fs:"Раздел",apply:"Применить",new_listing:"Новое объявление",lbl_photos:"Фото (минимум 1, до 8)",lbl_title:"Заголовок *",lbl_desc:"Описание *",lbl_price:"Цена (USD)",lbl_cat:"Категория *",lbl_city:"Город *",publish:"Опубликовать",contact:"Написать продавцу",edit:"Редактировать",empty:"Объявлений нет",free:"Бесплатно",nav_market:"Рынок",nav_auction:"Аукцион",nav_profile:"Профиль",auction_title:"Аукцион",auction_sub:"Здесь скоро появятся аукционы.",auction_badge:"Скоро",add_listing:"Добавить объявление",my_listings:"Мои объявления",no_listings:"Нет объявлений",recs:"Похожие",del_confirm:"Удалить объявление?",s_active:"Активных",s_total:"Всего",s_deals:"Сделки",promo_on:"Продвигается · $5 · 24ч",promo_off:"Не продвигать",all_cities:"Все города",all_cats:"Все разделы",deals_title:"История сделок",loading:"Загрузка...",no_msgs:"Нет сообщений",msgs_hint:"Когда покупатели напишут — диалоги появятся здесь",start_chat:"Начните общение!",load_err:"Ошибка загрузки",conn_err:"Ошибка соединения",chats_title:"Чаты",chat_placeholder:"Сообщение...",verified_seller:"Верифицированный продавец",dialogs_lbl:"Диалоги",offers_lbl:"Предложения цены",deleted:"Удалено",err:"Ошибка",bookmarks:"Закладки",orders_lbl:"Ордера",chats_nav:"Чаты",profile_nav:"Профиль",share_lbl:"Поделиться",condition_new:"Новое",condition_used:"Б/У",sold_btn:"Продано!",delete_btn:"Удалить",edit_btn:"Редактировать",contact_btn:"Написать",offer_btn:"Предложить цену",share_btn:"Поделиться",report_btn:"Пожаловаться",extend_btn:"Продлить на 30 дней",my_ads:"Мои объявления",
+  ru:{search:"Поиск...",fp:"$",fc:"Город",fs:"Раздел",apply:"Применить",new_listing:"Новое объявление",lbl_photos:"Фото (минимум 1, до 8)",lbl_title:"Заголовок *",lbl_desc:"Описание *",lbl_price:"Цена (USD)",lbl_cat:"Категория *",lbl_city:"Город *",publish:"Добавить",contact:"Написать продавцу",edit:"Редактировать",empty:"Объявлений нет",free:"Бесплатно",nav_market:"Рынок",nav_auction:"Аукцион",nav_profile:"Профиль",auction_title:"Аукцион",auction_sub:"Здесь скоро появятся аукционы.",auction_badge:"Скоро",add_listing:"Добавить объявление",my_listings:"Мои объявления",no_listings:"Нет объявлений",recs:"Похожие",del_confirm:"Удалить объявление?",s_active:"Активных",s_total:"Всего",s_deals:"Сделки",promo_on:"Продвигается · $5 · 24ч",promo_off:"Не продвигать",all_cities:"Все города",all_cats:"Все разделы",deals_title:"История сделок",loading:"Загрузка...",no_msgs:"Нет сообщений",msgs_hint:"Когда покупатели напишут — диалоги появятся здесь",start_chat:"Начните общение!",load_err:"Ошибка загрузки",conn_err:"Ошибка соединения",chats_title:"Чаты",chat_placeholder:"Сообщение...",verified_seller:"Верифицированный продавец",dialogs_lbl:"Диалоги",offers_lbl:"Предложения цены",deleted:"Удалено",err:"Ошибка",bookmarks:"Закладки",orders_lbl:"Ордера",chats_nav:"Чаты",profile_nav:"Профиль",share_lbl:"Поделиться",condition_new:"Новое",condition_used:"Б/У",sold_btn:"Продано!",delete_btn:"Удалить",edit_btn:"Редактировать",contact_btn:"Написать",offer_btn:"Предложить цену",share_btn:"Поделиться",report_btn:"Пожаловаться",extend_btn:"Продлить на 30 дней",my_ads:"Мои объявления",
     cities:{sharm:"Шарм-эль-Шейх",hurghada:"Хургада",cairo:"Каир",alexandria:"Александрия",dahab:"Дахаб",marsa:"Марса-Алам","el-gouna":"Эль-Гуна",taba:"Таба",luxor:"Люксор",aswan:"Асуан",safaga:"Сафага","el-quseir":"Эль-Кусейр",nuweiba:"Нувейба","soma-bay":"Сома-Бей",other:"Другой город"},
     cats:{visas:"Визы и документы",moto:"Мото и лодки",events:"Мероприятия",property:"Недвижимость",transport:"Транспорт",services:"Услуги",beauty:"Мода и красота",clothes:"Одежда",kids:"Детские товары",home:"Дом и сад",jobs:"Работа",animals:"Животные",hobby:"Хобби",sport:"Спорт",electronics:"Электроника",food:"Продовольствие",business:"Бизнес",money:"Деньги и финансы",alcohol:"Алкоголь",furniture:"Мебель",household:"Бытовые товары",repair:"Ремонт",smoking:"Курение",tours:"Туры",excursions:"Экскурсии",medicine:"Аптека",education:"Обучение",restaurant:"Рестораны и кафе",rental:"Прокат",diving:"Дайвинг",construction:"Стройматериалы",transfer:"Трансфер",shipping:"Транспортировка",other:"Другое"}},
-  en:{search:"Search...",fp:"$",fc:"City",fs:"Section",apply:"Apply",new_listing:"New Listing",lbl_photos:"Photos (at least 1, up to 8)",lbl_title:"Title *",lbl_desc:"Description *",lbl_price:"Price (USD)",lbl_cat:"Category *",lbl_city:"City *",publish:"Publish",contact:"Contact seller",edit:"Edit",empty:"No listings",free:"Free",nav_market:"Market",nav_auction:"Auction",nav_profile:"Profile",auction_title:"Auction",auction_sub:"Auctions coming soon.",auction_badge:"Soon",add_listing:"Add listing",my_listings:"My listings",no_listings:"No listings yet",recs:"Similar",del_confirm:"Delete listing?",s_active:"Active",s_total:"Total",s_deals:"Deals",promo_on:"Promoted · $5 · 24h",promo_off:"Don't promote",all_cities:"All cities",all_cats:"All sections",deals_title:"Deal history",loading:"Loading...",no_msgs:"No messages",msgs_hint:"When buyers write to you — dialogs will appear here",start_chat:"Start chatting!",load_err:"Loading error",conn_err:"Connection error",chats_title:"Chats",chat_placeholder:"Message...",verified_seller:"Verified seller",dialogs_lbl:"Dialogs",offers_lbl:"Price offers",deleted:"Deleted",err:"Error",bookmarks:"Bookmarks",orders_lbl:"Orders",chats_nav:"Chats",profile_nav:"Profile",share_lbl:"Share",condition_new:"New",condition_used:"Used",sold_btn:"Sold!",delete_btn:"Delete",edit_btn:"Edit",contact_btn:"Message",offer_btn:"Make offer",share_btn:"Share",report_btn:"Report",extend_btn:"Extend 30 days",my_ads:"My listings",
+  en:{search:"Search...",fp:"$",fc:"City",fs:"Section",apply:"Apply",new_listing:"New Listing",lbl_photos:"Photos (at least 1, up to 8)",lbl_title:"Title *",lbl_desc:"Description *",lbl_price:"Price (USD)",lbl_cat:"Category *",lbl_city:"City *",publish:"Add",contact:"Contact seller",edit:"Edit",empty:"No listings",free:"Free",nav_market:"Market",nav_auction:"Auction",nav_profile:"Profile",auction_title:"Auction",auction_sub:"Auctions coming soon.",auction_badge:"Soon",add_listing:"Add listing",my_listings:"My listings",no_listings:"No listings yet",recs:"Similar",del_confirm:"Delete listing?",s_active:"Active",s_total:"Total",s_deals:"Deals",promo_on:"Promoted · $5 · 24h",promo_off:"Don't promote",all_cities:"All cities",all_cats:"All sections",deals_title:"Deal history",loading:"Loading...",no_msgs:"No messages",msgs_hint:"When buyers write to you — dialogs will appear here",start_chat:"Start chatting!",load_err:"Loading error",conn_err:"Connection error",chats_title:"Chats",chat_placeholder:"Message...",verified_seller:"Verified seller",dialogs_lbl:"Dialogs",offers_lbl:"Price offers",deleted:"Deleted",err:"Error",bookmarks:"Bookmarks",orders_lbl:"Orders",chats_nav:"Chats",profile_nav:"Profile",share_lbl:"Share",condition_new:"New",condition_used:"Used",sold_btn:"Sold!",delete_btn:"Delete",edit_btn:"Edit",contact_btn:"Message",offer_btn:"Make offer",share_btn:"Share",report_btn:"Report",extend_btn:"Extend 30 days",my_ads:"My listings",
     cities:{sharm:"Sharm",hurghada:"Hurghada",cairo:"Cairo",alexandria:"Alexandria",dahab:"Dahab",marsa:"Marsa Alam","el-gouna":"El Gouna",taba:"Taba",luxor:"Luxor",aswan:"Aswan",safaga:"Safaga","el-quseir":"El Quseir",nuweiba:"Nuweiba","soma-bay":"Soma Bay",other:"Other city"},
     cats:{visas:"Visas & Documents",moto:"Moto & Boats",events:"Events",property:"Real Estate",transport:"Transport",services:"Services",beauty:"Fashion & Beauty",clothes:"Clothes",kids:"Kids",home:"Home & Garden",jobs:"Jobs",animals:"Animals",hobby:"Hobby",sport:"Sport",electronics:"Electronics",food:"Grocery",business:"Business",money:"Finance",alcohol:"Alcohol",furniture:"Furniture",household:"Household",repair:"Repair",smoking:"Smoking",tours:"Tours",excursions:"Excursions",medicine:"Pharmacy",education:"Education",restaurant:"Restaurants & Cafes",rental:"Rental",diving:"Diving",construction:"Construction",transfer:"Transfer",shipping:"Shipping",other:"Other"}},
-  ar:{search:"بحث...",fp:"$",fc:"المدينة",fs:"القسم",apply:"تطبيق",new_listing:"إعلان جديد",lbl_photos:"صور (واحدة على الأقل، حتى 8)",lbl_title:"العنوان *",lbl_desc:"الوصف *",lbl_price:"السعر (USD)",lbl_cat:"الفئة *",lbl_city:"المدينة *",publish:"نشر",contact:"تواصل",edit:"تعديل",empty:"لا إعلانات",free:"مجاني",nav_market:"السوق",nav_auction:"مزاد",nav_profile:"الملف",auction_title:"مزاد",auction_sub:"قريباً.",auction_badge:"قريباً",add_listing:"إضافة إعلان",my_listings:"إعلاناتي",no_listings:"لا إعلانات",recs:"مشابهة",del_confirm:"حذف؟",s_active:"نشط",s_total:"المجموع",s_deals:"صفقات",promo_on:"مميز · $5",promo_off:"بدون ترويج",all_cities:"كل المدن",all_cats:"كل الأقسام",deals_title:"سجل الصفقات",loading:"جار التحميل...",no_msgs:"لا رسائل",msgs_hint:"عندما يكتب المشترون — ستظهر المحادثات هنا",start_chat:"ابدأ المحادثة!",load_err:"خطأ في التحميل",conn_err:"خطأ في الاتصال",chats_title:"💬 الدردشات",chat_placeholder:"رسالة...",verified_seller:"بائع موثق",dialogs_lbl:"المحادثات",offers_lbl:"عروض الأسعار",deleted:"🗑 تم الحذف",err:"❌ خطأ",bookmarks:"المفضلة",orders_lbl:"الطلبات",chats_nav:"الدردشات",profile_nav:"الملف",share_lbl:"مشاركة",condition_new:"✨ جديد",condition_used:"🔧 مستعمل",sold_btn:"تم البيع!",delete_btn:"حذف",edit_btn:"تعديل",contact_btn:"تواصل",offer_btn:"💰 اقتراح سعر",share_btn:"مشاركة",report_btn:"إبلاغ",extend_btn:"✅ تمديد 30 يوم",my_ads:"إعلاناتي",
+  ar:{search:"بحث...",fp:"$",fc:"المدينة",fs:"القسم",apply:"تطبيق",new_listing:"إعلان جديد",lbl_photos:"صور (واحدة على الأقل، حتى 8)",lbl_title:"العنوان *",lbl_desc:"الوصف *",lbl_price:"السعر (USD)",lbl_cat:"الفئة *",lbl_city:"المدينة *",publish:"إضافة",contact:"تواصل",edit:"تعديل",empty:"لا إعلانات",free:"مجاني",nav_market:"السوق",nav_auction:"مزاد",nav_profile:"الملف",auction_title:"مزاد",auction_sub:"قريباً.",auction_badge:"قريباً",add_listing:"إضافة إعلان",my_listings:"إعلاناتي",no_listings:"لا إعلانات",recs:"مشابهة",del_confirm:"حذف؟",s_active:"نشط",s_total:"المجموع",s_deals:"صفقات",promo_on:"مميز · $5",promo_off:"بدون ترويج",all_cities:"كل المدن",all_cats:"كل الأقسام",deals_title:"سجل الصفقات",loading:"جار التحميل...",no_msgs:"لا رسائل",msgs_hint:"عندما يكتب المشترون — ستظهر المحادثات هنا",start_chat:"ابدأ المحادثة!",load_err:"خطأ في التحميل",conn_err:"خطأ في الاتصال",chats_title:"💬 الدردشات",chat_placeholder:"رسالة...",verified_seller:"بائع موثق",dialogs_lbl:"المحادثات",offers_lbl:"عروض الأسعار",deleted:"🗑 تم الحذف",err:"❌ خطأ",bookmarks:"المفضلة",orders_lbl:"الطلبات",chats_nav:"الدردشات",profile_nav:"الملف",share_lbl:"مشاركة",condition_new:"✨ جديد",condition_used:"🔧 مستعمل",sold_btn:"تم البيع!",delete_btn:"حذف",edit_btn:"تعديل",contact_btn:"تواصل",offer_btn:"💰 اقتراح سعر",share_btn:"مشاركة",report_btn:"إبلاغ",extend_btn:"✅ تمديد 30 يوم",my_ads:"إعلاناتي",
     cities:{sharm:"شرم الشيخ",hurghada:"الغردقة",cairo:"القاهرة",alexandria:"الإسكندرية",dahab:"دهب",marsa:"مرسى علم","el-gouna":"الجونة",taba:"طابا",luxor:"الأقصر",aswan:"أسوان",safaga:"سفاجا","el-quseir":"القصير",nuweiba:"نويبع","soma-bay":"سوما باي",other:"مدينة أخرى"},
     cats:{visas:"تأشيرات ومستندات",moto:"دراجات وقوارب",events:"فعاليات",property:"عقارات",transport:"مواصلات",services:"خدمات",beauty:"موضة وجمال",clothes:"ملابس",kids:"أطفال",home:"المنزل",jobs:"وظائف",animals:"حيوانات",hobby:"هوايات",sport:"رياضة",electronics:"إلكترونيات",food:"بقالة",business:"أعمال",money:"مال",alcohol:"كحول",furniture:"أثاث",household:"منزلية",repair:"تجديد",smoking:"تدخين",tours:"جولات",excursions:"رحلات",medicine:"صيدلية",education:"تعليم",restaurant:"مطاعم وكافيهات",rental:"تأجير",diving:"غوص",construction:"مواد البناء",transfer:"نقل",shipping:"شحن",other:"أخرى"}}
 };
@@ -1354,7 +1354,7 @@ async function loadChats(){
       offers.forEach(o=>{
         const buyer=o.buyer_username?"@"+o.buyer_username:"#"+o.buyer_id;
         const card=document.createElement("div");
-        card.style.cssText="background:var(--card);border:1px solid var(--accent);border-radius:14px;padding:14px;margin-bottom:8px;";
+        card.style.cssText="background:#0f0f13;border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:11px 12px;margin-bottom:6px;";
         card.innerHTML="<div style='display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px'>"
           +"<div style='font-size:13px;font-weight:700;color:#fff;flex:1;margin-right:8px'>"+esc(o.listing_title||"")+"</div>"
           +"<span style='font-size:11px;color:var(--accent);font-weight:700'>Ожидает</span></div>"
@@ -1383,24 +1383,24 @@ async function loadChats(){
         const unread=!d.is_read&&d.receiver_id===uid;
         const card=document.createElement("div");
         card.style.cssText=unread
-          ?"background:linear-gradient(135deg,rgba(46,204,113,.10),rgba(46,204,113,.03));border:1.5px solid #2ecc71;border-radius:14px;padding:14px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:12px;box-shadow:0 0 14px rgba(46,204,113,.2);position:relative;overflow:hidden;"
-          :"background:var(--card);border:1.5px solid #555;border-radius:14px;padding:14px;margin-bottom:8px;cursor:pointer;display:flex;align-items:center;gap:12px;";
+          ?"background:#16161b;border:1px solid rgba(255,255,255,.28);border-radius:16px;padding:9px 12px;margin-bottom:6px;cursor:pointer;display:flex;align-items:center;gap:11px;position:relative;overflow:hidden;"
+          :"background:#0f0f13;border:1px solid rgba(255,255,255,.09);border-radius:16px;padding:9px 12px;margin-bottom:6px;cursor:pointer;display:flex;align-items:center;gap:11px;";
         const colors=["#e74c3c","#e67e22","#2ecc71","#1abc9c","#3498db","#9b59b6","#e91e63","#00bcd4"];
         const color=colors[(d.partner_id||0)%colors.length];
         const letter=partnerName.replace("@","")[0]?.toUpperCase()||"?";
         const avatarHtml=d.partner_avatar
-          ?"<img src='"+d.partner_avatar+"' style='width:44px;height:44px;border-radius:50%;object-fit:cover;flex-shrink:0' onerror=\"this.outerHTML='<div style=\\'width:44px;height:44px;border-radius:50%;background:"+color+";display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff;flex-shrink:0\\'>"+letter+"</div>'\">"
-          :"<div style='width:44px;height:44px;border-radius:50%;background:"+color+";display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;color:#fff;flex-shrink:0'>"+letter+"</div>";
+          ?"<img src='"+d.partner_avatar+"' style='width:38px;height:38px;border-radius:50%;object-fit:cover;flex-shrink:0' onerror=\"this.outerHTML='<div style=\\'width:38px;height:38px;border-radius:50%;background:"+color+";display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0\\'>"+letter+"</div>'\">"
+          :"<div style='width:38px;height:38px;border-radius:50%;background:"+color+";display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:#fff;flex-shrink:0'>"+letter+"</div>";
         card.innerHTML=avatarHtml
           +"<div style='flex:1;min-width:0'>"
-          +"<div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:3px'>"
+          +"<div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:1px'>"
           +"<div style='font-size:14px;font-weight:700;color:#fff'>"+partnerName+"</div>"
           +"<div style='font-size:11px;color:var(--muted)'>"+new Date(d.created_at).toLocaleDateString([],{day:"numeric",month:"short"})+"</div>"
           +"</div>"
-          +(listingTitle?"<div style='font-size:11px;color:var(--accent);margin-bottom:2px'>"+esc(listingTitle)+"</div>":"")
+          +(listingTitle?"<div style='font-size:11px;color:#9a9aa5;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>"+esc(listingTitle)+"</div>":"")
           +"<div style='font-size:13px;color:"+(unread?"#fff":"var(--muted)")+";font-weight:"+(unread?"600":"400")+";white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>"+esc(d.text)+"</div>"
           +"</div>"
-          +(unread?"<div style='position:absolute;inset:0;background:linear-gradient(105deg,transparent 60%,rgba(46,204,113,.08) 80%,transparent 100%);pointer-events:none;'></div><div style='width:10px;height:10px;border-radius:50%;background:#2ecc71;flex-shrink:0;box-shadow:0 0 8px rgba(46,204,113,.8);animation:pulse-dot 1.2s ease-in-out infinite;'></div>":"");
+          +(unread?"<div style='width:9px;height:9px;border-radius:50%;background:#fff;flex-shrink:0;'></div>":"");
         card.addEventListener("click",()=>{vib();openChatById(d.partner_id,partnerName,d.listing_id||0,listingTitle);});
         wrap.appendChild(card);
       });
@@ -1727,7 +1727,7 @@ function renderListings(data){
     }
   }catch(e){}
   if(!data.length){
-    const _cta={ru:"Опубликовать объявление",en:"Post a listing",ar:"انشر إعلانًا"}[lang]||"Post a listing";
+    const _cta={ru:"Добавить объявление",en:"Add a listing",ar:"أضف إعلانًا"}[lang]||"Add a listing";
     const _hint={ru:"Будьте первым — это бесплатно и займёт минуту",en:"Be the first — it's free and takes a minute",ar:"كن الأول — مجاني ويستغرق دقيقة"}[lang]||"";
     grid.innerHTML=`<div class="empty"><div class="empty-icon">${PH_ICON}</div><div>${t("empty")}</div><div style="opacity:.6;font-size:13px;margin-top:8px">${_hint}</div><button onclick="vib();openAddModal()" style="margin-top:18px;background:var(--accent);color:#000;border:0;border-radius:14px;padding:12px 22px;font-weight:800;font-size:14px;cursor:pointer">+ ${_cta}</button></div>`;return;}
   grid.innerHTML=data.map(l=>{
